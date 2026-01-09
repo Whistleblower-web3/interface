@@ -28,7 +28,7 @@
  * @param buyerId - Buyer ID (Optional, used to judge if there is a buyer. null/undefined/empty string means no buyer)
  * @returns Calculated status
  */
-function calculateStatusImpl(
+export function calculateStatus(
     status: string,
     deadline: number | string | null | undefined,
     buyerId?: string | number | null | undefined
@@ -74,6 +74,3 @@ function calculateStatusImpl(
 
     return status;
 }
-
-// Export as named export to ensure it's not removed by tree-shaking
-export const calculateStatus = calculateStatusImpl;

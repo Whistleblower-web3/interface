@@ -39,46 +39,18 @@ export default defineConfig({
     open: true,
   },
 
-  // Build configuration
+  // Build configuration - simplified for reliability
   build: {
     outDir: 'dist',
-    sourcemap: false,
-    // Enable compression optimization - use terser to remove console
-    minify: 'terser',
-    terserOptions: {
-      compress: {
-        drop_console: true, // Remove console in production
-        drop_debugger: true,
-        // Preserve exports to avoid "Export is not defined" errors
-        keep_fnames: false,
-        keep_classnames: false,
-      },
-      format: {
-        // Preserve comments that might be needed for exports
-        comments: false,
-        // Ensure exports are preserved
-        preserve_annotations: true,
-      },
-      mangle: {
-        // Don't mangle exported names to avoid export issues
-        reserved: ['calculateStatus'],
-      },
-    },
-    // Let Vite handle code splitting automatically to avoid export issues
+    // Let Vite use default minification (esbuild) - more reliable
+    // Only customize file naming
     rollupOptions: {
       output: {
-        // Simple chunk file naming
         chunkFileNames: 'js/[name]-[hash].js',
         entryFileNames: 'js/[name]-[hash].js',
         assetFileNames: 'assets/[name]-[hash].[ext]',
-        // Ensure exports are preserved
-        exports: 'named',
-        // Let Vite automatically handle code splitting
-        // No manual chunks to avoid export issues
       },
     },
-    // Increase chunk size warning threshold
-    chunkSizeWarningLimit: 1000,
   },
 
   // Optimize dependency pre-bundling
