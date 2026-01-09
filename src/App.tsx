@@ -1,4 +1,4 @@
-import { lazy, Suspense } from 'react';
+import { lazy, } from 'react';
 import { Routes, Route } from 'react-router-dom';
 import { Web3ContextProvider } from '@/contexts/web3Context';
 import '@rainbow-me/rainbowkit/styles.css';
@@ -7,7 +7,6 @@ import { useSecureAccount } from '@/hooks/useSecureAccount';
 // import { QueryClientProvider } from '@tanstack/react-query'
 // import { defaultQueryClient } from '@/config/queryClient';
 import { useSetCurrentChainConfig } from '@/config/contractsConfig';
-import Loader from '@/components/Loader';
 
 import { startIpfsGatewayPolling } from '@/config/ipfsUrl/sync'
 
@@ -27,27 +26,25 @@ function DappRoutes() {
     startIpfsGatewayPolling()
 
     return (
-        <Suspense fallback={<Loader />}>
-            <Routes>
-                <Route index element={<MarketplacePage />} />
-                <Route path="create" element={<CreatePage />} />
-                <Route path="staking" element={<StakingPage />} />
-                <Route path="dao" element={<DaoPage />} />
-                <Route path="token" element={<TokenPage />} />
-                <Route path="profile" element={<ProfilePage />} />
-                <Route path="boxDetail/:tokenId" element={<BoxDetailPage />} />
-            </Routes>
-        </Suspense>
+        <Routes>
+            <Route index element={<MarketplacePage />} />
+            <Route path="create" element={<CreatePage />} />
+            <Route path="staking" element={<StakingPage />} />
+            <Route path="dao" element={<DaoPage />} />
+            <Route path="token" element={<TokenPage />} />
+            <Route path="profile" element={<ProfilePage />} />
+            <Route path="boxDetail/:tokenId" element={<BoxDetailPage />} />
+        </Routes>
     );
 }
 
 export default function Dapp() {
     return (
         // <QueryClientProvider client={defaultQueryClient}>
-            <Web3ContextProvider>
-                <DappHeader />
-                <DappRoutes />
-            </Web3ContextProvider>
+        <Web3ContextProvider>
+            <DappHeader />
+            <DappRoutes />
+        </Web3ContextProvider>
         // </QueryClientProvider>
     );
 }

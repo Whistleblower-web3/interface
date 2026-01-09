@@ -1,7 +1,7 @@
 import { Modal } from "antd";
 import Loader from "./Loader/index";
-import Paragraph from "@/components/base/paragraph";
-import { FaSpinner } from "react-icons/fa";
+import TextP from "@/components/base/text_p";
+// import { FaSpinner } from "react-icons/fa";
 
 interface LoaderModalProps {
     title?: string;
@@ -22,9 +22,9 @@ export function LoaderModal({ open, closable = false, onCancel, title = 'Loading
         width={600}
         >
             <div className="flex flex-col justify-center items-center gap-4 h-full">
-                <Paragraph color="muted-foreground" className="mb-4">{title}</Paragraph>
+                <TextP className="mb-4">{title}</TextP>
                 <div className="flex justify-center items-center">
-                    <FaSpinner className="animate-spin" size={30} />
+                    <Loader />
                 </div>
             </div>
         </Modal>
