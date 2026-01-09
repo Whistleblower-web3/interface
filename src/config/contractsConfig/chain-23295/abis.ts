@@ -1,7 +1,7 @@
 
 import officialTokenJson from '@dapp/artifacts/contracts_23295/token/MockERC20.sol/MockERC20.json';
 import erc20SecretJson from '@dapp/artifacts/contracts_23295/token/ERC20Secret.sol/ERC20Secret.json';
-import wroseSecretJson from '@dapp/artifacts/contracts_23295/token/WroseSecret.sol/WroseSecret.json';
+import wroseSecretJson from '@dapp/artifacts/contracts_23295/token/WROSEsecret.sol/WROSEsecret.json';
 
 import truthBoxJson from '@dapp/artifacts/contracts_23295/TruthBox.sol/TruthBox.json';
 import truthNFTJson from '@dapp/artifacts/contracts_23295/TruthNFT.sol/TruthNFT.json';
