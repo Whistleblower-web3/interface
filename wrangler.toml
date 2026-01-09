@@ -3,10 +3,10 @@
 
 name = "wikitruth-vite"
 compatibility_date = "2026-01-09"
+pages_build_output_dir = "dist"
 
 # Pages deployment configuration
-# Note: When using 'wrangler pages deploy dist' command, the dist directory will be used as output directory automatically
-# If you need to specify a different directory, you can use the --project-name parameter
+# The pages_build_output_dir specifies the directory containing static files to upload
 
 # Optional: If you need to configure environment variables, uncomment the following section
 # [vars]
