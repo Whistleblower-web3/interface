@@ -1,7 +1,7 @@
 # Cloudflare Pages Deployment Configuration
 # WikiTruth DApp - Cloudflare Pages Configuration
 
-name = "wikitruth-interface"
+name = "interface"
 compatibility_date = "2026-01-09"
 pages_build_output_dir = "dist"
 
@@ -14,7 +14,7 @@ pages_build_output_dir = "dist"
 
 # Optional: If you need to configure different environments (production/preview), use the following configuration
 # [env.production]
-# name = "wikitruth-interface"
+# name = "interface"
 # 
 # [env.preview]
-# name = "wikitruth-interface-preview"
+# name = "interface-preview"
