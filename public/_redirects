@@ -1,4 +1,0 @@
-# Cloudflare Pages SPA Redirects
-# Simple SPA fallback - Cloudflare Pages will automatically exclude files with extensions
-
-/*    /index.html   200
