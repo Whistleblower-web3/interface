@@ -14,7 +14,7 @@ export default defineConfig({
       }
     })
   ],
-  envPrefix: ['VITE_', 'REACT_APP_'],
+  // envPrefix: ['VITE_', 'REACT_APP_'],
   
   resolve: {
     alias: {

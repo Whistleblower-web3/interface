@@ -18,9 +18,9 @@ export const replaceNetworkWithBaseURL = <T>(
 ): Promise<AxiosResponse<T>> => {
   if (
     !(
-      replacePrefixWithBase(config, '/mainnet/', import.meta.env.REACT_APP_API, 'REACT_APP_API') ||
-      replacePrefixWithBase(config, '/testnet/', import.meta.env.REACT_APP_TESTNET_API, 'REACT_APP_TESTNET_API') ||
-      replacePrefixWithBase(config, '/localnet/', import.meta.env.REACT_APP_LOCALNET_API, 'REACT_APP_LOCALNET_API')
+      replacePrefixWithBase(config, '/mainnet/', import.meta.env.VITE_API, 'VITE_API') ||
+      replacePrefixWithBase(config, '/testnet/', import.meta.env.VITE_TESTNET_API, 'VITE_TESTNET_API') ||
+      replacePrefixWithBase(config, '/localnet/', import.meta.env.VITE_LOCALNET_API, 'VITE_LOCALNET_API')
     )
   ) {
     throw new Error(`Expected URL to be prefixed with network: ${config.url}`)
