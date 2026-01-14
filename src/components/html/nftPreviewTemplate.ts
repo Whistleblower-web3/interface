@@ -204,30 +204,57 @@ export function generateNFTPreviewHTML(dataUrl: string, imageName: string): stri
 }
 
 /**
+ * Write HTML content to an existing window
+ * 
+ * @param window - Existing window object
+ * @param dataUrl - Base64 encoded image data
+ * @param imageName - Image name
+ */
+export function writeNFTPreviewToWindow(window: Window, dataUrl: string, imageName: string): void {
+    try {
+        if (window.closed) {
+            console.warn('[NFT Preview] Window was closed before content could be written');
+            return;
+        }
+        
+        const htmlContent = generateNFTPreviewHTML(dataUrl, imageName);
+        window.document.write(htmlContent);
+        window.document.close();
+    } catch (error) {
+        console.error('[NFT Preview] Error writing content to window:', error);
+    }
+}
+
+/**
  * Open NFT preview in a new window
  * 
  * @param dataUrl - Base64 encoded image data
  * @param imageName - Image name
+ * @param existingWindow - Optional existing window to write content to (avoids popup blocker)
  * @returns New window object (if opened successfully)
  */
-export function openNFTPreview(dataUrl: string, imageName: string): Window | null {
+export function openNFTPreview(dataUrl: string, imageName: string, existingWindow?: Window | null): Window | null {
     try {
+        let newWindow: Window | null = null;
 
-        const newWindow = window.open('', '_blank');
+        // If an existing window is provided, use it
+        if (existingWindow && !existingWindow.closed) {
+            newWindow = existingWindow;
+        } else {
+            // Otherwise, try to open a new window
+            newWindow = window.open('', '_blank');
 
-        if (!newWindow) {
-            console.warn('[NFT Preview] Failed to open window - likely blocked by popup blocker');
-            alert('⚠️ Browser blocked the popup, please allow the popup and try again, or manually view the generated NFT image.');
-            return null;
+            if (!newWindow) {
+                console.warn('[NFT Preview] Failed to open window - likely blocked by popup blocker');
+                alert('⚠️ Browser blocked the popup, please allow the popup and try again, or manually view the generated NFT image.');
+                return null;
+            }
         }
 
-        // console.log('[NFT Preview] Window opened successfully, writing HTML content...');
-        
+        // Write HTML content to the window
         const htmlContent = generateNFTPreviewHTML(dataUrl, imageName);
         newWindow.document.write(htmlContent);
         newWindow.document.close();
-        
-        // console.log('[NFT Preview] HTML content written successfully');
         
         return newWindow;
     } catch (error) {

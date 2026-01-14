@@ -56,6 +56,57 @@ export const useSiweAuthBase = (
         return NETWORK_CONFIGS[chainId] || NETWORK_CONFIGS[23294];
     }, [chainId]);
 
+    /**
+     * Get the appropriate domain based on current page origin
+     * Matches current host with domains in DEFAULT_DOMAINS list
+     */
+    const getDomainFromOrigin = useCallback((): string => {
+        if (typeof window === 'undefined') {
+            return DEFAULT_DOMAINS[0];
+        }
+
+        const currentHost = window.location.host;
+        
+        // Try to find a matching domain in DEFAULT_DOMAINS
+        const matchedDomain = DEFAULT_DOMAINS.find(domain => {
+            // Exact match
+            if (domain === currentHost) {
+                return true;
+            }
+            // Handle localhost with different ports (e.g., localhost:3000 matches localhost:3000)
+            if (domain.startsWith('localhost') && currentHost.startsWith('localhost')) {
+                return true;
+            }
+            // Handle subdomain matching (e.g., beta.wikitruth.xyz matches if current is beta.wikitruth.xyz:3000)
+            if (currentHost.includes(domain) || domain.includes(currentHost.split(':')[0])) {
+                return true;
+            }
+            return false;
+        });
+
+        // If no match found, use current host
+        return matchedDomain || currentHost;
+    }, []);
+
+    /**
+     * Get the appropriate URI based on domain and current page protocol
+     * localhost always uses http, other domains use current protocol
+     */
+    const getUriFromDomain = useCallback((domain: string): string => {
+        if (typeof window === 'undefined') {
+            // For localhost, use http; for others, use https
+            return domain.startsWith('localhost') ? `http://${domain}` : `https://${domain}`;
+        }
+
+        const protocol = window.location.protocol;
+        // For localhost, always use http
+        if (domain.startsWith('localhost')) {
+            return `http://${domain}`;
+        }
+        // For other domains, use the current protocol (http or https)
+        return `${protocol}//${domain}`;
+    }, []);
+
     const createSiweMessage = useCallback(
         (params: SiweMessageParams): string => {
             const networkConfig = getNetworkConfig();
@@ -66,7 +117,7 @@ export const useSiweAuthBase = (
                 domain: params.domain,
                 address: params.address,
                 statement: params.statement || networkConfig.defaultStatement,
-                uri: params.uri || `https://${params.domain}`,
+                uri: params.uri || getUriFromDomain(params.domain),
                 version: networkConfig.version,
                 chainId,
                 nonce: params.nonce || generateNonce(),
@@ -78,7 +129,7 @@ export const useSiweAuthBase = (
 
             return siweMessage.toMessage();
         },
-        [chainId, getNetworkConfig]
+        [chainId, getNetworkConfig, getUriFromDomain]
     );
 
     const parseSignature = (signature: Hex): SignatureRSV => {
@@ -110,7 +161,8 @@ export const useSiweAuthBase = (
                     throw new Error('The wallet is not connected, please connect the wallet first');
                 }
 
-                const domain = params?.domain || DEFAULT_DOMAINS[0];
+                // Use current origin to select matching domain from DEFAULT_DOMAINS
+                const domain = params?.domain || getDomainFromOrigin();
                 const messageParams: SiweMessageParams = {
                     domain,
                     address,
@@ -178,6 +230,7 @@ export const useSiweAuthBase = (
             signMessageAsync,
             contractLogin,
             getNetworkConfig,
+            getDomainFromOrigin,
         ]
     );
 
