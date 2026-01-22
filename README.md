@@ -1,5 +1,7 @@
 # WikiTruth DApp
 
+cloudflare deploy site:[https://interface-cloudflare.pages.dev/]
+
 WikiTruth is a decentralized application (DApp) built on Oasis Sapphire, focused on creating a truth market platform for secure evidence storage and trading.
 
 ## 🚀 Tech Stack

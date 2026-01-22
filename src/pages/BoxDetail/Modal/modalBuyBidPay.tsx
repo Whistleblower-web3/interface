@@ -22,7 +22,7 @@ export interface ModalBuyBidPayProps {
     boxId: string;
     tokenAddress: `0x${string}`;
     amount: string;
-    functionName: 'buy' | 'bid' | 'payConfiFee';
+    functionName: 'buy' | 'bid' | 'payDelayFee';
 }
 
 const ModalBuyBidPay: React.FC<ModalBuyBidPayProps> = ({
@@ -59,7 +59,7 @@ const ModalBuyBidPay: React.FC<ModalBuyBidPayProps> = ({
     const formattedAmount = formatUnits(amountBigInt, tokenMetadata.decimals);
 
     const canApprove = currentStepItem.stepKey === 'approve' && currentStepItem.status !== 'finish';
-    const canBuyBid = currentStepItem.stepKey === 'buy' || currentStepItem.stepKey === 'bid' || currentStepItem.stepKey === 'payConfiFee';
+    const canBuyBid = currentStepItem.stepKey === 'buy' || currentStepItem.stepKey === 'bid' || currentStepItem.stepKey === 'payDelayFee';
 
 
     const displaySteps = useMemo(

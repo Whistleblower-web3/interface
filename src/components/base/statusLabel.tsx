@@ -33,7 +33,7 @@ export default function StatusLabel({
                 return 'bg-green-500/20 text-green-400 border-green-500/30';
             case 'Refunding':
                 return 'bg-red-500/20 text-red-400 border-red-500/30';
-            case 'InSecrecy':
+            case 'Delaying':
                 return 'bg-purple-500/20 text-purple-400 border-purple-500/30';
             case 'Published':
                 return 'bg-lime-500/20 text-lime-400 border-lime-500/30';

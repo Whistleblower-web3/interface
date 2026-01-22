@@ -2,7 +2,7 @@
 import React from 'react';
 import {
     PublishButton,
-    PayConfiFeeButton,
+    PayDelayFeeButton,
     ViewFileButton
 } from '@BoxDetail/ButtonContainer';
 import { useBoxDetailContext } from '../contexts/BoxDetailContext';
@@ -13,7 +13,7 @@ interface Props {
     tokenId?: string,
 }
 
-const InSecrecy: React.FC<Props> = ({  }) => {
+const Delaying: React.FC<Props> = ({  }) => {
     const store = useBoxDetailStore(state => state)
     const { roles } = store.userState
     const { box } = useBoxDetailContext()
@@ -35,11 +35,11 @@ const InSecrecy: React.FC<Props> = ({  }) => {
                 </div>
             }
 
-            <PayConfiFeeButton />
+            <PayDelayFeeButton />
             <PublishButton />
             <ViewFileButton />
         </div>
     );
 }
 
-export default InSecrecy;
+export default Delaying;

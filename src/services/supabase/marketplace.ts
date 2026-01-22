@@ -137,7 +137,7 @@ const toQueryError = (error: unknown): QueryError => {
  * According to contract logic, when deadline expires:
  * - Selling/Auctioning + has buyer → Paid
  * - Selling/Auctioning + no buyer → Published
- * - InSecrecy → Published
+ * - Delaying → Published
  */
 const applyRuntimeStatus = (data: SearchBoxesResult[] | null): SearchBoxesResult[] | null => {
     if (!data || data.length === 0) {

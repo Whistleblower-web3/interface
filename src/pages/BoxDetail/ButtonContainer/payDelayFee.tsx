@@ -1,6 +1,6 @@
 ﻿"use client"
 import React, { useMemo, useState } from 'react';
-import { Typography, Button } from 'antd';
+// import { Typography, Button } from 'antd';
 import { cn } from '@/lib/utils';
 import { useProtocolConstants } from '@dapp/config/contractsConfig';
 import { useBoxActionController } from '@BoxDetail/hooks/useBoxActionController';
@@ -8,7 +8,7 @@ import { boxActionConfigs } from '@BoxDetail/actions/configs';
 import { useBoxDetailContext } from '@BoxDetail/contexts/BoxDetailContext';
 import ModalBuyBidPay from '@BoxDetail/Modal/modalBuyBidPay';
 import TextP from '@/components/base/text_p';
-import { ButtonContainer } from '../components/buttonContainer';
+// import { ButtonContainer } from '../components/buttonContainer';
 import BoxActionButton from '@BoxDetail/components/boxActionButton';
 
 interface Props {
@@ -16,8 +16,8 @@ interface Props {
   className?: string;
 }
 
-const PayConfiFeeButton: React.FC<Props> = ({ onClick, className }) => {
-  const controller = useBoxActionController(boxActionConfigs.payConfiFee);
+const PayDelayFeeButton: React.FC<Props> = ({ onClick, className }) => {
+  const controller = useBoxActionController(boxActionConfigs.payDelayFee);
   const { box } = useBoxDetailContext();
   const {
     confidentialityFeeExtensionPeriod,
@@ -25,7 +25,7 @@ const PayConfiFeeButton: React.FC<Props> = ({ onClick, className }) => {
   } = useProtocolConstants();
   const [open, setOpen] = useState(false);
 
-  const handlePayConfiFee = () => {
+  const handlePayDelayFee = () => {
     onClick?.();
     setOpen(true);
   };
@@ -39,7 +39,7 @@ const PayConfiFeeButton: React.FC<Props> = ({ onClick, className }) => {
   // const disabled = controller.isDisabled || !tokenAddress;
 
   return (
-      <BoxActionButton controller={controller} className={className} onClick={handlePayConfiFee}>
+      <BoxActionButton controller={controller} className={className} onClick={handlePayDelayFee}>
 
       <div className={cn('flex flex-col items-start')}>
         <TextP>
@@ -57,11 +57,11 @@ const PayConfiFeeButton: React.FC<Props> = ({ onClick, className }) => {
           boxId={box?.id?.toString() || ''}
           tokenAddress={tokenAddress}
           amount={amount}
-          functionName="payConfiFee"
+          functionName="payDelayFee"
         />
       )}
     </BoxActionButton>
   );
 };
 
-export default React.memo(PayConfiFeeButton); 
+export default React.memo(PayDelayFeeButton); 

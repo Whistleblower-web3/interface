@@ -33,10 +33,10 @@ export default defineConfig({
   },
 
   // Development server configuration
-  //server: {
-  //  port: 3000,
- //   host: true,
- // },
+  // server: {
+  //   port: 3000,
+  //   host: true,
+  // },
 
   // Build configuration - simplified for reliability
   build: {

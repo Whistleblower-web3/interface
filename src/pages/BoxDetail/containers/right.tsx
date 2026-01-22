@@ -6,7 +6,7 @@ import Selling from '@BoxDetail/statusContainer/Selling';
 import Auction from '@BoxDetail/statusContainer/Auction';
 import Paid from '@BoxDetail/statusContainer/Paid';
 import Refunding from '@BoxDetail/statusContainer/Refunding';
-import InSecrecy from '@BoxDetail/statusContainer/InSecrecy';
+import Delaying from '@/pages/BoxDetail/statusContainer/Delaying';
 import Published from '@BoxDetail/statusContainer/Published';
 import StatusStep from '@/components/statusStep';
 import CountdownTimer from '@/components/countdownTimer';
@@ -54,8 +54,8 @@ const ContentRight: React.FC<Props> = ({ tokenId }) => {
                 return <Paid />;
             case 'Refunding':
                 return <Refunding />;
-            case 'InSecrecy':
-                return <InSecrecy />;
+            case 'Delaying':
+                return <Delaying />;
             case 'Published':
                 return <Published />;
             default:

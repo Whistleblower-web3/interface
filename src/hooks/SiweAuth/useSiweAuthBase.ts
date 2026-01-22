@@ -57,35 +57,17 @@ export const useSiweAuthBase = (
     }, [chainId]);
 
     /**
-     * Get the appropriate domain based on current page origin
-     * Matches current host with domains in DEFAULT_DOMAINS list
+     * Get the domain from current page origin
+     * Directly returns the actual host without any replacement logic
+     * The contract will validate if the domain is in the allowed list
      */
     const getDomainFromOrigin = useCallback((): string => {
         if (typeof window === 'undefined') {
             return DEFAULT_DOMAINS[0];
         }
 
-        const currentHost = window.location.host;
-        
-        // Try to find a matching domain in DEFAULT_DOMAINS
-        const matchedDomain = DEFAULT_DOMAINS.find(domain => {
-            // Exact match
-            if (domain === currentHost) {
-                return true;
-            }
-            // Handle localhost with different ports (e.g., localhost:3000 matches localhost:3000)
-            if (domain.startsWith('localhost') && currentHost.startsWith('localhost')) {
-                return true;
-            }
-            // Handle subdomain matching (e.g., beta.wikitruth.xyz matches if current is beta.wikitruth.xyz:3000)
-            if (currentHost.includes(domain) || domain.includes(currentHost.split(':')[0])) {
-                return true;
-            }
-            return false;
-        });
-
-        // If no match found, use current host
-        return matchedDomain || currentHost;
+        // Directly return the actual host - no domain replacement
+        return window.location.host;
     }, []);
 
     /**
@@ -161,7 +143,7 @@ export const useSiweAuthBase = (
                     throw new Error('The wallet is not connected, please connect the wallet first');
                 }
 
-                // Use current origin to select matching domain from DEFAULT_DOMAINS
+                // Use the actual domain from current origin (no replacement)
                 const domain = params?.domain || getDomainFromOrigin();
                 const messageParams: SiweMessageParams = {
                     domain,

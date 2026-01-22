@@ -21,12 +21,12 @@ export const boxActionConfigs: Record<string, BoxActionConfig> = {
     activeKey: 'bidActive',
     requiresCustomArgs: true, // Marked as needing custom parameters, to avoid useBoxActionController checking default write
   },
-  payConfiFee: {
-    id: 'payConfiFee',
-    label: 'PayConfiFee',
-    // description: 'Pay the confidentiality fee and extend the confidentiality period.',
+  payDelayFee: {
+    id: 'payDelayFee',
+    label: 'PayDelayFee',
+    // description: 'Pay the delay fee and extend the delay period.',
     // This operation is executed in ModalBuyBidPay, not executed here write
-    activeKey: 'payConfiFeeActive',
+    activeKey: 'payDelayFeeActive',
     requiresCustomArgs: true, // Marked as needing custom parameters, to avoid useBoxActionController checking default write
   },
   requestRefund: {
@@ -68,7 +68,7 @@ export const boxActionConfigs: Record<string, BoxActionConfig> = {
   completeOrder: {
     id: 'completeOrder',
     label: 'Complete',
-    description: 'Complete the order: Paid → InSecrecy.',
+    description: 'Complete the order: Paid → Delaying.',
     contract: exchangeContract,
     functionName: 'completeOrder',
     getArgs: ({ boxId }) => [boxId],
@@ -94,7 +94,7 @@ export const boxActionConfigs: Record<string, BoxActionConfig> = {
         };
       }
 
-      if (box.status === 'InSecrecy' && roles.includes('Buyer')) {
+      if (box.status === 'Delaying' && roles.includes('Buyer')) {
         return {
           contract: configs.TruthBox,
           functionName: 'publishByBuyer',

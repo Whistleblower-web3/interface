@@ -24,7 +24,7 @@ const StatisticalDataMarket: React.FC = () => {
         { label: 'Storing', value: stats.totalStoring },
         { label: 'OnSale', value: stats.totalOnSale },
         { label: 'Swaping', value: stats.totalSwaping },
-        { label: 'InSecrecy', value: stats.totalInSecrecy },
+        { label: 'Delaying', value: stats.totalInSecrecy },
         { label: 'Published', value: stats.totalPublished },
         { label: 'Volume', value: stats.totalGTV, suffix: '$' },
     ]), [stats]);

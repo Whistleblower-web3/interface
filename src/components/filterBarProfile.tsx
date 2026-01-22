@@ -20,7 +20,7 @@ const FilterBar: React.FC<FilterBarProps> = ({
         { value: 'Auctioning', label: 'Auctioning' },
         { value: 'Refunding', label: 'Refunding' },
         { value: 'Paid', label: 'Paid' },
-        { value: 'InSecrecy', label: 'InSecrecy' },
+        { value: 'Delaying', label: 'Delaying' },
         { value: 'Published', label: 'Published' },
     ];
 

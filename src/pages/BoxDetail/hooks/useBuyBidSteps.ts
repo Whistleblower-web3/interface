@@ -7,7 +7,7 @@ import { parseUnits, maxUint256, formatUnits } from 'viem';
 
 type writeStatus = 'idle' | 'pending' | 'success' | 'error';
 type StepStatus = 'wait' | 'process' | 'finish' | 'error';
-type StepKey = 'allowance' | 'approve' | 'buy' | 'bid' | 'payConfiFee';
+type StepKey = 'allowance' | 'approve' | 'buy' | 'bid' | 'payDelayFee';
 
 interface StepConfig {
     title: string;
@@ -58,8 +58,8 @@ const STEP_CONFIGS: Record<StepKey, StepConfig> = {
             error: 'Bid operation failed',
         },
     },
-    payConfiFee: {
-        title: 'PayConfiFee',
+    payDelayFee: {
+        title: 'PayDelayFee',
         descriptions: {
             idle: 'Ready to pay confidentiality fee',
             pending: 'Executing pay confidentiality fee operation...',
@@ -83,7 +83,7 @@ const mapWriteStatusToStepStatus = (status: writeStatus): StepStatus => {
     }
 };
 
-const createSteps = (functionName: 'buy' | 'bid' | 'payConfiFee', isEnough: boolean): StepItem[] => {
+const createSteps = (functionName: 'buy' | 'bid' | 'payDelayFee', isEnough: boolean): StepItem[] => {
     const steps: StepItem[] = [
         {
             stepKey: 'allowance',
@@ -115,11 +115,11 @@ const createSteps = (functionName: 'buy' | 'bid' | 'payConfiFee', isEnough: bool
             description: STEP_CONFIGS.bid.descriptions.idle,
             status: 'wait',
         });
-    } else if (functionName === 'payConfiFee') {
+    } else if (functionName === 'payDelayFee') {
         steps.push({
-            stepKey: 'payConfiFee',
-            title: STEP_CONFIGS.payConfiFee.title,
-            description: STEP_CONFIGS.payConfiFee.descriptions.idle,
+            stepKey: 'payDelayFee',
+            title: STEP_CONFIGS.payDelayFee.title,
+            description: STEP_CONFIGS.payDelayFee.descriptions.idle,
             status: 'wait',
         });
     }
@@ -136,7 +136,7 @@ export const useBuyBidSteps = (
     boxId: string,
     tokenMetadata: TokenMetadata,
     amount: string,
-    functionName: 'buy' | 'bid' | 'payConfiFee',
+    functionName: 'buy' | 'bid' | 'payDelayFee',
 ) => {
     const allConfigs = useAllContractConfigs();
     const { address } = useAccount();
@@ -243,7 +243,7 @@ export const useBuyBidSteps = (
     const handleBuyBidClick = useCallback(async () => {
         if (!tokenMetadata || !amount || !allConfigs) return;
         let contract = allConfigs.Exchange;
-        if (functionName === 'payConfiFee') {
+        if (functionName === 'payDelayFee') {
             contract = allConfigs.TruthBox;
         }
         try {

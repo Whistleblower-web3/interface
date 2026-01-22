@@ -25,7 +25,7 @@ const statusOptions: { value: string; label: string }[] = [
     { value: 'Auctioning', label: 'Auctioning' },
     { value: 'Paid', label: 'Paid' },
     { value: 'Refunding', label: 'Refunding' },
-    { value: 'InSecrecy', label: 'InSecrecy' },
+    { value: 'Delaying', label: 'Delaying' },
     { value: 'Published', label: 'Published' },
 ];
 

@@ -612,7 +612,7 @@
           "type": "uint256"
         }
       ],
-      "name": "payConfidentialityFee",
+      "name": "payDelayFee",
       "outputs": [],
       "stateMutability": "nonpayable",
       "type": "function"
@@ -858,7 +858,5 @@
       "stateMutability": "nonpayable",
       "type": "function"
     }
-  ],
-  "linkReferences": {},
-  "deployedLinkReferences": {}
+  ]
 }

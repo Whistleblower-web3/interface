@@ -15,15 +15,15 @@
  *                 // If there is a buyer, then the status is Paid
  *                 return Status.Paid;
  *             }
- *         } else if (status == Status.InSecrecy) {
- *             // 2, Box in InSecrecy status, then the status is Published
+ *         } else if (status == Status.Delaying) {
+ *             // 2, Box in Delaying status, then the status is Published
  *             return Status.Published;
  *         }
  *     }
  *     return status;
  * }
  * 
- * @param status - Current status ('Storing' | 'Selling' | 'Auctioning' | 'Paid' | 'Refunding' | 'InSecrecy' | 'Published' | 'Blacklisted')
+ * @param status - Current status ('Storing' | 'Selling' | 'Auctioning' | 'Paid' | 'Refunding' | 'Delaying' | 'Published' | 'Blacklisted')
  * @param deadline - Deadline (Unix timestamp, seconds)
  * @param buyerId - Buyer ID (Optional, used to judge if there is a buyer. null/undefined/empty string means no buyer)
  * @returns Calculated status
@@ -68,7 +68,7 @@ export function calculateStatus(
         }
     }
     
-    if (status === 'InSecrecy') {
+    if (status === 'Delaying') {
         return 'Published';
     }
 

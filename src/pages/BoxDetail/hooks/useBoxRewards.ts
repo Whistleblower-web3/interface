@@ -18,7 +18,7 @@ export const useBoxRewards = (
 
     const { network, layer } = CHAIN_CONFIG;
 
-    const shouldQuery = !!boxId && !!box && box.listedMode !== '' && (box.status === 'InSecrecy' || box.status === 'Published');
+    const shouldQuery = !!boxId && !!box && box.listedMode !== '' && (box.status === 'Delaying' || box.status === 'Published');
 
     // Use React Query to query Box reward data
     const { data, isLoading, error, isFetching } = useQuery({

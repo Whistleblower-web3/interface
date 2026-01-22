@@ -22,7 +22,7 @@ export interface BoxActionConfig {
   id: string;
   label: string;
   description?: string;
-  // The following fields are optional for buttons that only open the modal (such as buy, bid, payConfiFee, extendDeadline, viewFile)
+  // The following fields are optional for buttons that only open the modal (such as buy, bid, payDelayFee, extendDeadline, viewFile)
   contract?: (configs: ContractConfigs) => ContractConfig;
   functionName?: FunctionNameType;
   pendingFunctions?: FunctionNameType[];

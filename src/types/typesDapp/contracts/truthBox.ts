@@ -19,7 +19,7 @@ export type FunctionNameType_TruthBox =
 'createAndPublish' |
 'publishByMinter' | 
 'publishByBuyer' | 
-'payConfiFee' |
+'payDelayFee' |
 'addBoxToBlacklist' |
 'extendDeadline';
 
@@ -30,7 +30,7 @@ export const boxStatus = [
     'Auctioning',
     'Paid',
     'Refunding',
-    'InSecrecy',
+    'Delaying',
     'Published',
     'Blacklisted',
 ] as const;
@@ -63,7 +63,6 @@ export interface BoxUserDataType {
 
 // NftDetail_two
 export interface BoxDetailDataType {
-    // deliveryTimestamp:number, // Deleted in new version
     refundRequestTimestamp: number,
     purchaseTimestamp: number,
     overDeadline:boolean,

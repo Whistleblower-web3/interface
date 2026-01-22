@@ -3,11 +3,10 @@
 import { useMemo } from 'react';
 import { formatUnits } from 'viem';
 import { useSupportedTokens } from '@dapp/config/contractsConfig';
-import { useBoxOrderAmounts } from '@BoxDetail/hooks/useBoxOrderAmounts';
+import { useBoxOrderAmounts } from './useBoxOrderAmounts';
 import { ClaimableFund, ClaimMethodType, FundType, TokenData } from '../types/cardProfile.types';
 import type { BoxData } from '../types/profile.types';
 import { useProfileStore } from '../store/profileStore';
-import { BoxRoleType } from '@dapp/types/typesDapp/account';
 
 export interface UseFundsParams {
     box: BoxData;
@@ -61,13 +60,10 @@ export const useFunds = ({ box, userId }: UseFundsParams): UseFundsReturn => {
         return supportedTokens.find((token) => token.address.toLowerCase() === box.acceptedToken?.toLowerCase());
     }, [box.acceptedToken, supportedTokens]);
 
-    const isOrderTab = selectedTab === 'bought' || selectedTab === 'bade';
-    const shouldQuery = Boolean(isOrderTab && userId && box.acceptedToken);
-
     const { orderAmountsData, isLoading } = useBoxOrderAmounts(
-        box.id,
+        box,
         userId ?? '',
-        ['Buyer', 'Bidder'] as BoxRoleType[]
+        selectedTab
     );
 
     const result = useMemo(() => {
@@ -76,7 +72,9 @@ export const useFunds = ({ box, userId }: UseFundsParams): UseFundsReturn => {
         const symbol = acceptedTokenMeta?.symbol ?? fallbackSymbol(acceptedAddress);
         const tokens: TokenData[] = [];
 
-        if (shouldQuery && orderAmountsData && orderAmountsData.length > 0) {
+        const hasOrderAmounts = Boolean(orderAmountsData && orderAmountsData.length > 0);
+
+        if (hasOrderAmounts && orderAmountsData) {
             const totalRaw = orderAmountsData.reduce((acc, item) => {
                 try {
                     return acc + BigInt(item.amount || '0');
@@ -101,13 +99,13 @@ export const useFunds = ({ box, userId }: UseFundsParams): UseFundsReturn => {
             userId &&
             box.refundPermit &&
             box.buyer?.id &&
-            box.buyer.id === userId
+            String(box.buyer.id) === String(userId)
         );
 
-        const isOrderEligible = Boolean(
+        const isOrderEligible = hasOrderAmounts || Boolean(
             userId &&
-            (!box.buyer?.id || box.buyer.id !== userId) &&
-            box.bidders?.some((bidder) => bidder.id === userId)
+            (!box.buyer?.id || String(box.buyer.id) !== String(userId)) &&
+            box.bidders?.some((bidder) => String(bidder.id) === String(userId))
         );
 
         const hasAccess = isRefundEligible || isOrderEligible;
@@ -131,13 +129,12 @@ export const useFunds = ({ box, userId }: UseFundsParams): UseFundsReturn => {
         box.buyer,
         box.refundPermit,
         orderAmountsData,
-        shouldQuery,
         userId,
     ]);
 
     return {
-        funds: result.funds,
+        funds: result?.funds,
         isLoading,
-        hasClaimableFunds: result.hasClaimableFunds,
+        hasClaimableFunds: result?.hasClaimableFunds,
     };
 };

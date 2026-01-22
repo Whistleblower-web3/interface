@@ -17,7 +17,7 @@ export type ButtonActiveNameType =
   'agreeRefundActive' |
   'refuseRefundActive' |
   'completeActive' |
-  'payConfiFeeActive' |
+  'payDelayFeeActive' |
   'publishActive' |
   'viewFileActive';
 
@@ -32,7 +32,7 @@ export const buttonActiveConfig: Record<ButtonActiveNameType, FunctionNameType[]
   agreeRefundActive: ['agreeRefund','cancelRefund','refuseRefund'],
   refuseRefundActive: ['agreeRefund','cancelRefund','refuseRefund'],
   completeActive: ['completeOrder','requestRefund','agreeRefund','refuseRefund'],
-  payConfiFeeActive: ['payConfiFee','publishByBuyer'],
+  payDelayFeeActive: ['payDelayFee','publishByBuyer'],
   publishActive: ['publishByMinter','publishByBuyer','sell','auction'],
   viewFileActive: ['viewFile'],
 }
@@ -88,7 +88,7 @@ export const useButtonActive = (name: ButtonActiveNameType) => {
     const publishActive_roleCheck = (): boolean => {
       if (status === 'Storing') {
         return isMinter ;
-      } else if (status === 'InSecrecy') {
+      } else if (status === 'Delaying') {
         return isBuyer ;
       }
       return false;
@@ -124,7 +124,7 @@ export const useButtonActive = (name: ButtonActiveNameType) => {
     const viewFileActive = (): boolean => {
       if (status === 'Storing' || status === 'Selling' || status === 'Auctioning') {
         return isMinter ;
-      } else if (status === 'InSecrecy' || status === 'Paid') {
+      } else if (status === 'Delaying' || status === 'Paid') {
         return isBuyer ;
       } else if (status === 'Refunding') {
         return !isGuest;
@@ -217,12 +217,12 @@ export const useButtonActive = (name: ButtonActiveNameType) => {
           completeOrder_roleCheck() &&
           wroteListNotInclude(buttonActiveConfig.completeActive);
 
-      case 'payConfiFeeActive':
+      case 'payDelayFeeActive':
         return !isInBlackListed &&
-          status === 'InSecrecy' &&
+          status === 'Delaying' &&
           deadlineCheckState?.isInExtendDeadlineTimeWindow &&
           !isGuest &&
-          wroteListNotInclude(buttonActiveConfig.payConfiFeeActive);
+          wroteListNotInclude(buttonActiveConfig.payDelayFeeActive);
 
       case 'publishActive':
         return !isInBlackListed &&

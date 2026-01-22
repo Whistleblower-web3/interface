@@ -85,8 +85,8 @@ const StatusStepFlow: React.FC<StatusStepFlowProps> = ({
             // 'Waiting': ['Storing', listedMode, 'Waiting'],
             'Paid': ['Storing', listedMode, 'Paid'],
             'Refunding': ['Storing', listedMode, 'Paid', 'Refunding'],
-            'InSecrecy': ['Storing', listedMode, 'Paid', 'InSecrecy'],
-            'Published': ['Storing', listedMode, 'Paid', 'InSecrecy', 'Published'],
+            'Delaying': ['Storing', listedMode, 'Paid', 'Delaying'],
+            'Published': ['Storing', listedMode, 'Paid', 'Delaying', 'Published'],
             'Blacklisted': ['Storing', 'Blacklisted']
         };
 
@@ -184,9 +184,9 @@ const StatusStepFlow: React.FC<StatusStepFlowProps> = ({
                 id: 'inSecrecy',
                 position: positions.inSecrecy,
                 data: {
-                    status: 'InSecrecy' as BoxStatus,
-                    isActive: isStatusActive('InSecrecy'),
-                    isCurrent: status === 'InSecrecy',
+                    status: 'Delaying' as BoxStatus,
+                    isActive: isStatusActive('Delaying'),
+                    isCurrent: status === 'Delaying',
                     size,
                     responsive
                 },

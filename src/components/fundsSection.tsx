@@ -1,5 +1,5 @@
 import React from 'react';
-import { Radio, Typography, Space, Empty,} from 'antd';
+import { Radio, Typography, Space, Empty, } from 'antd';
 // import { CheckCircleOutlined } from '@ant-design/icons';
 import { formatAmount } from '@dapp/utils/formatAmount';
 
@@ -88,7 +88,7 @@ const FundsSection: React.FC<FundsSectionProps> = ({
         <div className={className}>
             <Space direction="vertical" size="middle" style={{ width: '100%' }}>
                 {/* Title Area */}
-                <Title level={5} style={{ margin: 0 }}>
+                <Title level={5}>
                     {hasAnyFunds ? title : 'No funds available'}
                 </Title>
 
@@ -97,7 +97,7 @@ const FundsSection: React.FC<FundsSectionProps> = ({
                     <Radio.Group
                         value={selectedValue || undefined}
                         onChange={handleChange}
-                        // style={{ width: '100%' }}
+                    // style={{ width: '100%' }}
                     >
                         <Space direction="vertical" size="small" style={{ width: '100%' }}>
                             {validFunds.map((fund, index) => (

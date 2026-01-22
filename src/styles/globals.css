@@ -100,7 +100,7 @@
   --Waiting: #e28b19;
   --Paid: #c7480d;
   --Refunding: #bd0fb4;
-  --InSecrecy: #5e0fdd;
+  --Delaying: #5e0fdd;
   --Published: #3d63e0;
   --Blacklisted: #4f5055;
 
@@ -166,7 +166,7 @@
   --color-Waiting: var(--Waiting);
   --color-Paid: var(--Paid);
   --color-Refunding: var(--Refunding);
-  --color-InSecrecy: var(--InSecrecy);
+  --color-Delaying: var(--Delaying);
   --color-Blacklisted: var(--Blacklisted);
   --color-Published: var(--Published);
 }
