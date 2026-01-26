@@ -16,6 +16,8 @@ export interface UseProgressiveRevealConfig {
     cleanupOnUnmount?: boolean;
     /** Whether to trigger the next based on image loading completion (instead of time delay) */
     waitForImageLoad?: boolean; 
+    /** Maximum number of projects items allowed to be in the "transitioning" or "awaiting load" state at once */
+    revealWindowSize?: number;
 }
 
 export interface UseProgressiveRevealReturn<T> {
@@ -27,7 +29,7 @@ export interface UseProgressiveRevealReturn<T> {
     appendReveal: (newData: T[]) => void;
     /** Reset to initial state */
     reset: () => void;
-    /** Whether progressive display is正在进行渐进式显示 */
+    /** Whether progressive display is in progress */
     isRevealing: boolean;
     /** Completed display project quantity */
     revealedCount: number;
@@ -39,17 +41,6 @@ export interface UseProgressiveRevealReturn<T> {
 
 /**
  * Progressive display Hook
- * 
- * Features:
- * 1. Support custom delay time and animation configuration
- * 2. Provide complete state management and progress tracking
- * 3. Automatically clean up timers to prevent memory leaks
- * 4. Support reset and restart
- * 5. Support incremental display (infinite scrolling scenario)
- * 6. Type-safe generic support
- * 
- * @param config Configuration options
- * @returns Progressive display state and control functions
  */
 export function useProgressiveReveal<T = any>(
     config: UseProgressiveRevealConfig = {}
@@ -60,33 +51,27 @@ export function useProgressiveReveal<T = any>(
         initialCount = 20,
         cleanupOnUnmount = true,
         waitForImageLoad = false, 
+        revealWindowSize = 3,
     } = config;
 
     const [items, setItems] = useState<ProgressiveItem<T>[]>([]);
     const [isRevealing, setIsRevealing] = useState(false);
     const [revealedCount, setRevealedCount] = useState(0);
     
-    // Use ref to store timer IDs for easy cleanup
     const timeoutsRef = useRef<Set<NodeJS.Timeout>>(new Set());
-    // Record the current length of processed data, used to determine the starting position of incremental display
     const processedDataLengthRef = useRef(0);
 
-    // New: Track the image loading status of each project
     const imageLoadStatusRef = useRef<Map<number, boolean>>(new Map());
-    // New: The next index to be displayed
     const nextIndexToRevealRef = useRef<number>(0);
-    // New: The data queue to be displayed
     const pendingDataRef = useRef<T[]>([]);
-    // New: Whether to process the image loading completion event
     const isProcessingImageLoadRef = useRef<boolean>(false);
+    const activeRevealCountRef = useRef<number>(0);
 
-    // Function to clean up all timers
     const clearAllTimeouts = useCallback(() => {
         timeoutsRef.current.forEach(timeout => clearTimeout(timeout));
         timeoutsRef.current.clear();
     }, []);
 
-    // Initialize skeleton screen projects
     const initializeItems = useCallback((count: number) => {
         const initialItems: ProgressiveItem<T>[] = Array.from({ length: count }, (_, index) => ({
             data: null,
@@ -98,11 +83,9 @@ export function useProgressiveReveal<T = any>(
         processedDataLengthRef.current = 0;
     }, []);
 
-    // General function for progressive display of projects
     const revealItems = useCallback((data: T[], startIndex: number = 0, resetMode: boolean = false) => {
         const itemsToReveal = resetMode ? data : data.slice(startIndex);
 
-        // Clean up previous timers
         clearAllTimeouts();
         setIsRevealing(true);
 
@@ -111,22 +94,17 @@ export function useProgressiveReveal<T = any>(
             processedDataLengthRef.current = 0;
         }
 
-        // If image loading wait mode is enabled
         if (waitForImageLoad) {
-            // Image loading mode: first set all data to pendingDataRef
             pendingDataRef.current = [...data];
             nextIndexToRevealRef.current = resetMode ? 0 : startIndex;
             imageLoadStatusRef.current.clear();
             isProcessingImageLoadRef.current = false;
+            activeRevealCountRef.current = 0;
 
-            // Initialize all projects to skeleton state
-            // Ensure the length of the items array is consistent with the data length
             setItems(prevItems => {
-                const requiredCount = data.length; // Use data length, not Math.max
-                if (prevItems.length !== requiredCount) {
-                    if (import.meta.env.DEV) {
-                        console.log(`🔄 useProgressiveReveal: Resizing items array from ${prevItems.length} to ${requiredCount}`);
-                    }
+                const requiredCount = data.length;
+                if (import.meta.env.DEV && prevItems.length !== requiredCount) {
+                    console.log(`🔄 useProgressiveReveal: Resizing items array to ${requiredCount}`);
                 }
                 return Array.from({ length: requiredCount }, (_, index) => ({
                     data: null,
@@ -135,123 +113,94 @@ export function useProgressiveReveal<T = any>(
                 }));
             });
 
-            // Delay display the first one, ensure the skeleton screen is displayed first
             if (resetMode && data.length > 0) {
-                // First wait for a short time, let the skeleton screen display
-                setTimeout(() => {
-                    // Set data for the first one, enter transitioning state
-                    setItems(prevItems => {
-                        const newItems = [...prevItems];
-                        if (newItems[0]) {
-                            newItems[0] = {
-                                data: data[0],
-                                status: 'transitioning',
-                                index: 0
-                            };
-                        }
-                        return newItems;
-                    });
-                    nextIndexToRevealRef.current = 1;
-                    
-                    // Delay set the first one to revealed state, so the image can start loading
+                const initialBatchSize = Math.min(revealWindowSize, data.length);
+                
+                for (let i = 0; i < initialBatchSize; i++) {
+                    const index = i;
                     setTimeout(() => {
                         setItems(prevItems => {
                             const newItems = [...prevItems];
-                            if (newItems[0] && data[0]) {
-                                newItems[0] = {
-                                    data: data[0],
-                                    status: 'revealed',
-                                    index: 0
+                            if (newItems[index]) {
+                                newItems[index] = {
+                                    data: data[index],
+                                    status: 'transitioning',
+                                    index
                                 };
                             }
                             return newItems;
                         });
-                        setRevealedCount(1);
-                    }, transitionDuration / 2);
-                }, 100); // Delay 100ms, let the skeleton screen display first
+                        
+                        activeRevealCountRef.current++;
+                        
+                        setTimeout(() => {
+                            setItems(prevItems => {
+                                const newItems = [...prevItems];
+                                if (newItems[index] && data[index]) {
+                                    newItems[index] = {
+                                        data: data[index],
+                                        status: 'revealed',
+                                        index
+                                    };
+                                }
+                                return newItems;
+                            });
+                        }, transitionDuration / 2);
+                    }, i * (revealDelay / 2));
+                    
+                    nextIndexToRevealRef.current = i + 1;
+                }
             }
             return;
         }
 
         // Normal mode: based on time delay
-        // Prepare project list
         setItems(prevItems => {
             if (resetMode) {
-                const requiredCount = data.length;
-                if (import.meta.env.DEV && prevItems.length !== requiredCount) {
-                    console.log(`🔄 useProgressiveReveal: Resizing items array from ${prevItems.length} to ${requiredCount} (normal mode)`);
-                }
-                return Array.from({ length: requiredCount }, (_, index) => ({
+                return Array.from({ length: data.length }, (_, index) => ({
                     data: null,
                     status: 'skeleton' as const,
                     index
                 }));
             } else {
-                // Incremental mode: keep displayed projects, only add skeleton screen for new projects
                 const newItems = [...prevItems];
                 const requiredCount = Math.max(data.length, prevItems.length);
-                
-                // If more project positions are needed, add new skeleton screen projects
                 for (let i = prevItems.length; i < requiredCount; i++) {
-                    newItems.push({
-                        data: null,
-                        status: 'skeleton' as const,
-                        index: i
-                    });
+                    newItems.push({ data: null, status: 'skeleton', index: i });
                 }
-                
                 return newItems;
             }
         });
 
-        // Start progressive display
         itemsToReveal.forEach((itemData: T, relativeIndex: number) => {
             const absoluteIndex = resetMode ? relativeIndex : startIndex + relativeIndex;
             
-            // Timer for starting transition
             const startTransitionTimeout = setTimeout(() => {
                 setItems(prevItems => {
                     const newItems = [...prevItems];
                     if (newItems[absoluteIndex]) {
-                        newItems[absoluteIndex] = {
-                            ...newItems[absoluteIndex],
-                            status: 'transitioning'
-                        };
+                        newItems[absoluteIndex] = { ...newItems[absoluteIndex], status: 'transitioning' };
                     }
                     return newItems;
                 });
 
-                // Timer for completing display
                 const completeRevealTimeout = setTimeout(() => {
                     setItems(prevItems => {
                         const newItems = [...prevItems];
                         if (newItems[absoluteIndex]) {
-                            newItems[absoluteIndex] = {
-                                data: itemData,
-                                status: 'revealed',
-                                index: absoluteIndex
-                            };
+                            newItems[absoluteIndex] = { data: itemData, status: 'revealed', index: absoluteIndex };
                         }
                         return newItems;
                     });
 
                     setRevealedCount(prev => {
                         const newCount = prev + 1;
-                        // Check if it is the last project in the current batch
-                        const isLastInBatch = relativeIndex === itemsToReveal.length - 1;
-                        
-                        if (isLastInBatch) {
+                        if (relativeIndex === itemsToReveal.length - 1) {
                             setIsRevealing(false);
-                            // Update the length of processed data
                             processedDataLengthRef.current = data.length;
-                            if (import.meta.env.DEV) {
-                                console.log(`✅ useProgressiveReveal: ${resetMode ? 'Reset' : 'Incremental'} display completed, total ${data.length} projects processed`);
-                            }
                         }
                         return newCount;
                     });
-
-                    // Remove completed timers
                     timeoutsRef.current.delete(completeRevealTimeout);
                 }, transitionDuration / 2);
 
@@ -261,44 +210,45 @@ export function useProgressiveReveal<T = any>(
 
             timeoutsRef.current.add(startTransitionTimeout);
         });
-    }, [revealDelay, transitionDuration, clearAllTimeouts, waitForImageLoad]);
+    }, [revealDelay, transitionDuration, clearAllTimeouts, waitForImageLoad, revealWindowSize]);
 
-    // New: Function to handle loading completion
     const handleCompleted = useCallback((index: number) => {
         if (import.meta.env.DEV) {
             console.log('handleImageLoaded: useProgressiveReveal', index);
         }
         if (!waitForImageLoad) return;
 
-        // Use setTimeout to delay execution, avoid updating state during rendering
         setTimeout(() => {
             imageLoadStatusRef.current.set(index, true);
+            activeRevealCountRef.current = Math.max(0, activeRevealCountRef.current - 1);
+            
+            setRevealedCount(prev => {
+                const newCount = prev + 1;
+                if (newCount >= pendingDataRef.current.length) {
+                    setIsRevealing(false);
+                    processedDataLengthRef.current = pendingDataRef.current.length;
+                }
+                return newCount;
+            });
 
-            // Check if the next one can be displayed
             const checkAndRevealNext = () => {
                 if (isProcessingImageLoadRef.current) return;
                 if (nextIndexToRevealRef.current >= pendingDataRef.current.length) return;
-
-                const nextIndex = nextIndexToRevealRef.current;
-                const prevIndex = nextIndex - 1;
-
-                // If it is the first one, or the previous one has been loaded
-                if (nextIndex === 0 || imageLoadStatusRef.current.get(prevIndex) === true) {
+                
+                if (activeRevealCountRef.current < revealWindowSize) {
+                    const nextIndex = nextIndexToRevealRef.current;
                     isProcessingImageLoadRef.current = true;
+                    activeRevealCountRef.current++;
+                    nextIndexToRevealRef.current++;
 
-                    // Start transition
                     setItems(prevItems => {
                         const newItems = [...prevItems];
                         if (newItems[nextIndex]) {
-                            newItems[nextIndex] = {
-                                ...newItems[nextIndex],
-                                status: 'transitioning'
-                            };
+                            newItems[nextIndex] = { ...newItems[nextIndex], status: 'transitioning' };
                         }
                         return newItems;
                     });
 
-                    // Complete display
                     setTimeout(() => {
                         setItems(prevItems => {
                             const newItems = [...prevItems];
@@ -311,73 +261,38 @@ export function useProgressiveReveal<T = any>(
                             }
                             return newItems;
                         });
-
-                        setRevealedCount(prev => {
-                            const newCount = prev + 1;
-                            nextIndexToRevealRef.current = newCount;
-                            isProcessingImageLoadRef.current = false;
-
-                            // Check if there are more to display
-                            if (nextIndexToRevealRef.current < pendingDataRef.current.length) {
-                                // Recursive check the next one
-                                setTimeout(() => checkAndRevealNext(), 0);
-                            } else {
-                                setIsRevealing(false);
-                                processedDataLengthRef.current = pendingDataRef.current.length;
-                            }
-
-                            return newCount;
-                        });
+                        isProcessingImageLoadRef.current = false;
+                        checkAndRevealNext();
                     }, transitionDuration / 2);
                 }
             };
-
             checkAndRevealNext();
         }, 0);
-    }, [waitForImageLoad, transitionDuration]);
+    }, [waitForImageLoad, transitionDuration, revealWindowSize]);
 
-    // Start progressive display (reset mode)
     const startReveal = useCallback((data: T[]) => {
-        if (import.meta.env.DEV) {
-            console.log(`🔄 useProgressiveReveal: Reset display mode - ${data.length} projects`);
-        }
         revealItems(data, 0, true);
     }, [revealItems]);
 
-    // Incremental progressive display (retain displayed projects)
     const appendReveal = useCallback((newData: T[]) => {
-        const startIndex = processedDataLengthRef.current;
-        if (import.meta.env.DEV) {
-            console.log(`➕ useProgressiveReveal: Incremental display mode - start from index ${startIndex} to display ${newData.length} new projects (total ${newData.length} projects)`);
-        }
-        
-        revealItems(newData, startIndex, false);
+        revealItems(newData, processedDataLengthRef.current, false);
     }, [revealItems]);
 
-    // Reset to initial state
     const reset = useCallback(() => {
-        if (import.meta.env.DEV) {
-            console.log(`🔄 useProgressiveReveal: Reset to initial state`);
-        }
         clearAllTimeouts();
         setIsRevealing(false);
         initializeItems(initialCount);
     }, [clearAllTimeouts, initializeItems, initialCount]);
 
-    // Calculate total progress
     const progress = items.length > 0 ? revealedCount / items.length : 0;
 
-    // Initialize
     useEffect(() => {
         initializeItems(initialCount);
     }, [initializeItems, initialCount]);
 
-    // Clean up timers when the component is unmounted
     useEffect(() => {
         if (cleanupOnUnmount) {
-            return () => {
-                clearAllTimeouts();
-            };
+            return () => clearAllTimeouts();
         }
     }, [cleanupOnUnmount, clearAllTimeouts]);
 

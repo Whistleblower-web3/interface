@@ -1,5 +1,7 @@
+import { boxStatusMap_string } from "@dapp/types/typesDapp/contracts/truthBox";
 
 /**
+ * 
  * Calculate Box status based on contract logic
  * 
  * Refer to the implementation logic of contract function _getStatus:
@@ -23,18 +25,23 @@
  *     return status;
  * }
  * 
- * @param status - Current status ('Storing' | 'Selling' | 'Auctioning' | 'Paid' | 'Refunding' | 'Delaying' | 'Published' | 'Blacklisted')
+ * @param status - status on supabase
  * @param deadline - Deadline (Unix timestamp, seconds)
  * @param buyerId - Buyer ID (Optional, used to judge if there is a buyer. null/undefined/empty string means no buyer)
  * @returns Calculated status
  */
 export function calculateStatus(
-    status: string,
+    status: number,
     deadline: number | string | null | undefined,
-    buyerId?: string | number | null | undefined
+    buyerId: string | number | null | undefined
 ): string {
+    if (import.meta.env.DEV) {
+        console.log('status:', status, 'deadline:', deadline, 'buyerId:', buyerId);
+    }
+
+    const statusStr = boxStatusMap_string[status];
     if (deadline === null || deadline === undefined) {
-        return status;
+        return statusStr;
     }
 
     let deadlineSeconds = 0;
@@ -46,16 +53,16 @@ export function calculateStatus(
     }
 
     if (deadlineSeconds === 0) {
-        return status;
+        return statusStr;
     }
 
     const now = Math.floor(Date.now() / 1000);
 
     if (now <= deadlineSeconds) {
-        return status;
+        return statusStr;
     }
 
-    if (status === 'Selling' || status === 'Auctioning') {
+    if (statusStr === 'Selling' || statusStr === 'Auctioning') {
         const hasBuyer = buyerId !== null && 
                         buyerId !== undefined && 
                         buyerId !== '' && 
@@ -68,9 +75,15 @@ export function calculateStatus(
         }
     }
     
-    if (status === 'Delaying') {
+    if (statusStr === 'Delaying') {
         return 'Published';
     }
 
-    return status;
+    return statusStr;
 }
+
+export const getListedMode = (mode: number | null): string | null => {
+    if (mode === 2) return 'Auctioning';
+    if (mode === 1) return 'Selling'; // Assuming 1 is Selling/Direct
+    return null;
+};

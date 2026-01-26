@@ -3,9 +3,9 @@
 import { useQuery, keepPreviousData } from '@tanstack/react-query';
 import { useState, useCallback, useEffect, useRef } from 'react';
 import { queryMarketplaceBoxes, countMarketplaceBoxes } from '@dapp/services/supabase/marketplace';
-import { convertSearchResultToMarketplaceBoxData } from '@dapp/services/supabase/types';
+import { convertSearchResultToMarketplaceBoxData } from '@/services/supabase/types/types';
 import { useMarketplaceStore } from '../store/marketplaceStore';
-import type { MarketplaceBoxData } from '../types/marketplace.types';
+import type { MarketplaceBoxType } from '../types/marketplace.types';
 
 /**
  * Marketplace Boxes Hook (based on Supabase)
@@ -66,7 +66,7 @@ export const useMarketplaceBoxesSupabase = () => {
 
     // Use normal query for pagination
     // Use default cache configuration (5 minutes), combined with placeholderData to achieve smooth page switching
-    const marketplaceQuery = useQuery<MarketplaceBoxData[]>({
+    const marketplaceQuery = useQuery<MarketplaceBoxType[]>({
         queryKey: ['marketplace-boxes', filters, pageSize, currentPage],
         queryFn: async () => {
             const offset = (currentPage - 1) * pageSize;

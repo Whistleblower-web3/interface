@@ -24,7 +24,7 @@ const useGetTokenPrice = () => {
     const getTokenPrice = async (tokenAddress: string, amount: string | number) => {
         // Find token configuration
         const tokenMetadata = SUPPORTED_TOKENS.find(
-            (tokenMetadata: TokenMetadata) => tokenMetadata.address === tokenAddress
+            (tokenMetadata: TokenMetadata) => tokenMetadata.address.toLowerCase() === tokenAddress.toLowerCase()
         );
         if (!tokenMetadata) {
             throw new Error(`Token ${tokenAddress} not found`);

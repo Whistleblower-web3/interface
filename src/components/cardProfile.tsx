@@ -2,7 +2,7 @@ import React, { useMemo } from 'react';
 import { Card, Row, Col, Image } from 'antd';
 import BoxInfo, { BoxMetadata } from '@dapp/components/base/boxInfo';
 import FundsSection, { FundsData } from './fundsSection';
-import { ipfsCidToUrl } from '@/config/ipfsUrl/ipfsCidToUrl';
+import { ipfsCidToUrl } from '@/services/ipfsUrl/ipfsCidToUrl';
 
 // Type Definitions
 export interface CardProfileData {

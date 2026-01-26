@@ -13,7 +13,7 @@ import type {
 } from '@BoxDetail/types/boxDetailData';
 import { CHAIN_CONFIG } from '@dapp/config/contractsConfig';
 
-import { calculateStatus } from './status';
+import { calculateStatus, getListedMode } from './utils/status';
 
 type BoxRow = Database['public']['Tables']['boxes']['Row'];
 type MetadataBoxRow = Database['public']['Tables']['metadata_boxes']['Row'];
@@ -49,7 +49,7 @@ function convertBoxRow(
         ),
         biddersIds: camelCased.biddersIds || [],
         acceptedToken: camelCased.acceptedToken ?? undefined,
-        listedMode: camelCased.listedMode ?? undefined,
+        listedMode: getListedMode(camelCased.listedMode),
     };
 }
 
@@ -211,20 +211,20 @@ export async function queryBoxAndMetadata(
  */
 export async function queryBoxDetail_BiddersIds(
     boxId: string,
-    listedMode: string,
+    listedMode: string | number,
 ): Promise<BoxDetailResult_BiddersIds> {
     const { network, layer } = CHAIN_CONFIG;
     try {
         let biddersIds: string[] | null = null;
 
-        // Only query when listedMode is 'Auctioning'
-        if (listedMode === 'Auctioning') {
+        // Only query when listedMode is 'Auctioning' (2)
+        if (listedMode === 'Auctioning' || listedMode === 2) {
             const { data, error } = await supabase
                 .from('box_bidders')
                 .select('bidder_id')
                 .eq('network', network)
                 .eq('layer', layer)
-                .eq('id', boxId);
+                .eq('box_id', boxId);
 
             if (error) {
                 console.warn('Failed to fetch box_bidders:', error);

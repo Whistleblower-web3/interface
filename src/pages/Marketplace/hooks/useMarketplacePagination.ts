@@ -1,7 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useMemo, useState } from 'react';
-import type { MarketplaceBoxData } from '../types/marketplace.types';
+import type { MarketplaceBoxType } from '../types/marketplace.types';
 
 /**
  * Split array into fixed size groups
@@ -19,11 +19,11 @@ const chunkItems = <T,>(items: T[], size: number): T[][] => {
  * Pagination configuration
  */
 export interface UseMarketplacePaginationConfig {
-  items: MarketplaceBoxData[];
+  items: MarketplaceBoxType[];
   loadBatchSize: number;
   /** Paginator page size (20, 40, 80, 160), use 8,16,32,64 for testing */
   pageSize: number;
-  mode: 'loadMore' | 'paginator';
+  mode: 'infiniteScroll' | 'paginator';
   onPageSizeChange?: (size: number) => void;
 }
 
@@ -31,7 +31,7 @@ export interface UseMarketplacePaginationConfig {
  * Pagination return value
  */
 export interface UseMarketplacePaginationReturn {
-  visibleItems: MarketplaceBoxData[];
+  visibleItems: MarketplaceBoxType[];
   hasNextPage: boolean;
   fetchNextPage: () => void;
   resetPagination: () => void;
@@ -74,7 +74,7 @@ export const useMarketplacePagination = (
   // Load More mode: visibleItems represents the accumulated loaded batches
   // Paginator mode: visibleItems represents the data of the current page
   const visibleItems = useMemo(() => {
-    if (mode === 'loadMore') {
+    if (mode === 'infiniteScroll') {
       const visiblePages = paginatedItems.slice(0, pageCount);
       return visiblePages.flat();
     } else {
@@ -84,14 +84,14 @@ export const useMarketplacePagination = (
     }
   }, [mode, paginatedItems, pageCount, currentPage, totalPages]);
 
-  const hasNextPage = mode === 'loadMore' ? pageCount < totalPages : currentPage < totalPages;
+  const hasNextPage = mode === 'infiniteScroll' ? pageCount < totalPages : currentPage < totalPages;
 
   // Load More mode: increase load batch
   // Paginator mode: modify current page number
   const fetchNextPage = useCallback(() => {
     if (!hasNextPage) return;
     
-    if (mode === 'loadMore') {
+    if (mode === 'infiniteScroll') {
       setIsFetchingNextPage(true);
       setPageCount(current => Math.min(current + 1, totalPages));
     } else {
@@ -116,7 +116,7 @@ export const useMarketplacePagination = (
 
   // Load More mode: delay reset isFetchingNextPage state
   useEffect(() => {
-    if (mode === 'loadMore' && isFetchingNextPage) {
+    if (mode === 'infiniteScroll' && isFetchingNextPage) {
       const timeoutId = setTimeout(() => {
         setIsFetchingNextPage(false);
       }, 150);

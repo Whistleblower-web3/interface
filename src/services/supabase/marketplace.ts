@@ -1,9 +1,9 @@
 ﻿import type { PostgrestError } from '@supabase/supabase-js';
 import { supabase, Database  } from './config/supabase.config';
 import type { MarketplaceFilters } from '@Marketplace/types/marketplace.types';
-import type { SearchBoxesResult, StatisticalState } from './types';
+import type { SearchBoxesResult, StatisticalState } from './types/types';
 import { CHAIN_CONFIG } from '@dapp/config/contractsConfig';
-import { calculateStatus } from './status';
+import { boxStatusMap_number } from "@dapp/types/typesDapp/contracts/truthBox";
 
 const MAX_COUNT_LIMIT = 200;
 
@@ -58,9 +58,9 @@ function convertFiltersToSearchParams(
         default:
             break;
     }
-
+    // process status filter to number
     const statusFilter = filters.status && filters.status !== 'Default'
-        ? [filters.status] as string[]
+        ? [boxStatusMap_number[filters.status]]
         : null;
 
     const countryFilter = normalizeString(filters.country);
@@ -72,7 +72,7 @@ function convertFiltersToSearchParams(
         network_filter: network,
         layer_filter: layer,
         search_query: normalizeString(filters.search) || null,
-        status_filter: statusFilter,
+        status_filter: statusFilter as any,
         country_filter: countryFilter ? [countryFilter] : null,
         type_of_crime_filter: null,
         label_filter: null,
@@ -139,26 +139,6 @@ const toQueryError = (error: unknown): QueryError => {
  * - Selling/Auctioning + no buyer → Published
  * - Delaying → Published
  */
-const applyRuntimeStatus = (data: SearchBoxesResult[] | null): SearchBoxesResult[] | null => {
-    if (!data || data.length === 0) {
-        return data;
-    }
-
-    return data.map(item => {
-        const rawStatus = (item as any).status as string | undefined;
-        const rawDeadline = (item as any).deadline as number | string | null | undefined;
-        const rawBuyerId = (item as any).buyer_id || (item as any).buyerId || null;
-
-        if (!rawStatus) {
-            return item;
-        }
-
-        return {
-            ...item,
-            status: calculateStatus(rawStatus, rawDeadline, rawBuyerId),
-        };
-    });
-};
 
 export async function queryMarketplaceBoxes(
     filters: MarketplaceFilters,
@@ -181,10 +161,8 @@ export async function queryMarketplaceBoxes(
             return { data: null, error };
         }
 
-        const dataWithRuntimeStatus = applyRuntimeStatus(data);
-
         // Apply client-side filtering (e.g. ID range, state, etc.)
-        const filteredData = applyClientSideFilters(dataWithRuntimeStatus, filters);
+        const filteredData = applyClientSideFilters(data, filters);
 
         return {
             data: filteredData,
@@ -196,7 +174,7 @@ export async function queryMarketplaceBoxes(
     }
 }
 
-export async function queryMarketplaceStats(): Promise<{
+export async function queryStatisticalStats(): Promise<{
     data: StatisticalState | null;
     error: QueryError;
 }> {
@@ -238,10 +216,7 @@ export async function countMarketplaceBoxes(
             return { count: null, error };
         }
 
-        // To maintain consistency with list interface logic, apply runtime status conversion here as well
-        const dataWithRuntimeStatus = applyRuntimeStatus(data);
-
-        const filteredData = applyClientSideFilters(dataWithRuntimeStatus, filters);
+        const filteredData = applyClientSideFilters(data, filters);
         return { count: filteredData.length, error: null };
     } catch (error) {
         console.error('Error counting marketplace boxes:', error);

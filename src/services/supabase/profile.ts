@@ -98,7 +98,7 @@ export async function queryUserBoxes(
                 }
                 const { data: bidBoxes, error: bidError } = await supabase
                     .from('box_bidders')
-                    .select('id')
+                    .select('box_id')
                     .eq('network', CHAIN_CONFIG.network)
                     .eq('layer', CHAIN_CONFIG.layer)
                     .eq('bidder_id', userId);
@@ -107,7 +107,7 @@ export async function queryUserBoxes(
                     return { data: null, error: bidError };
                 }
                 
-                const boxIds = bidBoxes?.map((b: { id: string }) => b.id) || [];
+                const boxIds = bidBoxes?.map((b: { box_id: string }) => b.box_id) || [];
                 if (boxIds.length === 0) {
                     return { data: [], error: null };
                 }
@@ -289,7 +289,7 @@ export async function queryUserStats(
             // Query boxId from bidBoxes
             const { data: bidBoxIds } = await supabase
                 .from('box_bidders')
-                .select('id')
+                .select('box_id')
                 .eq('network', CHAIN_CONFIG.network)
                 .eq('layer', CHAIN_CONFIG.layer)
                 .eq('bidder_id', userId);
@@ -297,7 +297,7 @@ export async function queryUserStats(
             // Merge and deduplicate
             const allIds = new Set<string>();
             allBoxIds?.forEach((box: { id: string }) => allIds.add(box.id));
-            bidBoxIds?.forEach((bid: { id: string }) => allIds.add(bid.id));
+            bidBoxIds?.forEach((bid: { box_id: string }) => allIds.add(bid.box_id));
             stats.totalBoxes = allIds.size;
         } else {
             // If no userId, only count ownedBoxes

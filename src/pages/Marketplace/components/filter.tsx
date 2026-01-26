@@ -77,7 +77,7 @@ const Filter: React.FC<FilterProps> = ({ className, totalItems = 0 }) => {
         setState: state.setState,
         setSearch: state.setSearch,
         setDateRange: state.setDateRange,
-        setPaginationMode: state.setPaginationMode,
+        // setPaginationMode: state.setPaginationMode,
     })));
 
     // Local state: store pending filter conditions (except search, search remains real-time)

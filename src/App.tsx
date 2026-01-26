@@ -1,4 +1,4 @@
-import { lazy, } from 'react';
+import { lazy, useEffect } from 'react';
 import { Routes, Route } from 'react-router-dom';
 import { Web3ContextProvider } from '@/contexts/web3Context';
 import '@rainbow-me/rainbowkit/styles.css';
@@ -8,7 +8,8 @@ import { useSecureAccount } from '@/hooks/useSecureAccount';
 // import { defaultQueryClient } from '@/config/queryClient';
 import { useSetCurrentChainConfig } from '@/config/contractsConfig';
 
-import { startIpfsGatewayPolling } from '@/config/ipfsUrl/sync'
+import { startIpfsGatewayPolling, stopIpfsGatewayPolling } from '@/services/ipfsUrl/sync'
+import { cleanupIpfsCache } from '@/services/ipfsCache/ipfsCache';
 
 // The lazy loading of the pages components
 const MarketplacePage = lazy(() => import('@/pages/Marketplace'));
@@ -23,7 +24,14 @@ const BoxDetailPage = lazy(() => import('@/pages/BoxDetail'));
 function DappRoutes() {
     useSecureAccount();
     useSetCurrentChainConfig();
-    startIpfsGatewayPolling()
+    
+    useEffect(() => {
+        startIpfsGatewayPolling();
+        cleanupIpfsCache();
+        return () => {
+            stopIpfsGatewayPolling();
+        };
+    }, []);
 
     return (
         <Routes>

@@ -63,6 +63,7 @@ const TruthBoxCard: React.FC<TruthBoxCardProps> = ({
                     altPrefix={`truthbox-${data.tokenId}`}
                     className="w-full"
                     onImageLoad={handleImageLoad} 
+                    notifyOnFirstImageOnly={true}
                 />
             </div>
 

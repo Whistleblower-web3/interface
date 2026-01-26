@@ -90,11 +90,11 @@ const CardProfileContainer: React.FC<CardProfileContainerProps> = ({
         tokenId: data.tokenId,
         title: data.title || `Box #${data.tokenId}`,
         description: data.description || 'No description available',
-        boxImage: data.boxImage ?? data.nftImage ?? data.image,
+        boxImage: data.boxImage ?? data.nftImage ?? data.image ?? undefined,
         status: data.status,
-        country: data.country,
-        state: data.state,
-        eventDate: data.eventDate,
+        country: data.country ?? undefined,
+        state: data.state ?? undefined,
+        eventDate: data.eventDate ?? undefined,
     }), [data]);
 
     const cardFunds: FundsData[] = useMemo(() => {

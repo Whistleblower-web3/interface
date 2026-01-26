@@ -1,7 +1,7 @@
 "use client";
 
 import { useQuery } from '@tanstack/react-query';
-import { queryMarketplaceStats } from '@dapp/services/supabase/marketplace';
+import { queryStatisticalStats } from '@dapp/services/supabase/marketplace';
 import type { GlobalStats } from '../types/marketplace.types';
 
 /**
@@ -14,11 +14,11 @@ import type { GlobalStats } from '../types/marketplace.types';
  * Features:
  * - Use React Query to get and cache data
  */
-export const useMarketplaceStats = () => {
+export const useStatisticalStats = () => {
     const { data, isLoading, isFetching, error } = useQuery({
-        queryKey: ['marketplace-stats'],
+        queryKey: ['statistical-stats'],
         queryFn: async () => {
-            const result = await queryMarketplaceStats();
+            const result = await queryStatisticalStats();
 
             if (result.error) {
                 throw result.error;
@@ -31,15 +31,15 @@ export const useMarketplaceStats = () => {
             // Convert to frontend format
             const stats: GlobalStats = {
                 totalSupply: parseInt(result.data.total_supply || '0', 10),
-                totalStoring: parseInt(result.data.storing_supply || '0', 10),
+                totalStoring: parseInt(result.data.status_0_supply || '0', 10),
                 totalOnSale:
-                    parseInt(result.data.selling_supply || '0', 10) +
-                    parseInt(result.data.auctioning_supply || '0', 10),
+                    parseInt(result.data.status_1_supply || '0', 10) +
+                    parseInt(result.data.status_2_supply || '0', 10),
                 totalSwaping:
-                    parseInt(result.data.paid_supply || '0', 10) +
-                    parseInt(result.data.refunding_supply || '0', 10),
-                totalInSecrecy: parseInt(result.data.in_secrecy_supply || '0', 10),
-                totalPublished: parseInt(result.data.published_supply || '0', 10),
+                    parseInt(result.data.status_3_supply || '0', 10) +
+                    parseInt(result.data.status_4_supply || '0', 10),
+                totalDelaying: parseInt(result.data.status_5_supply || '0', 10),
+                totalPublished: parseInt(result.data.status_6_supply || '0', 10),
                 totalGTV: 0, // TODO: calculate from token_total_amounts
             };
 

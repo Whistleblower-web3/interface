@@ -45,7 +45,7 @@ interface MarketplaceActions {
   setDateRange: (start?: string, end?: string) => void;
   setIdRange: (start?: number, end?: number) => void;
   // Pagination actions
-  setPaginationMode: (mode: PaginationConfig['mode']) => void;
+  // setPaginationMode: (mode: PaginationConfig['mode']) => void;
   setPageSize: (pageSize: number) => void;
   setLoadBatchSize: (loadBatchSize: number) => void;
 }
@@ -195,19 +195,19 @@ export const useMarketplaceStore = create<MarketplaceStoreType>()(
           'setIdRange',
         );
       },
-
-      setPaginationMode: mode => {
-        set(
-          state => ({
-            paginationConfig: {
-              ...state.paginationConfig,
-              mode,
-            },
-          }),
-          false,
-          'setPaginationMode',
-        );
-      },
+      // Current not used
+      // setPaginationMode: mode => {
+      //   set(
+      //     state => ({
+      //       paginationConfig: {
+      //         ...state.paginationConfig,
+      //         mode,
+      //       },
+      //     }),
+      //     false,
+      //     'setPaginationMode',
+      //   );
+      // },
 
       setPageSize: pageSize => {
         set(

@@ -22,33 +22,12 @@ export interface MarketplaceFilters {
 }
 
 
-export interface MarketplaceBoxData {
-  id: string;
-  tokenId: string;
-  tokenIdNumeric?: number;
-  price: string;
-  status: BoxStatus | string;
-  deadline: string | null;
-  boxInfoCID: string | null;
-  acceptToken?: string | null;
+import type { BoxUnifiedType } from '@dapp/services/supabase/types/types';
 
-
-  title: string;
-  description?: string;
-  nftImage: string | null;
-  boxImage: string | null;
-  country: string | null;
-  state: string | null;
-  eventDate: string | null;
-  typeOfCrime: string | null;
-  label: string[] | null;
-
-  relevance?: number;
-  hasError?: boolean;
-}
+export type MarketplaceBoxType = BoxUnifiedType;
 
 export interface MarketplaceListResponse {
-  items: MarketplaceBoxData[];
+  items: MarketplaceBoxType[];
   nextCursor?: number;
   hasMore: boolean;
   totalCount?: number;
@@ -65,7 +44,7 @@ export interface GlobalStats {
   totalStoring: number;
   totalOnSale: number;
   totalSwaping: number;
-  totalInSecrecy: number;
+  totalDelaying: number;
   totalPublished: number;
   totalGTV: number;
 }
@@ -84,7 +63,7 @@ export enum LoadingStep {
   error = 'error'
 }
 
-export type PaginationMode = 'loadMore' | 'paginator';
+export type PaginationMode = 'infiniteScroll' | 'paginator';
 
 export interface PaginationConfig {
   loadBatchSize: number;

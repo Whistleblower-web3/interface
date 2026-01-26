@@ -1,8 +1,9 @@
 'use client';
 
-import React, { useEffect, useRef, useState, useCallback } from 'react';
+import React, { useEffect, useRef, useState, useCallback, useMemo } from 'react';
 import { cn } from '@/lib/utils';
-import { ipfsCidToUrl } from '@/config/ipfsUrl/ipfsCidToUrl';
+import { ipfsCidToUrl } from '@/services/ipfsUrl/ipfsCidToUrl';
+import { useIpfsImage } from '@/services/ipfsCache/useIpfsImage';
 
 interface ImageSwiperProps {
     images: string[];
@@ -21,10 +22,56 @@ interface ImageSwiperProps {
     /** Whether to enable ipfsUrl, default true */
     enableIpfsUrl?: boolean;
     onImageLoad?: () => void; 
+    /** Whether to notify on the first image completion instead of waiting for all */
+    notifyOnFirstImageOnly?: boolean;
+    /** Whether to enable local caching, default true */
+    enableCache?: boolean;
     className?: string;
 }
 
 type MaskDirection = 'lt' | 'rt' | 'lb' | 'rb';
+
+/**
+ * Internal component to handle individual image caching and loading
+ */
+const SwiperImage: React.FC<{
+    src: string;
+    alt: string;
+    isActive: boolean;
+    isVisible: boolean;
+    transitionDuration: number;
+    maskStyle: React.CSSProperties;
+    enableMask: boolean;
+    onLoad: (src: string) => void;
+    enableCache: boolean;
+}> = ({ src, alt, isActive, isVisible, transitionDuration, maskStyle, enableMask, onLoad, enableCache }) => {
+    const { displayUrl } = useIpfsImage(src, enableCache && isVisible);
+
+    return (
+        <img
+            src={displayUrl}
+            alt={alt}
+            className={cn(
+                "w-full h-full object-contain absolute left-0 top-0 pointer-events-none",
+                "transition-opacity ease-linear",
+                isActive ? "opacity-100 z-20" : "opacity-0 z-10"
+            )}
+            style={{
+                transitionDuration: `${transitionDuration}s`,
+                ...(isActive && enableMask ? maskStyle : {}),
+                transitionProperty: enableMask
+                    ? 'opacity, mask-image, -webkit-mask-image'
+                    : 'opacity',
+            }}
+            loading={isVisible ? 'eager' : 'lazy'}
+            onLoad={() => onLoad(src)}
+            onError={(e) => {
+                console.error(`Failed to load image: ${src}`, e);
+                onLoad(src);
+            }}
+        />
+    );
+};
 
 const ImageSwiper: React.FC<ImageSwiperProps> = ({
     images,
@@ -37,6 +84,8 @@ const ImageSwiper: React.FC<ImageSwiperProps> = ({
     enableMask = true,
     enableIpfsUrl = true,
     onImageLoad, 
+    notifyOnFirstImageOnly = false,
+    enableCache = true,
 }) => {
 
     // Current displayed image index
@@ -58,14 +107,6 @@ const ImageSwiper: React.FC<ImageSwiperProps> = ({
         setMaskDir(getRandomMaskDirection());
         setCurrentIndex((prevIndex) => (prevIndex + 1) % images.length);
     }, [images.length]);
-
-    // Switch to the image at the specified index - remove function dependency to avoid circular reference
-    const goToImage = useCallback((index: number) => {
-        if (index < 0 || index >= images.length || index === currentIndex) return;
-
-        setMaskDir(getRandomMaskDirection());
-        setCurrentIndex(index);
-    }, [images.length, currentIndex]);
 
     // Auto play logic - use ref to avoid nextImage function dependency
     const nextImageRef = useRef(nextImage);
@@ -105,7 +146,7 @@ const ImageSwiper: React.FC<ImageSwiperProps> = ({
     }
 
     // Get mask style
-    const getMaskStyle = (direction: MaskDirection) => {
+    const maskStyle = useMemo(() => {
         if (!enableMask) return {};
 
         const maskGradients = {
@@ -116,10 +157,10 @@ const ImageSwiper: React.FC<ImageSwiperProps> = ({
         };
 
         return {
-            maskImage: maskGradients[direction],
-            WebkitMaskImage: maskGradients[direction],
+            maskImage: maskGradients[maskDir],
+            WebkitMaskImage: maskGradients[maskDir],
         };
-    };
+    }, [enableMask, maskDir]);
 
     const [loadedImages, setLoadedImages] = useState<Set<string>>(new Set());
     const hasNotifiedRef = useRef(false); // Track whether it has been notified
@@ -135,18 +176,21 @@ const ImageSwiper: React.FC<ImageSwiperProps> = ({
 
     // Use useEffect to listen to all images loading complete, avoid updating parent component state during rendering
     useEffect(() => {
-        if (loadedImages.size === images.length && onImageLoad && !hasNotifiedRef.current) {
+        if (!onImageLoad || hasNotifiedRef.current) return;
+
+        const isComplete = notifyOnFirstImageOnly 
+            ? loadedImages.size >= 1 
+            : loadedImages.size === images.length;
+
+        if (isComplete) {
             hasNotifiedRef.current = true;
             // Use setTimeout to ensure execution in the next event loop, avoid updating state during rendering
             const timer = setTimeout(() => {
                 onImageLoad();
-                // if (import.meta.env.DEV) {
-                //     console.log('onImageLoad: imageSwiper');
-                // }
             }, 0);
             return () => clearTimeout(timer);
         }
-    }, [loadedImages.size, images.length]);
+    }, [loadedImages.size, images.length, onImageLoad, notifyOnFirstImageOnly]);
 
     // When images change, reset loading state and notification flag
     useEffect(() => {
@@ -170,29 +214,17 @@ const ImageSwiper: React.FC<ImageSwiperProps> = ({
                     const imageUrl = enableIpfsUrl ? ipfsCidToUrl(image) : image;
 
                     return (
-                        <img
+                        <SwiperImage
                             key={`${imageUrl}-${index}`}
                             src={imageUrl}
                             alt={`${altPrefix}-${index + 1}`}
-                            className={cn(
-                                "w-full h-full object-contain absolute left-0 top-0 pointer-events-none",
-                                "transition-opacity ease-linear",
-                                isActive ? "opacity-100 z-20" : "opacity-0 z-10"
-                            )}
-                            style={{
-                                transitionDuration: `${transitionDuration}s`,
-                                ...(isActive && enableMask ? getMaskStyle(maskDir) : {}),
-                                transitionProperty: enableMask
-                                    ? 'opacity, mask-image, -webkit-mask-image'
-                                    : 'opacity',
-                            }}
-                            loading={isVisible ? 'eager' : 'lazy'}
-                            onLoad={() => handleImageLoad(image)} // 新增
-                            onError={(e) => {
-                                console.error(`Failed to load image: ${image}`, e);
-                                // Even if loading fails, trigger callback (avoid blocking)
-                                handleImageLoad(image);
-                            }}
+                            isActive={isActive}
+                            isVisible={isVisible}
+                            transitionDuration={transitionDuration}
+                            maskStyle={maskStyle}
+                            enableMask={enableMask}
+                            onLoad={handleImageLoad}
+                            enableCache={enableCache}
                         />
                     );
                 })}

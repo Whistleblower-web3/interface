@@ -4,7 +4,7 @@ import React from 'react';
 import { Typography, Card, Space } from 'antd';
 import { CheckOutlined, CopyOutlined } from '@ant-design/icons';
 import { message } from 'antd';
-import { ipfsCidToUrl } from '@/config/ipfsUrl/ipfsCidToUrl';
+import { ipfsCidToUrl } from '@/services/ipfsUrl/ipfsCidToUrl';
 
 const { Text, Paragraph } = Typography;
 

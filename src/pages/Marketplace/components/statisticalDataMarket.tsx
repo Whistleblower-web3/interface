@@ -1,7 +1,7 @@
 "use client"
 
 import React, { useMemo } from 'react';
-import { useMarketplaceStats } from '../hooks/useMarketplaceStats';
+import { useStatisticalStats } from '../hooks/useStatisticalStats';
 import DataLabel, { DataType } from '@/components/base/dataLabel';
 import { cn } from '@/lib/utils';
 
@@ -10,13 +10,13 @@ const defaultStats = {
     totalStoring: 0,
     totalOnSale: 0,
     totalSwaping: 0,
-    totalInSecrecy: 0,
+    totalDelaying: 0,
     totalPublished: 0,
     totalGTV: 0,
 };
 
 const StatisticalDataMarket: React.FC = () => {
-    const { data, isLoading, isError } = useMarketplaceStats();
+    const { data, isLoading, isError } = useStatisticalStats();
     const stats = data || defaultStats;
 
     const metricCards: DataType[] = useMemo(() => ([
@@ -24,7 +24,7 @@ const StatisticalDataMarket: React.FC = () => {
         { label: 'Storing', value: stats.totalStoring },
         { label: 'OnSale', value: stats.totalOnSale },
         { label: 'Swaping', value: stats.totalSwaping },
-        { label: 'Delaying', value: stats.totalInSecrecy },
+        { label: 'Delaying', value: stats.totalDelaying },
         { label: 'Published', value: stats.totalPublished },
         { label: 'Volume', value: stats.totalGTV, suffix: '$' },
     ]), [stats]);

@@ -5,7 +5,7 @@ import { useNavigate } from 'react-router-dom';
 import TruthBoxCard from '@/components/truthBoxCard';
 import MarketplacePagination from './MarketplacePagination';
 import { cn } from '@/lib/utils';
-import type { MarketplaceBoxData } from '../types/marketplace.types';
+import type { MarketplaceBoxType } from '../types/marketplace.types';
 import SkeletonCard from '@/components/base/skeletonCard';
 import { 
     ProgressiveRevealCard,
@@ -14,7 +14,7 @@ import {
 
 interface MarketplaceListProps {
     className?: string;
-    items: MarketplaceBoxData[];
+    items: MarketplaceBoxType[];
     totalItems: number;
     pageSize: number;
     currentPage: number;
@@ -44,7 +44,7 @@ const MarketplaceList: React.FC<MarketplaceListProps> = ({
         });
 
     // Use useRef to track the previous items, to avoid unnecessary resets
-    const prevItemsRef = useRef<MarketplaceBoxData[]>([]);
+    const prevItemsRef = useRef<MarketplaceBoxType[]>([]);
     const itemsKeyRef = useRef<string>('');
 
     // Generate unique identifier for items (based on length and id of the first/last item)
@@ -62,10 +62,12 @@ const MarketplaceList: React.FC<MarketplaceListProps> = ({
         appendReveal,
         reset,
         notifyCompleted,
-    } = useProgressiveReveal<MarketplaceBoxData>({
+    } = useProgressiveReveal<MarketplaceBoxType>({
         initialCount: visibleItems.length || 0,
         waitForImageLoad: true, // Enable image loading wait mode
         transitionDuration: 300,
+        revealWindowSize: 4, // Concurrent revealing for 4-column layout
+        revealDelay: 100, // Speed up the delay between reveals
     });
 
     // When the items data really changes, start progressive display (to avoid repeated resets)

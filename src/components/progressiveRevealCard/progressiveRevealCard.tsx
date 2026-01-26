@@ -162,7 +162,7 @@ function ProgressiveRevealCard<T = any>({
 
     // New: track image loading status
     const imageLoadCountRef = useRef(0);
-    const expectedImageCount = 1; // truthBoxCard只会回调一次
+    const expectedImageCount = 1; // truthBoxCard only calls once
     const hasNotifiedRef = useRef(false); // Track whether it has been notified
 
     // New: image loading completed processing - use useEffect to delay execution, avoid updating the parent component state during rendering

@@ -11,35 +11,9 @@ export interface BoxParticipant {
     id: string;
 }
 
-export interface BoxData {
-    id: string;
-    tokenId: string;
-    price: string;
-    deadline: string;
-    status: BoxStatus;
-    createTimestamp: string;
-    boxInfoCID?: string;
-    acceptedToken?: string;
-    refundPermit?: boolean;
-    listedMode?: 'Selling' | 'Auctioning';
-    owner: BoxParticipant;
-    minter: BoxParticipant;
-    seller?: BoxParticipant;
-    buyer?: BoxParticipant;
-    completer?: BoxParticipant;
-    publisher?: BoxParticipant;
-    bidders: BoxParticipant[];
-    title?: string;
-    description?: string;
-    nftImage?: string;
-    image?: string;
-    boxImage?: string;
-    country?: string;
-    state?: string;
-    eventDate?: string;
-    typeOfCrime?: string;
-    hasError?: boolean;
-}
+import type { BoxUnifiedType } from '@dapp/services/supabase/types/types';
+
+export type BoxData = BoxUnifiedType;
 
 
 // Box metadata interface

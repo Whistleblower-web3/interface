@@ -1,4 +1,4 @@
-import { ipfsCidToUrl } from "@/config/ipfsUrl/ipfsCidToUrl";
+import { ipfsCidToUrl } from "@/services/ipfsUrl/ipfsCidToUrl";
 import { useMetadataStore } from "./useMetadataStore";
 import { MetadataBoxType } from "@dapp/types/typesDapp/metadata/metadataBox";
 
