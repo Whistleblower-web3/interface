@@ -8,26 +8,25 @@ export const boxActionConfigs: Record<string, BoxActionConfig> = {
   buy: {
     id: 'buy',
     label: 'Buy',
+    openModal: 'BuyBidPay',
     description: 'Buy this box.',
-    // This operation is executed in ModalBuyBidPay, not executed here write
     activeKey: 'buyActive',
-    requiresCustomArgs: true, // Marked as needing custom parameters, to avoid useBoxActionController checking default write
+    requiresCustomArgs: true, 
   },
   bid: {
     id: 'bid',
     label: 'Bid',
+    openModal: 'BuyBidPay',
     description: 'Bid for this box.',
-    // This operation is executed in ModalBuyBidPay, not executed here write
     activeKey: 'bidActive',
-    requiresCustomArgs: true, // Marked as needing custom parameters, to avoid useBoxActionController checking default write
+    requiresCustomArgs: true, 
   },
   payDelayFee: {
     id: 'payDelayFee',
     label: 'PayDelayFee',
-    // description: 'Pay the delay fee and extend the delay period.',
-    // This operation is executed in ModalBuyBidPay, not executed here write
+    openModal: 'BuyBidPay',
     activeKey: 'payDelayFeeActive',
-    requiresCustomArgs: true, // Marked as needing custom parameters, to avoid useBoxActionController checking default write
+    requiresCustomArgs: true, 
   },
   requestRefund: {
     id: 'requestRefund',
@@ -108,9 +107,9 @@ export const boxActionConfigs: Record<string, BoxActionConfig> = {
   sell: {
     id: 'sell',
     label: 'Sell',
-    // This operation is executed in ModalSellAuction, the button only负责打开弹窗，弹窗中通过 buildWrite 执行 write
+    openModal: 'SellAuction',
     activeKey: 'sellActive',
-    requiresCustomArgs: true, // Marked as needing custom parameters, to avoid useBoxActionController checking default write
+    requiresCustomArgs: true, 
     pendingFunctions: ['sell'], // Used to detect whether the sell operation is in progress
     buildWrite: (ctx, configs, customArgs) => {
       if (!customArgs) return null;
@@ -125,9 +124,9 @@ export const boxActionConfigs: Record<string, BoxActionConfig> = {
   auction: {
     id: 'auction',
     label: 'Auction',
-    // This operation is executed in ModalSellAuction, the button only负责打开弹窗，弹窗中通过 buildWrite 执行 write
+    openModal: 'SellAuction',
     activeKey: 'auctionActive',
-    requiresCustomArgs: true, // Marked as needing custom parameters, to avoid useBoxActionController checking default write
+    requiresCustomArgs: true, 
     pendingFunctions: ['auction'], // Used to detect whether the auction operation is in progress
     buildWrite: (ctx, configs, customArgs) => {
       if (!customArgs) return null;
@@ -142,18 +141,18 @@ export const boxActionConfigs: Record<string, BoxActionConfig> = {
   extendDeadline: {
     id: 'extendDeadline',
     label: 'Extend Deadline',
+    openModal: 'ExtendDeadline',
     description: 'Extend the deadline of the box.',
-    // This operation is executed in ModalExtend, not executed here write
     activeKey: 'extendActive',
-    requiresCustomArgs: true, // Marked as needing custom parameters, to avoid useBoxActionController checking default write
+    requiresCustomArgs: true, 
   },
   viewFile: {
     id: 'viewFile',
     label: 'View File',
-    description: 'View the confidential file.',
-    // This operation is executed in ModalViewFile, not executed here write
+    openModal: 'ViewFile',
+    description: 'View the secret file.',
     activeKey: 'viewFileActive',
-    requiresCustomArgs: true, // Marked as needing custom parameters, to avoid useBoxActionController checking default write
+    requiresCustomArgs: true, 
   },
 };
 

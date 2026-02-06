@@ -3,6 +3,7 @@
 import React, { useMemo } from 'react';
 import { useBoxDetailContext } from '../contexts/BoxDetailContext';
 import PriceLabel from '@/components/base/priceLabel';
+import { formatPrice } from '@/utils/formatPrice';
 import { getTokenMetadata } from '@dapp/config/contractsConfig';
 import type { BoxUserOrderAmountData } from '@dapp/services/supabase/fundsBox';
 import { useWalletContext } from '@dapp/contexts/web3Context/useAccount/WalletContext';
@@ -41,9 +42,8 @@ const CalcMoney: React.FC<Props> = () => {
                 <div style={{ marginBottom: '5px' }}>
                     <TextP>In the Auction, you paid:</TextP>
                     <PriceLabel
-                        price={oldMoney}
+                        data={formatPrice(oldMoney, tokenMetadata?.decimals, tokenMetadata?.precision)}
                         symbol={tokenMetadata?.symbol}
-                        decimals={tokenMetadata?.decimals}
                     />
                 </div>
             )}
@@ -51,9 +51,8 @@ const CalcMoney: React.FC<Props> = () => {
                 <div>
                     <TextP>You need to pay:</TextP>
                     <PriceLabel
-                        price={newMoney}
+                        data={formatPrice(newMoney, tokenMetadata?.decimals, tokenMetadata?.precision)}
                         symbol={tokenMetadata?.symbol}
-                        decimals={tokenMetadata?.decimals}
                     />
                 </div>
             )}

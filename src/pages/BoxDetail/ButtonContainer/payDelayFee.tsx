@@ -20,7 +20,7 @@ const PayDelayFeeButton: React.FC<Props> = ({ onClick, className }) => {
   const controller = useBoxActionController(boxActionConfigs.payDelayFee);
   const { box } = useBoxDetailContext();
   const {
-    confidentialityFeeExtensionPeriod,
+    delayFeeExtensionPeriod,
     incrementRate,
   } = useProtocolConstants();
   const [open, setOpen] = useState(false);
@@ -43,7 +43,7 @@ const PayDelayFeeButton: React.FC<Props> = ({ onClick, className }) => {
 
       <div className={cn('flex flex-col items-start')}>
         <TextP>
-          Pay the confidentiality fee to extend the confidentiality period: {confidentialityFeeExtensionPeriod / 24 / 3600} days
+          Pay the delay fee to extend the publish deadline: {delayFeeExtensionPeriod / 24 / 3600} days
         </TextP>
         <TextP>
           The increment rate: {incrementRate}%

@@ -20,10 +20,10 @@ export interface ProtocolConstantsType {
     
     deadlineExtensionWindow: number; // The time window for extending the deadline within the deadline (seconds)
     minterPrivacyExtension: number; // The maximum privacy period that the minter can extend for each unsold box (seconds)
-    confidentialityFeeExtensionPeriod: number; // The privacy period that the buyer can extend by paying the confidentiality fee after the transaction (seconds)
+    delayFeeExtensionPeriod: number; // The privacy period that the buyer can extend by paying the delay fee after the transaction (seconds)
 
     bidIncrementRate: number; // The bid increment rate (%)
-    incrementRate: number; // The increase rate of the confidentiality fee for each time the buyer pays the confidentiality fee (%)
+    incrementRate: number; // The increase rate of the delay fee for each time the buyer pays the delay fee (%)
     serviceFeeRate: number; // The transaction fee rate (%)
     helperRewardRate: number; // The reward rate for other operators (%)
 }
@@ -43,7 +43,7 @@ export const SAPPHIRE_TESTNET: ProtocolConstantsType = {
 
     deadlineExtensionWindow: 3 * 24 * 3600,
     minterPrivacyExtension: 15 * 24 * 3600, 
-    confidentialityFeeExtensionPeriod: 15 * 24 * 3600, 
+    delayFeeExtensionPeriod: 15 * 24 * 3600, 
 
     bidIncrementRate: 110, 
     incrementRate: 200, 
@@ -66,7 +66,7 @@ export const SAPPHIRE_MAINNET: ProtocolConstantsType = {
 
     deadlineExtensionWindow: 30 * 24 * 3600,
     minterPrivacyExtension: 365 * 24 * 3600,
-    confidentialityFeeExtensionPeriod: 365 * 24 * 3600,
+    delayFeeExtensionPeriod: 365 * 24 * 3600,
 
     bidIncrementRate: 110,
     incrementRate: 200,

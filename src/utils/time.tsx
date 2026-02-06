@@ -71,3 +71,20 @@ export const timeToDate = (time: number | string) => {
     return date;
 
 }
+
+
+export const formatDuration = (milliseconds: number): string => {
+    if (milliseconds <= 0) return '00:00:00:00';
+
+    const seconds = Math.floor(milliseconds / 1000);
+    const m = Math.floor(seconds / 60);
+    const h = Math.floor(m / 60);
+    const d = Math.floor(h / 24);
+
+    const displayD = String(d).padStart(2, '0');
+    const displayH = String(h % 24).padStart(2, '0');
+    const displayM = String(m % 60).padStart(2, '0');
+    const displayS = String(seconds % 60).padStart(2, '0');
+
+    return `${displayD}:${displayH}:${displayM}:${displayS}`;
+};

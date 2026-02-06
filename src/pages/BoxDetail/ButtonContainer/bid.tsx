@@ -31,19 +31,6 @@ const BidButton: React.FC<Props> = ({ onClick, className }) => {
 
     return (
         <BoxActionButton controller={controller} className={className} onClick={handleBid}>
-            {/* <Button
-                type="primary"
-                disabled={disabled}
-                loading={controller.isLoading}
-                className={className}
-                onClick={() => {
-                    onClick?.();
-                    setOpen(true);
-                }}
-                block
-            >
-                Bid
-            </Button> */}
 
             <div className='w-full mt-2 flex-col'>
                 <CalcMoney />

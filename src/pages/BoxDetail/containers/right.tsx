@@ -9,13 +9,12 @@ import Refunding from '@BoxDetail/statusContainer/Refunding';
 import Delaying from '@/pages/BoxDetail/statusContainer/Delaying';
 import Published from '@BoxDetail/statusContainer/Published';
 import StatusStep from '@/components/statusStep';
-import CountdownTimer from '@/components/countdownTimer';
 import RoleContainer from '../components/roleLabel';
-import PriceLabel from '@BoxDetail/components/priceLabel';
 import { BoxStatus } from '@dapp/types/typesDapp/contracts/truthBox';
 import StatusLabel from '@/components/base/statusLabel';
 import ShareSocial from '@/components/shareSoical';
 import { useBoxDetailContext } from '../contexts/BoxDetailContext';
+import PriceTimer from '../components/priceTimer';
 
 interface Props {
     tokenId: number | string;
@@ -86,17 +85,14 @@ const ContentRight: React.FC<Props> = ({ tokenId }) => {
             />
 
             {status !== 'Published' && (
-                <>
-                    <CountdownTimer targetTime={deadline} size='sm' />
-                    <hr className="border-border/50" />
-                </>
+                <PriceTimer status={status} price={price} token={token} deadline={deadline} />
             )}
 
             {box?.isInBlacklist && (
                 <Alert message="Warning" description="The NFT is in blacklist, can't do anything!" type="warning" />
             )}
 
-            <PriceLabel status={status} price={price} token={token} />
+            
 
             <RoleContainer />
 
@@ -113,15 +109,7 @@ const ContentRight: React.FC<Props> = ({ tokenId }) => {
                 )
             }
 
-            {/* Additional Features Section */}
 
-
-            {/* Admin Functions - Commented out for now */}
-            {/* 
-            <div className="admin-functions">
-                {accountRole === 'Admin' && <AdminFunction />}
-            </div> 
-            */}
             {/* Social Share - Commented out for now */}
             <ShareSocial
                 title={metadataBox?.title ?? ''}

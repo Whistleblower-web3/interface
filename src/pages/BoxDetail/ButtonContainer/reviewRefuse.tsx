@@ -1,11 +1,6 @@
 "use client"
 import React from 'react';
-import { Typography } from 'antd';
-// import { useAllContractConfigs } from '@/dapp/contractsConfig';
-import { cn } from '@/lib/utils';
-// import { useButtonInteractionStore } from '@/dapp/store/buttonInteractionStore';
-// import { useWriteCustormV2 } from '@/dapp/hooks/useWriteCustormV2';
-// import { useBoxDetailContext } from '../contexts/BoxDetailContext';
+
 import BoxActionButton from '@BoxDetail/components/boxActionButton';
 import { useBoxActionController } from '@BoxDetail/hooks/useBoxActionController';
 import { boxActionConfigs } from '@BoxDetail/actions/configs';

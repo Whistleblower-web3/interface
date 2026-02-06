@@ -97,7 +97,7 @@
 
   --Storing: #4db325;
   --OnSale: #b0b306;
-  --Waiting: #e28b19;
+  --CanSale: #e28b19;
   --Paid: #c7480d;
   --Refunding: #bd0fb4;
   --Delaying: #5e0fdd;
@@ -163,7 +163,7 @@
 
   --color-Storing: var(--Storing);
   --color-OnSale: var(--OnSale);
-  --color-Waiting: var(--Waiting);
+  --color-CanSale: var(--CanSale);
   --color-Paid: var(--Paid);
   --color-Refunding: var(--Refunding);
   --color-Delaying: var(--Delaying);

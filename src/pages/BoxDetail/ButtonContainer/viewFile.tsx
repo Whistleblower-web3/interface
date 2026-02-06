@@ -35,7 +35,7 @@ const ViewFileButton: React.FC<Props> = ({ onClick, className }) => {
       >
         ViewFile
       </Button> */}
-      <TextP>You can view the confidential file here.</TextP>
+      <TextP>You can view the secret file here.</TextP>
       {modalOpen && <ModalViewFile onClose={() => setModalOpen(false)} />}
     </BoxActionButton>
   );

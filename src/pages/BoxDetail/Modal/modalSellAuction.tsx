@@ -7,6 +7,7 @@ import { useBoxDetailStore } from '../store/boxDetailStore';
 import TokenSelector from '../components/tokenSelector';
 import { CommonSelectOption } from '@/components/base/CommonSelect';
 import PriceLabel from '@/components/base/priceLabel';
+import { formatPrice } from '@/utils/formatPrice';
 import { useBoxDetailContext } from '../contexts/BoxDetailContext';
 // import Paragraph from '@/components/base/paragraph';
 import type { BoxActionController } from '../actions/types';
@@ -106,9 +107,8 @@ const ModalSellAuction: React.FC<Props> = ({ onClose, listedMode, controller }) 
                     <div className='flex flex-row gap-2 items-baseline'>
                         <TextP>Current Price:</TextP>
                         <PriceLabel
-                            price={box.price}
+                            data={formatPrice(box.price, ACCEPTED_TOKENS[0].decimals, ACCEPTED_TOKENS[0].precision)}
                             symbol={ACCEPTED_TOKENS[0].symbol}
-                            decimals={ACCEPTED_TOKENS[0].decimals}
                         />
                     </div>
                     <hr className='my-2' />

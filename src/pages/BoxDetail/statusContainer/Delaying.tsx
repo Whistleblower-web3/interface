@@ -30,7 +30,7 @@ const Delaying: React.FC<Props> = ({  }) => {
                     <Alert
                         type="info"
                         message="Info"
-                        description="Each time the confidentiality period is extended, an additional confidentiality fee must be paid."
+                        description="Each time the delay period is extended, an additional delay fee must be paid."
                     />
                 </div>
             }

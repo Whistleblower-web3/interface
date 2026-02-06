@@ -21,7 +21,7 @@ const TEST_PRICE = {
 
 
 const useGetTokenPrice = () => {
-    const getTokenPrice = async (tokenAddress: string, amount: string | number) => {
+    const getTokenPrice = (tokenAddress: string, amount: string | number): number => {
         // Find token configuration
         const tokenMetadata = SUPPORTED_TOKENS.find(
             (tokenMetadata: TokenMetadata) => tokenMetadata.address.toLowerCase() === tokenAddress.toLowerCase()

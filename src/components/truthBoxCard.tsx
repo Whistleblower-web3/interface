@@ -4,9 +4,26 @@ import React from 'react';
 import { cn } from '@/lib/utils';
 import PriceLabel from './base/priceLabel';
 import ImageSwiper from './imageSwiper';
-import { boxStatus } from '@dapp/types/typesDapp/contracts/truthBox';
-import { getTokenMetadata } from '@dapp/config/contractsConfig';
 import StatusLabel from './base/statusLabel';
+import { getBoxCardData } from '@/utils/getBoxCardData';
+import { formatPrice } from '@/utils/formatPrice';
+
+export interface BoxCardProps {
+    boxImage: string;
+    nftImage: string;
+    title: string;
+    country: string;
+    state: string;
+    eventDate: string;
+    boxId: string;
+    price: string;
+    status: string;
+    tokenSymbol: string;
+    tokenDecimals: number;
+    precision: number;
+    isDisplayPrice: boolean;
+
+}
 
 
 interface TruthBoxCardProps {
@@ -24,10 +41,8 @@ const TruthBoxCard: React.FC<TruthBoxCardProps> = ({
     className,
     onCompleted, 
 }) => {
-    // Get token metadata, if the token does not exist, do not get token metadata
-    const tokenMetadata = data.acceptToken ? getTokenMetadata(data.acceptToken as `0x${string}`) : null;
 
-    const shouldShowPrice = data.status !== boxStatus[0] && data.status !== boxStatus[6] && tokenMetadata !== null;
+    const cardData = getBoxCardData(data);
 
     const handleImageLoad = () => {
         if (onCompleted) {
@@ -58,9 +73,9 @@ const TruthBoxCard: React.FC<TruthBoxCardProps> = ({
                 // "rounded-t-xl md:rounded-t-2xl"
             )}>
                 <ImageSwiper
-                    images={[data.boxImage, data.nftImage]}
+                    images={[cardData.boxImage, cardData.nftImage]}
                     enableIpfsUrl={enableIpfsUrl}
-                    altPrefix={`truthbox-${data.tokenId}`}
+                    altPrefix={`truthbox-${cardData.boxId}`}
                     className="w-full"
                     onImageLoad={handleImageLoad} 
                     notifyOnFirstImageOnly={true}
@@ -83,7 +98,7 @@ const TruthBoxCard: React.FC<TruthBoxCardProps> = ({
                         "leading-tight md:leading-normal"
                     )}
                 >
-                    {data.title}
+                    {cardData.title}
                 </p>
 
                 {/* Information row - country and date */}
@@ -95,12 +110,12 @@ const TruthBoxCard: React.FC<TruthBoxCardProps> = ({
                     <p
                         className="text-neutral-300 text-sm line-clamp-1 max-w-[140px] sm:max-w-[160px] md:max-w-[180px]"
                     >
-                        {data.country} {data.state}
+                        {cardData.country} {cardData.state}
                     </p>
                     <p
                         className="text-neutral-300 text-sm line-clamp-1"
                     >
-                        {data.eventDate}
+                        {cardData.eventDate}
                     </p>
                 </div>
 
@@ -114,7 +129,7 @@ const TruthBoxCard: React.FC<TruthBoxCardProps> = ({
                 )}>
                     {/* Token ID */}
                     <p className="text-white font-medium shrink-0">
-                        {data.tokenId}
+                        {cardData.boxId}
                     </p>
 
                     {/* Status and price */}
@@ -123,19 +138,17 @@ const TruthBoxCard: React.FC<TruthBoxCardProps> = ({
                         "gap-1 sm:gap-1.5 md:gap-2"
                     )}>
                         {/* Price component */}
-                        {shouldShowPrice && data.price !== undefined && (
+                        {cardData.isDisplayPrice && cardData.price !== undefined && (
                             <PriceLabel
-                                price={data.price}
-                                symbol={tokenMetadata?.symbol}
-                                decimals={tokenMetadata?.decimals}
-                                precision={1}
+                                data={formatPrice(cardData.price, cardData.tokenDecimals, cardData.precision)}
+                                symbol={cardData.tokenSymbol}
                                 className="shrink min-w-0"
                             />
                         )}
 
                         {/* Status label */}
                         <StatusLabel
-                            status={data.status}
+                            status={cardData.status}
                             size="sm"
                             responsive={true}
                             className="shrink-0"

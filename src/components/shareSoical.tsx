@@ -61,9 +61,9 @@ export const ShareSocial: React.FC<ShareSocialProps> = ({
                     target="_blank"
                     rel="noopener noreferrer"
                     aria-label={`Share to ${platform.name}`}
-                    className={`rounded-full p-1 md:p-2 shadow-sm transition-colors duration-150 ${platform.color} hover:text-primary hover:scale-105`}
+                    className={`shadow-sm transition-colors duration-150 ${platform.color} hover:scale-105`}
                 >
-                    <div className='w-4 h-4 md:w-5 md:h-5 flex items-center justify-center text-muted-foreground hover:text-primary '>
+                    <div className='w-5 h-5 md:w-7 md:h-7 flex items-center justify-center text-muted-foreground hover:text-primary '>
                         {platform.icon}
                     </div>
                 </a>

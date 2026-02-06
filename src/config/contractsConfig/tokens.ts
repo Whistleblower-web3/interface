@@ -2,6 +2,7 @@ import { ContractName, SupportedChainId, TokenMetadata } from './types';
 import { NETWORK_CONTRACTS } from './contracts';
 import { ABIS } from './chain-23295/abis';
 import { CHAIN_ID , OFFICIAL_TOKEN_CONFIG} from './current';
+import { TokenSymbolType, TokenAddressType } from './typesToken';
 
 export function getSupportedTokens_WithChainId(chainId: SupportedChainId): TokenMetadata[] {
   const addresses = NETWORK_CONTRACTS[chainId];
@@ -82,6 +83,15 @@ export function getOfficialTokenConfig_WithChainId(chainId: SupportedChainId): T
     contractName: ContractName.OFFICIAL_TOKEN,
     abi: ABIS[ContractName.OFFICIAL_TOKEN],
   };
+}
+
+export function getTokenMetadataBySymbol(symbol: TokenSymbolType): TokenMetadata {
+  const supportedTokens = getSupportedTokens_WithChainId(CHAIN_ID);
+  const foundToken = supportedTokens.find(token => token.symbol === symbol);
+  if (!foundToken) {
+    return OFFICIAL_TOKEN_CONFIG;
+  }
+  return foundToken;
 }
 
 export function getTokenMetadata(tokenAddress: string): TokenMetadata {

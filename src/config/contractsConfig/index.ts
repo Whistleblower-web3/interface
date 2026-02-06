@@ -51,6 +51,7 @@ export {
   // getOfficialTokenConfig_WithChainId,
   // getAcceptedTokens_WithChainId,
   getTokenMetadata,
+  getTokenMetadataBySymbol,
 } from './tokens';
 
 // export * from './eventSignatures';

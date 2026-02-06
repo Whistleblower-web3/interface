@@ -12,6 +12,7 @@ export interface DeadlineCheckStateType {
     isInReviewRefundDeadline: boolean,
     isInDeadline: boolean,
     isInExtendDeadlineTimeWindow: boolean,
+    
 }
 
 // const initialDeadlineCheckState: DeadlineCheckStateType = {

@@ -1,8 +1,6 @@
 ﻿"use client"
 import React from 'react';
-import { Typography } from 'antd';
 import { cn } from '@/lib/utils';
-import { useBoxDetailStore } from '@BoxDetail/store/boxDetailStore';
 import { timeToDate } from '@dapp/utils/time';
 import BoxActionButton from '@BoxDetail/components/boxActionButton';
 import { useBoxActionController } from '@BoxDetail/hooks/useBoxActionController';

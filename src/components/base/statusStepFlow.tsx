@@ -33,7 +33,7 @@ export interface StatusStepFlowProps {
 
 }
 
-// Simple custom node component, with明确的 handles
+// Simple custom node component, with  handles
 const StatusNode = ({ data }: { data: any }) => {
     return (
         <div className="relative">
@@ -82,7 +82,6 @@ const StatusStepFlow: React.FC<StatusStepFlowProps> = ({
             'Storing': ['Storing'],
             'Selling': ['Storing', 'Selling'],
             'Auctioning': ['Storing', 'Auctioning'],
-            // 'Waiting': ['Storing', listedMode, 'Waiting'],
             'Paid': ['Storing', listedMode, 'Paid'],
             'Refunding': ['Storing', listedMode, 'Paid', 'Refunding'],
             'Delaying': ['Storing', listedMode, 'Paid', 'Delaying'],

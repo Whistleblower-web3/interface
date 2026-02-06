@@ -1,6 +1,6 @@
 ﻿import type { BoxRoleType } from '@dapp/types/typesDapp/account';
 import type { BoxDetailData } from '../types/boxDetailData';
-// import type { DeadlineCheckStateType } from '../types/stateType';
+import type { ModalType } from '../types/stateType';
 import type { ContractConfig, ContractConfigs } from '@dapp/config/contractsConfig';
 import type { FunctionNameType } from '@dapp/types/typesDapp/contracts';
 import type { ButtonActiveNameType } from '../hooks/useButtonActive';
@@ -22,7 +22,7 @@ export interface BoxActionConfig {
   id: string;
   label: string;
   description?: string;
-  // The following fields are optional for buttons that only open the modal (such as buy, bid, payDelayFee, extendDeadline, viewFile)
+  openModal?: ModalType;
   contract?: (configs: ContractConfigs) => ContractConfig;
   functionName?: FunctionNameType;
   pendingFunctions?: FunctionNameType[];

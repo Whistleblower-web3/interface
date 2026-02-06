@@ -11,13 +11,13 @@ interface ImageResult {
 
 import fonts from '/font/STSONG.ttf'
 
-const textY = [490,570,820,860,930] // 5 starting Y coordinates - the 4th field Y=860, the 5th field Y=930
+const textY = [460,550,820,860,930] // 5 starting Y coordinates - the 4th field Y=860, the 5th field Y=930
 const fontSize = [45,30,30,30,25] // 5 font sizes
 
 // Define bottom boundaries for all fields
 const fieldBottomBounds = [
-  560,  // The 1st field bottom boundary (Y start 490 + 70px space)
-  790,  // The 2nd field bottom boundary (Y start 570 + 220px space)
+  520,  // The 1st field bottom boundary (Y start 460 + 70px space)
+  790,  // The 2nd field bottom boundary (Y start 550 + 240px space)
   900,  // The 3rd field bottom boundary (Y start 820 + 80px space)
   950,  // The 4th field bottom boundary (Y start 860 + 90px space) - increase space
   1000 // The 5th field bottom boundary (Y start 930 + 70px space)

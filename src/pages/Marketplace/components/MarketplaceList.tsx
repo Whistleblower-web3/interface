@@ -37,6 +37,7 @@ const MarketplaceList: React.FC<MarketplaceListProps> = ({
         navigate(`/boxDetail/${tokenId.toString()}`);
     };
 
+
     const visibleItems = items ?? [];
     const handlePageChange =
         onPageChange ?? ((page: number, size: number) => {

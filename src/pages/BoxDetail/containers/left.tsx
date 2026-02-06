@@ -1,9 +1,9 @@
 "use client"
-import React from 'react';
+import React, { useState } from 'react';
 import ImageSwiper from '@/components/imageSwiper';
 import TextP from '@/components/base/text_p';
 import TextTitle from '@/components/base/text_title';
-import {Space } from 'antd';
+import { Space, Button } from 'antd';
 import { useBoxDetailContext } from '../contexts/BoxDetailContext';
 
 interface Props {
@@ -13,6 +13,13 @@ interface Props {
 const ContentLeft: React.FC<Props> = ({ tokenId }) => {
 
     const { box, metadataBox } = useBoxDetailContext()
+    const [isExpanded, setIsExpanded] = useState(false);
+
+    // Simple check to determine if we should show the "Show More" button
+    // In a real scenario, you might want to measure the element's height
+    const description = metadataBox?.description || '';
+    const shouldShowButton = description.length > 200; // Rough character limit check
+
 
     if (!box) {
         return (
@@ -25,17 +32,20 @@ const ContentLeft: React.FC<Props> = ({ tokenId }) => {
     return (
         <div className="w-full space-y-6 md:space-y-8">
             <Space direction="vertical" size="middle">
-                {/* Truth Box ID */}
-                <Space direction="horizontal" size="middle">
-                    <TextP>Truth Box Id:</TextP>
-                    <TextP>{tokenId}</TextP>
-                </Space>
 
-                {/* Owner Information */}
-                <Space direction="horizontal" size="middle">
-                    <TextP>Minter:</TextP>{' '}
-                    <TextP>{box.minterId}</TextP>
-                </Space>
+                <div className='flex justify-between w-full'>
+                    <Space direction="horizontal" size="middle" align='baseline'>
+                        <TextP>Box Id:</TextP>
+                        <TextP size='lg' className='text-white'>{tokenId}</TextP>
+                    </Space>
+
+                    {/* Owner Information */}
+                    <Space direction="horizontal" size="middle">
+                        <TextP>Minter:</TextP>{' '}
+                        <TextP size='lg' className='text-primary'>{box.minterId}</TextP>
+                    </Space>
+                </div>
+
                 <Space direction="horizontal" size="middle">
                     <TextP>Owner:</TextP>{' '}
                     <TextP>{box.ownerAddress}</TextP>
@@ -69,8 +79,24 @@ const ContentLeft: React.FC<Props> = ({ tokenId }) => {
             </div>
             <hr className="border-border/50" />
             {/* Description */}
-            <div className="space-y-3">
-                <TextP>{metadataBox?.description}</TextP>
+            <div className="space-y-2">
+                <div className={`
+                    relative transition-all duration-300 ease-in-out
+                    ${isExpanded ? 'max-h-none' : 'max-h-[72px] line-clamp-3'}
+                    overflow-hidden
+                `}>
+                    <TextP>{description}</TextP>
+                </div>
+
+                {shouldShowButton && (
+                    <Button
+                        type="link"
+                        onClick={() => setIsExpanded(!isExpanded)}
+                        className="px-0 h-auto text-primary hover:text-primary/80 font-medium"
+                    >
+                        {isExpanded ? 'Show Less' : 'Show More'}
+                    </Button>
+                )}
             </div>
         </div>
     );
