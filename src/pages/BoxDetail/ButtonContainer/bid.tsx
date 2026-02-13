@@ -4,7 +4,7 @@ import CalcMoney from '@BoxDetail/components/calcMoney';
 import { useBoxActionController } from '@BoxDetail/hooks/useBoxActionController';
 import { boxActionConfigs } from '@BoxDetail/actions/configs';
 import { useBoxDetailContext } from '@BoxDetail/contexts/BoxDetailContext';
-import ModalBuyBidPay from '@BoxDetail/Modal/modalBuyBidPay';
+import ModalBuyBidPay from '@/pages/BoxDetail/Modal/modalBuyBidDelay';
 import BoxActionButton from '@BoxDetail/components/boxActionButton';
 
 interface Props {
@@ -21,7 +21,7 @@ const BidButton: React.FC<Props> = ({ onClick, className }) => {
         setOpen(true);
     };
 
-    const tokenAddress = box?.acceptedToken as `0x${string}` | undefined;
+    const tokenAddress = box?.accepted_token as `0x${string}` | undefined;
     const amount = useMemo(() => {
         const price = box?.price;
         return price ? price.toString() : '0';

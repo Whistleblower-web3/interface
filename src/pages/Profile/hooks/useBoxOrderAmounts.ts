@@ -28,7 +28,7 @@ export const useBoxOrderAmounts = (
         }
         
         if (selectedTab === 'bought') {
-            return box?.refundPermit === true && buyerId === userId;
+            return box?.refund_permit === true && buyerId === userId;
         }
         
         if (selectedTab === 'bade') {
@@ -36,7 +36,7 @@ export const useBoxOrderAmounts = (
         }
         
         return false;
-    }, [selectedTab, box?.refundPermit, buyerId, userId, bidderIds]);
+    }, [selectedTab, box?.refund_permit, buyerId, userId, bidderIds]);
 
     const { data, isLoading, error, isFetching } = useQuery({
         queryKey: ['box-order-amounts', network, layer, box.id, userId, selectedTab],

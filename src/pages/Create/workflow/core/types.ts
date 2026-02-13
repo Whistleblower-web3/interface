@@ -84,7 +84,7 @@ export interface WorkflowContext {
    * @returns Whether cancelled
    */
   isCancelled: () => boolean;
-
+  
   /**
    * Throw WorkflowCancelledError if cancelled
    */
@@ -255,11 +255,11 @@ export interface WorkflowInitialData {
     label: string[];
     country: string;
     state: string;
-    typeOfCrime: string;
-    eventDate: string;
-    nftOwner: string;
+    type_of_crime: string;
+    event_date: string;
+    nft_owner: string;
     price: string;
-    mintMethod: 'create' | 'createAndPublish';
+    mint_method: 'create' | 'createAndPublish';
   };
   
   // File Data
@@ -269,7 +269,5 @@ export interface WorkflowInitialData {
 }
 
 export type WorkflowPayload = WorkflowInitialData & {
-  allStepOutputs: AllStepOutputs;
+  all_step_outputs: AllStepOutputs;
 };
-
-

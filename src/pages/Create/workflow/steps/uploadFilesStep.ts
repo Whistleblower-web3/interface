@@ -10,18 +10,18 @@ export function createUploadFilesStep(): WorkflowStep<WorkflowPayload, UploadFil
     description: 'Upload zip files to IPFS',
 
     validate: (input) => {
-      const fileChunks = input.allStepOutputs.fileChunks;
+      const fileChunks = input.all_step_outputs.file_chunks;
       if (!fileChunks || fileChunks.length === 0) {
         console.error('Upload Files: fileChunks is missing');
         return false;
       }
-      const fileName = input.allStepOutputs.fileName;
+      const fileName = input.all_step_outputs.file_name;
       if (!fileName) {
         console.error('Upload Files: fileName is missing');
         return false;
       }
-      if (input.boxInfo.mintMethod === 'create') {
-        const slicesMetadata = input.allStepOutputs.slicesMetadata;
+      if (input.boxInfo.mint_method === 'create') {
+        const slicesMetadata = input.all_step_outputs.slices_metadata_file;
         if (!slicesMetadata) {
           console.error('Upload Files: slicesMetadata is missing');
           return false;
@@ -36,12 +36,12 @@ export function createUploadFilesStep(): WorkflowStep<WorkflowPayload, UploadFil
         stores.workflow.setCurrentStep('uploadFiles');
       });
 
-      const fileChunks =  input.allStepOutputs.fileChunks;
-      const fileName = input.allStepOutputs.fileName;
-      const slicesMetadata = input.allStepOutputs.slicesMetadata;
+      const fileChunks =  input.all_step_outputs.file_chunks;
+      const fileName = input.all_step_outputs.file_name;
+      const slicesMetadata = input.all_step_outputs.slices_metadata_file;
 
       try {
-        const result = input.boxInfo.mintMethod === 'create'
+        const result = input.boxInfo.mint_method === 'create'
           ? await handleCreateUpload(fileChunks!, fileName!, slicesMetadata as Blob, input.isTestMode)
           : await handlePublishUpload(fileChunks!, fileName!, input.isTestMode);
 
@@ -93,8 +93,8 @@ async function handleCreateUpload(
   const metadataCid = await evidenceCommonUpload(metadataFile, isTestMode);
 
   return {
-    slicesMetadataCID: metadataCid,
-    fileCidList: cidList,
+    slices_metadata_cid: metadataCid,
+    file_cid_list: cidList,
   };
 }
 
@@ -106,8 +106,7 @@ async function handlePublishUpload(
   const file = new File([fileChunks[0]], fileName, { type: 'application/zip' });
   let cid = await evidenceCommonUpload(file, isTestMode);
   return {
-    slicesMetadataCID: '',
-    fileCidList: [cid],
+    slices_metadata_cid: '',
+    file_cid_list: [cid],
   };
 }
-

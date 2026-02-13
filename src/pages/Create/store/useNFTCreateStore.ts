@@ -25,8 +25,8 @@ import type { UploadFile } from 'antd/es/upload/interface';
 interface NFTCreateState {
   // Input data-------
   fileData: {
-    fileList: UploadFile[];
-    boxImageList: UploadFile[];
+    file_list: UploadFile[];
+    box_image_list: UploadFile[];
   };
   boxInfoForm: BoxInfoFormType;
   isTestMode:boolean; // Whether in test mode
@@ -35,9 +35,7 @@ interface NFTCreateState {
   baselineVersion: number;
 
   // ------ Workflow Generated Data --------
-  allStepOutputs: AllStepOutputs;
-
-
+  all_step_outputs: AllStepOutputs;
 }
 
 // Define State Modification Methods
@@ -71,16 +69,15 @@ type NFTCreateStore = NFTCreateState & NFTCreateActions;
 // Initial State
 const initialState: NFTCreateState = {
   fileData: {
-    fileList: [],
-    boxImageList: [], 
+    file_list: [],
+    box_image_list: [], 
   },
   boxInfoForm: initialBoxInfoForm,
   isTestMode: false,
   // Changed fields list (fine-grained tracking)
   changedFields: [],
   baselineVersion: 0,
-  allStepOutputs: createInitialAllStepOutputs(),
-
+  all_step_outputs: createInitialAllStepOutputs(),
 };
 
 // Create Store
@@ -89,14 +86,14 @@ export const useNFTCreateStore = create<NFTCreateStore>()(
     (set) => ({
       ...initialState,
       // File Management Methods
-      updateFileList: (fileList) =>
+      updateFileList: (file_list) =>
         set((state) => ({
-          fileData: { ...state.fileData, fileList }
+          fileData: { ...state.fileData, file_list }
         }), false, 'updateFileList'),
 
-      updateBoxImageList: (boxImageList) =>
+      updateBoxImageList: (box_image_list) =>
         set((state) => ({
-          fileData: { ...state.fileData, boxImageList }
+          fileData: { ...state.fileData, box_image_list }
         }), false, 'updateBoxImageList'),
 
       // BoxInfo Update Methods
@@ -113,64 +110,64 @@ export const useNFTCreateStore = create<NFTCreateStore>()(
 
       updateCompressFilesOutput: (compressFilesOutput: CompressFilesOutput) =>
         set((state) => ({
-          allStepOutputs: { ...state.allStepOutputs, ...compressFilesOutput }
+          all_step_outputs: { ...state.all_step_outputs, ...compressFilesOutput }
         }), false, 'updateCompressFilesOutput'),
 
       updateUploadFilesOutput: (uploadFilesOutput: UploadFilesOutput) =>
         set((state) => ({
-          allStepOutputs: { ...state.allStepOutputs, ...uploadFilesOutput }
+          all_step_outputs: { ...state.all_step_outputs, ...uploadFilesOutput }
         }), false, 'updateUploadFilesOutput'),
 
       updateEncryptDataOutput: (encryptDataOutput: EncryptDataOutput) =>
         set((state) => ({
-          allStepOutputs: { ...state.allStepOutputs, ...encryptDataOutput }
+          all_step_outputs: { ...state.all_step_outputs, ...encryptDataOutput }
         }), false, 'updateEncryptDataOutput'),
 
       updateUploadBoxImageOutput: (uploadBoxImageOutput: UploadBoxImageOutput) =>
         set((state) => ({
-          allStepOutputs: { ...state.allStepOutputs, ...uploadBoxImageOutput }
+          all_step_outputs: { ...state.all_step_outputs, ...uploadBoxImageOutput }
         }), false, 'updateUploadBoxImageOutput'),
 
       updateCreateNFTImageOutput: (createNFTImageOutput: CreateNFTImageOutput) =>
         set((state) => ({
-          allStepOutputs: { ...state.allStepOutputs, ...createNFTImageOutput }
+          all_step_outputs: { ...state.all_step_outputs, ...createNFTImageOutput }
         }), false, 'updateCreateNFTImageOutput'),
 
       updateUploadNFTImageOutput: (uploadNFTImageOutput: UploadNFTImageOutput) =>
         set((state) => ({
-          allStepOutputs: { ...state.allStepOutputs, ...uploadNFTImageOutput }
+          all_step_outputs: { ...state.all_step_outputs, ...uploadNFTImageOutput }
         }), false, 'updateUploadNFTImageOutput'),
 
       updateMetadataBoxOutput: (metadataBoxOutput: MetadataBoxOutput) =>
         set((state) => ({
-          allStepOutputs: { ...state.allStepOutputs, ...metadataBoxOutput }
+          all_step_outputs: { ...state.all_step_outputs, ...metadataBoxOutput }
         }), false, 'updateMetadataBoxOutput'),
 
       updateMetadataNFTOutput: (metadataNFTOutput: MetadataNFTOutput) =>
         set((state) => ({
-          allStepOutputs: { ...state.allStepOutputs, ...metadataNFTOutput }
+          all_step_outputs: { ...state.all_step_outputs, ...metadataNFTOutput }
         }), false, 'updateMetadataNFTOutput'),
 
       updateMintOutput: (mintOutput: MintOutput) =>
         set((state) => ({
-          allStepOutputs: { ...state.allStepOutputs, ...mintOutput }
+          all_step_outputs: { ...state.all_step_outputs, ...mintOutput }
         }), false, 'updateMintOutput'),
 
       updateUploadResultDataOutput: (uploadResultDataOutput: UploadResultDataOutput) =>
         set((state) => ({
-          allStepOutputs: { ...state.allStepOutputs, ...uploadResultDataOutput }
+          all_step_outputs: { ...state.all_step_outputs, ...uploadResultDataOutput }
         }), false, 'updateUploadResultDataOutput'),
 
       resetAllCreateStore: () =>
         set((state) => ({
           fileData: {
-            fileList: [],
-            boxImageList: [],
+            file_list: [],
+            box_image_list: [],
           },
           boxInfoForm: initialBoxInfoForm,
           changedFields: [],
           baselineVersion: state.baselineVersion + 1,
-          allStepOutputs: createInitialAllStepOutputs(),
+          all_step_outputs: createInitialAllStepOutputs(),
         }), false, 'resetAllCreateStore'),
 
       markBaseline: () =>

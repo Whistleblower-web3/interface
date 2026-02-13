@@ -1,7 +1,5 @@
 ﻿import { WorkflowStep, WorkflowPayload } from '../core/types';
 import { UploadNFTImageOutput } from '../../types/stepType';
-// import { saveFile } from '@/dapp/services/saveFile';
-// import { pinataService } from '@/dapp/services/pinata/pinataService';
 import { mintDataUpload } from '../utils/commonUpload';
 
 export function createUploadNFTImageStep(): WorkflowStep<WorkflowPayload, UploadNFTImageOutput> {
@@ -10,9 +8,9 @@ export function createUploadNFTImageStep(): WorkflowStep<WorkflowPayload, Upload
     description: 'Upload NFT Image to IPFS',
 
     validate: (input) => {
-      const image = input.allStepOutputs.nftImage;
+      const image = input.all_step_outputs.nft_image;
       if (!image || image.size === 0) {
-        console.error('Upload NFT Image: nftImage is missing');
+        console.error('Upload NFT Image: nft_image is missing');
         return false;
       }
       return true;
@@ -24,14 +22,22 @@ export function createUploadNFTImageStep(): WorkflowStep<WorkflowPayload, Upload
         stores.workflow.setCurrentStep('uploadNFTImage');
       });
 
-      const image = input.allStepOutputs.nftImage;
-      const cid = await mintDataUpload(image!, input.isTestMode);
+      try {
+        const image = input.all_step_outputs.nft_image;
+        const cid = await mintDataUpload(image!, input.isTestMode);
 
-      context.updateStore(stores => {
-        stores.nft.updateUploadNFTImageOutput({ nftImageCid: cid });
-      });
+        const result: UploadNFTImageOutput = {
+          nft_image_cid: cid,
+        };
 
-      return { nftImageCid: cid };
+        context.updateStore(stores => {
+          stores.nft.updateUploadNFTImageOutput(result);
+        });
+
+        return result;
+      } catch (error: any) {
+        throw new Error(`Upload NFT image failed: ${error.message}`);
+      }
     },
 
     onSuccess: (_, context) => {
@@ -45,7 +51,6 @@ export function createUploadNFTImageStep(): WorkflowStep<WorkflowPayload, Upload
       context.updateStore(stores => {
         stores.workflow.updateCreateProgress('uploadNFTImage_status', 'error');
         stores.workflow.updateCreateProgress('uploadNFTImage_Error', error.message);
-        // stores.workflow.updateCreateProgress('workflowStatus', 'error');
       });
     },
   };

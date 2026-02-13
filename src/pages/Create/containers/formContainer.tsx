@@ -32,7 +32,7 @@ const FormContainer: React.FC = () => {
   // const boxInfoForm = useNFTCreateStore(state => state.boxInfoForm)
 
   useEffect(() => {
-    if (boxInfoForm && boxInfoForm.mintMethod === 'create') {
+    if (boxInfoForm && boxInfoForm.mint_method === 'create') {
       // setIsStoring(true);
       setTimeout(() => {
         setShowPriceBar(true);

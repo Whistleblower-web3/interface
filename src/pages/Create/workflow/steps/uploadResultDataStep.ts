@@ -18,20 +18,20 @@ export function createUploadResultDataStep(): WorkflowStep<WorkflowPayload, Uplo
         stores.workflow.setCurrentStep('uploadResultData');
       });
 
-      const outputs = input.allStepOutputs;
+      const outputs = input.all_step_outputs;
 
       try {
         const resultData = metadataService.createResultData(
-          input.boxInfo.mintMethod,
-          outputs.fileCidList,
+          input.boxInfo.mint_method,
+          outputs.file_cid_list,
           [
-            outputs.boxImageCid && { cid: outputs.boxImageCid, isExisting: false },
-            outputs.nftImageCid && { cid: outputs.nftImageCid, isExisting: false },
-            outputs.metadataBoxCid && { cid: outputs.metadataBoxCid, isExisting: false },
-            outputs.metadataNFTCid && { cid: outputs.metadataNFTCid, isExisting: false },
+            outputs.box_image_cid && { cid: outputs.box_image_cid, isExisting: false },
+            outputs.nft_image_cid && { cid: outputs.nft_image_cid, isExisting: false },
+            outputs.metadata_box_cid && { cid: outputs.metadata_box_cid, isExisting: false },
+            outputs.metadata_nft_cid && { cid: outputs.metadata_nft_cid, isExisting: false },
           ].filter(Boolean) as any,
           true,
-          String(outputs.currentTime.timestamp ?? Date.now())
+          String(outputs.current_time.timestamp ?? Date.now())
         );
 
         const resultDataFile = objToJson(resultData, nameService.resultDataName());
@@ -39,13 +39,13 @@ export function createUploadResultDataStep(): WorkflowStep<WorkflowPayload, Uplo
         const resultDataCid = await resultDataUpload(resultDataFile, input.isTestMode);
 
         context.updateStore(stores => {
-          stores.nft.updateUploadResultDataOutput({ resultDataCid });
+          stores.nft.updateUploadResultDataOutput({ result_data_cid: resultDataCid });
         });
 
-        return { resultDataCid };
+        return { result_data_cid: resultDataCid };
       } catch (error: any) {
         context.log(`Result data upload failed (non-critical): ${error.message}`, 'warn');
-        return { resultDataCid: '' };
+        return { result_data_cid: '' };
       }
     },
 

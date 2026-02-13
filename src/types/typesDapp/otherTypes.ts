@@ -2,7 +2,7 @@
 // ipfs---
 export interface CIDIsExitingType {
     cid:string,
-    isExisting:boolean,
+    is_existed:boolean,
 }
 
 // export interface CIDListStateType {

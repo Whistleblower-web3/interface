@@ -50,8 +50,8 @@ export const useFormInputDirect = (fieldName: FormFieldName) => {
         error = 'Title is required';
       } else if (value.length < 40) {
         error = 'Title must be at least 40 characters';
-      } else if (value.length > 150) {
-        error = 'Title must be no more than 150 characters';
+      } else if (value.length > 200) {
+        error = 'Title must be no more than 200 characters';
       }
     } else if (fieldName === 'description') {
       if (!value || value.trim().length === 0) {
@@ -61,7 +61,7 @@ export const useFormInputDirect = (fieldName: FormFieldName) => {
       } else if (value.length > 1000) {
         error = 'Description must be no more than 1000 characters';
       }
-    } else if (fieldName === 'typeOfCrime') {
+    } else if (fieldName === 'type_of_crime') {
       if (!value || value.trim().length === 0) {
         error = 'Type of crime is required';
       } else if (value.length > 20) {

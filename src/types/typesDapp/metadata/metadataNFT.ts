@@ -8,13 +8,13 @@ export interface AttributeType {
 export interface MetadataType {
     name: string;
     description: string;
-    tokenId: string;
-    typeOfCrime: string;
+    token_id: string;
+    type_of_crime: string;
     title: string;
     image: string;
     country: string;
     state: string;
-    eventDate: string;
+    event_date: string;
     attributes: AttributeType[];
 }
 
@@ -24,14 +24,14 @@ export const initialMetadataNFT: MetadataNFTType = {
     name: "Truth NFT",
     project: projectDataStore.project,
     website: projectDataStore.website,
-    description: "WikiTruth is a decentralized platform for trading criminal evidence, driven by blockchain-based token economics—a Web3-native evolution of WikiLeaks.",
+    description: "Wiki Truth is a decentralized platform for trading criminal evidence, driven by blockchain-based token economics—a Web3-native evolution of WikiLeaks.",
     image: "ipfs://",
-    tokenId: "",
-    typeOfCrime: "",
+    token_id: "",
+    type_of_crime: "",
     title: "",
     country: "",
     state: "",
-    eventDate: "",
+    event_date: "",
     attributes: [
         {
             trait_type: "Version",

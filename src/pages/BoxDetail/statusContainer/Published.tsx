@@ -22,7 +22,7 @@ const Published: React.FC<Props> = ({ }) => {
     const [fileCidList, setFileCidList] = useState<string[]>([]);
     const [uriError, setUriError] = useState<string | null>(null);
 
-    const mintMethod = metadataBox?.mintMethod || 'create';
+    const mintMethod = metadataBox?.mint_method || 'create';
     const isCreateMode = mintMethod === 'create';
 
     useEffect(() => {
@@ -32,8 +32,8 @@ const Published: React.FC<Props> = ({ }) => {
             return;
         }
 
-        if (metadataBox.mintMethod === 'createAndPublish') {
-            setFileCidList(metadataBox.fileList || []);
+        if (metadataBox.mint_method === 'createAndPublish') {
+            setFileCidList(metadataBox.file_list || []);
             setUriError(null);
             return;
         }

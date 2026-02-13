@@ -36,8 +36,8 @@ const ContentRight: React.FC<Props> = ({ tokenId }) => {
             setStatus(box.status as BoxStatus);
             setPrice(box.price ?? '');
             setDeadline(Number(box.deadline));
-            setToken(box.acceptedToken ?? '');
-            setListedMode(box.listedMode ?? 'Selling');
+            setToken(box.accepted_token ?? '');
+            setListedMode(box.listed_mode ?? 'Selling');
         }
     }, [box]);
 
@@ -88,7 +88,7 @@ const ContentRight: React.FC<Props> = ({ tokenId }) => {
                 <PriceTimer status={status} price={price} token={token} deadline={deadline} />
             )}
 
-            {box?.isInBlacklist && (
+            {box?.status === 'Blacklisted' && (
                 <Alert message="Warning" description="The NFT is in blacklist, can't do anything!" type="warning" />
             )}
 
@@ -114,7 +114,7 @@ const ContentRight: React.FC<Props> = ({ tokenId }) => {
             <ShareSocial
                 title={metadataBox?.title ?? ''}
                 description={metadataBox?.description ?? ''}
-                image={metadataBox?.nftImage ?? ''}
+                image={metadataBox?.nft_image ?? ''}
                 url={typeof window !== 'undefined' ? window.location.href : ''}
             />
         </div>

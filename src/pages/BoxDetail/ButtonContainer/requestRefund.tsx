@@ -21,7 +21,7 @@ const RequestRefundButton: React.FC<Props> = ({ onClick, className }) => {
     <BoxActionButton controller={controller} className={className} onClick={onClick}>
       <div className={cn('flex flex-col items-start')}>
         <TextP type="info">
-          Request Refund Deadline: {timeToDate(Number(box?.requestRefundDeadline))}
+          Request Refund Deadline: {timeToDate(Number(box?.request_refund_deadline))}
         </TextP>
       </div>
     </BoxActionButton>

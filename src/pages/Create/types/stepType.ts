@@ -1,77 +1,68 @@
 ﻿import {
-    EncryptionSlicesMetadataCIDType,
-    EncryptionFileCIDType,
-    EncryptionPasswordType,
+    // EncryptionSlicesMetadataCIDType,
+    // EncryptionFileCIDType,
+    // EncryptionPasswordType,
+    EncryptionResultType,
 } from '@dapp/types/typesDapp/metadata/encryption';
 
 export interface TimeType {
-    createDate: string;
+    create_date: string;
     timestamp: string | number;
 }
 
 export interface CompressFilesOutput {
-    zipFile: Blob | null;
-    fileName: string;
+    zip_file: Blob | null;
+    file_name: string;
     password: string;
-    fileChunks: Blob[];
-    slicesMetadata: Blob | null;
+    file_chunks: Blob[];
+    slices_metadata_file: Blob | null;
 }
 
 export interface UploadFilesOutput {
-    slicesMetadataCID: string;
-    fileCidList: string[];
+    slices_metadata_cid: string;
+    file_cid_list: string[];
 }
 
 export interface EncryptDataOutput {
-    encryptionSlicesMetadataCID: EncryptionSlicesMetadataCIDType;
-    encryptionFileCID: EncryptionFileCIDType[];
-    encryptionPasswords: EncryptionPasswordType;
-    keyPair: {
-        privateKey_minter: string;
-        publicKey_minter: string;
+    encryption_slices_metadata_cid: EncryptionResultType;
+    encryption_file_cid: EncryptionResultType[];
+    encryption_passwords: EncryptionResultType;
+    key_pair: {
+        private_key_minter: string;
+        public_key_minter: string;
     };
 }
 
 export interface UploadBoxImageOutput {
-    boxImageCid: string;
+    box_image_cid: string;
 }
 
 export interface CreateNFTImageOutput {
-    nftImage: File | null;
-    currentTime: TimeType;
+    nft_image: File | null;
+    current_time: TimeType;
 }
 
 export interface UploadNFTImageOutput {
-    nftImageCid: string;
+    nft_image_cid: string;
 }
 
-// export interface CreateMetadataOutput {
-//     metadataBoxFile: File | null;
-//     metadataNFTFile: File | null;
-// }
-
-// export interface UploadMetadataOutput {
-//     metadataBoxCid: string;
-//     metadataNFTCid: string;
-// }
-
 export interface MetadataBoxOutput {
-    metadataBoxFile: File | null;
-    metadataBoxCid: string;
+    metadata_box_file: File | null;
+    metadata_box_cid: string;
 }
 
 export interface MetadataNFTOutput {
-    metadataNFTFile: File | null;
-    metadataNFTCid: string;
+    metadata_nft_file: File | null;
+    metadata_nft_cid: string;
 }
 
 export interface MintOutput {
-    transactionHash: string;
-    tokenId?: string;
+    transaction_hash: string;
+    token_id?: string;
 }
 
 export interface UploadResultDataOutput {
-    resultDataCid: string;
+    result_data_cid: string;
 }
 
 export interface AllStepOutputs
@@ -87,38 +78,38 @@ export interface AllStepOutputs
     UploadResultDataOutput { }
 
 export const createInitialAllStepOutputs = (): AllStepOutputs => ({
-    zipFile: null,
-    fileName: '',
+    zip_file: null,
+    file_name: '',
     password: '',
-    fileChunks: [],
-    slicesMetadata: null,
-    slicesMetadataCID: '',
-    fileCidList: [],
-    encryptionSlicesMetadataCID: {
-        slicesMetadataCID_encryption: '',
-        slicesMetadataCID_iv: '',
+    file_chunks: [],
+    slices_metadata_file: null,
+    slices_metadata_cid: '',
+    file_cid_list: [],
+    encryption_slices_metadata_cid: {
+        encryption_data: '',
+        encryption_iv: '',
     },
-    encryptionFileCID: [],
-    encryptionPasswords: {
-        password_encryption: '',
-        password_iv: '',
+    encryption_file_cid: [],
+    encryption_passwords: {
+        encryption_data: '',
+        encryption_iv: '',
     },
-    keyPair: {
-        privateKey_minter: '',
-        publicKey_minter: '',
+    key_pair: {
+        private_key_minter: '',
+        public_key_minter: '',
     },
-    boxImageCid: '',
-    nftImage: null,
-    nftImageCid: '',
-    currentTime: {
-        createDate: '',
+    box_image_cid: '',
+    nft_image: null,
+    nft_image_cid: '',
+    current_time: {
+        create_date: '',
         timestamp: 0,
     },
-    metadataBoxFile: null,
-    metadataBoxCid: '',
-    metadataNFTFile: null,
-    metadataNFTCid: '',
-    transactionHash: '',
-    tokenId: '',
-    resultDataCid: '',
+    metadata_box_file: null,
+    metadata_box_cid: '',
+    metadata_nft_file: null,
+    metadata_nft_cid: '',
+    transaction_hash: '',
+    token_id: '',
+    result_data_cid: '',
 });

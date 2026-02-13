@@ -34,26 +34,26 @@ export function prepareWorkflowData(): WorkflowInitialData {
   validateRequiredFields(boxInfoForm,fileData,isTestMode);
 
   // 4. Extract file objects
-  const files = extractFiles(fileData.fileList);
-  const boxImages = extractFiles(fileData.boxImageList);
+  const files = extractFiles(fileData.file_list);
+  const boxImages = extractFiles(fileData.box_image_list);
 
   // 6. Build and return initial data object
-  const initialData = {
+  const initialData: WorkflowInitialData = {
     boxInfo: {
       title: boxInfoForm.title,
       description: boxInfoForm.description,
       label: boxInfoForm.label,
       country: boxInfoForm.country,
       state: boxInfoForm.state,
-      typeOfCrime: boxInfoForm.typeOfCrime,
-      eventDate: boxInfoForm.eventDate,
-      nftOwner: boxInfoForm.nftOwner,
+      type_of_crime: boxInfoForm.type_of_crime,
+      event_date: boxInfoForm.event_date,
+      nft_owner: boxInfoForm.nft_owner,
       price: boxInfoForm.price,
-      mintMethod: boxInfoForm.mintMethod,
+      mint_method: boxInfoForm.mint_method,
     },
     files,
     boxImages,
-    isTestMode: isTestMode,
+    isTestMode,
   };
   
   return initialData;
@@ -77,23 +77,23 @@ function validateRequiredFields(
   // Build complete data object for validation
   const data = {
     boxInfo: boxInfoForm,
-    files: fileData.fileList.map((f: any) => f.originFileObj || f),
-    boxImages: fileData.boxImageList.map((f: any) => f.originFileObj || f),
-    isTestMode,
+    files: fileData.file_list.map((f: any) => f.originFileObj || f),
+    box_images: fileData.box_image_list.map((f: any) => f.originFileObj || f),
+    is_test_mode: isTestMode,
   };
 
   // Get initial required fields config (from new metadata system)
   const requiredFields = [
     { path: 'boxInfo.title', label: 'Title' },
     { path: 'boxInfo.description', label: 'Description' },
-    { path: 'boxInfo.typeOfCrime', label: 'Type of Crime' },
+    { path: 'boxInfo.type_of_crime', label: 'Type of Crime' },
     { path: 'boxInfo.country', label: 'Country' },
-    { path: 'boxInfo.eventDate', label: 'Event Date' },
-    { path: 'boxInfo.nftOwner', label: 'NFT Owner' },
-    { path: 'boxInfo.mintMethod', label: 'Mint Method' },
+    { path: 'boxInfo.event_date', label: 'Event Date' },
+    { path: 'boxInfo.nft_owner', label: 'NFT Owner' },
+    { path: 'boxInfo.mint_method', label: 'Mint Method' },
     { path: 'files', label: 'Files' },
-    { path: 'boxImages', label: 'Box Images' },
-    { path: 'isTestMode', label: 'Is Test Mode' },
+    { path: 'box_images', label: 'Box Images' },
+    { path: 'is_test_mode', label: 'Is Test Mode' },
   ];
 
   // Iterate to validate each required field

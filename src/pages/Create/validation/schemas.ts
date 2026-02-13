@@ -99,24 +99,24 @@ export const createFormSchema = z.object({
     // BoxInfo related fields
     title: titleSchema,
     description: descriptionSchema,
-    typeOfCrime: typeOfCrimeSchema,
+    type_of_crime: typeOfCrimeSchema,
     label: labelSchema,
     country: countrySchema,
     state: stateSchema,
-    eventDate: eventDateSchema,
+    event_date: eventDateSchema,
 
     // NFT related fields
-    nftOwner: nftOwnerSchema,
+    nft_owner: nftOwnerSchema,
     price: priceSchema,
-    mintMethod: mintMethodSchema,
+    mint_method: mintMethodSchema,
 
     // File related
-    boxImageList: boxImageListSchema,
-    fileList: fileListSchema,
+    box_image_list: boxImageListSchema,
+    file_list: fileListSchema,
 }).refine(
     (data) => {
         // Conditional validation: price is required when mintMethod is 'create'
-        if (data.mintMethod === 'create') {
+        if (data.mint_method === 'create') {
             return data.price && data.price.trim() !== '';
         }
         // price is optional when mintMethod is 'createAndPublish'
@@ -135,18 +135,18 @@ export type CreateFormData = z.infer<typeof createFormSchema>;
 export const step1Schema = z.object({
     title: titleSchema,
     description: descriptionSchema,
-    typeOfCrime: typeOfCrimeSchema,
+    type_of_crime: typeOfCrimeSchema,
 });
 
 export const step2Schema = z.object({
     label: labelSchema,
     country: countrySchema,
     state: stateSchema,
-    eventDate: eventDateSchema,
+    event_date: eventDateSchema,
 });
 
 export const step3Schema = z.object({
-    nftOwner: nftOwnerSchema,
+    nft_owner: nftOwnerSchema,
     price: priceSchema,
     boxImageList: boxImageListSchema,
 });

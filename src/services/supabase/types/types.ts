@@ -1,12 +1,7 @@
-﻿import camelcaseKeys from 'camelcase-keys';
-
-import { boxStatus, type BoxStatus } from '@dapp/types/typesDapp/contracts/truthBox';
+﻿import { boxStatus, type BoxStatus } from '@dapp/types/typesDapp/contracts/truthBox';
 import { calculateStatus, getListedMode } from '../utils/status';
 import type { Database } from '../config/supabase.config';
 
-export interface BoxParticipant {
-    id: string;
-}
 
 /**
  * Unified Box type used across all pages (Marketplace, Profile, BoxDetail)
@@ -15,61 +10,50 @@ export interface BoxParticipant {
 export interface BoxUnifiedType {
     // Basic fields
     id: string;
-    tokenId: string;
-    tokenIdNumeric?: number;
+    token_id: string;
     price: string;
     deadline: string;
     status: BoxStatus | string;
-    listedMode: BoxStatus | string | null;
-    acceptToken?: string;
-    acceptedToken?: string;
-    boxInfoCID?: string;
-    privateKey?: string | null;
-    createTimestamp: string;
+    listed_mode: BoxStatus | string | null;
+    accepted_token?: string;
+    box_info_cid?: string;
+    private_key?: string | null;
+    create_timestamp: string;
     
     // Flat ID fields (legacy/database style)
-    minterId: string;
-    ownerAddress: string;
-    publisherId?: string;
-    sellerId?: string;
-    buyerId?: string | null;
-    completerId?: string;
-    refundPermit?: boolean;
+    minter_id: string;
+    owner_address: string;
+    publisher_id?: string;
+    seller_id?: string;
+    buyer_id?: string | null;
+    completer_id?: string;
+    refund_permit?: boolean;
 
     // Nested Participant objects (Profile page style)
-    owner: BoxParticipant;
-    minter: BoxParticipant;
-    seller?: BoxParticipant;
-    buyer?: BoxParticipant;
-    completer?: BoxParticipant;
-    publisher?: BoxParticipant;
-    bidders: BoxParticipant[];
+    bidders: string[];
 
     // Metadata fields
     title: string;
     description?: string;
-    nftImage: string | null;
-    boxImage: string | null;
-    image?: string | null; // Profile alias for boxImage/nftImage
+    nft_image: string | null;
+    box_image: string | null;
     country: string | null;
     state: string | null;
-    eventDate: string | null;
-    typeOfCrime: string | null;
+    event_date: string | null;
+    type_of_crime: string | null;
     label: string[] | null;
 
     // Timestamps
-    sellTimestamp?: string | null;
-    publishTimestamp?: string | null;
-    listedTimestamp?: string | null;
-    purchaseTimestamp?: string | null;
-    completeTimestamp?: string | null;
-    requestRefundDeadline?: string | null;
-    reviewDeadline?: string | null;
+    publish_timestamp?: string | null;
+    listed_timestamp?: string | null;
+    purchase_timestamp?: string | null;
+    complete_timestamp?: string | null;
+    request_refund_deadline?: string | null;
+    review_deadline?: string | null;
 
     // Misc
     relevance?: number;
-    hasError?: boolean;
-    isInBlacklist?: boolean;
+    has_error?: boolean;
 }
 
 // Supabase query result types
@@ -78,10 +62,6 @@ export type StatisticalState = Database['public']['Tables']['statistical_state']
 export type BoxRow = Database['public']['Tables']['boxes']['Row'];
 export type MetadataBoxRow = Database['public']['Tables']['metadata_boxes']['Row'];
 
-// Type guard: Check if status is a valid BoxStatus
-const isBoxStatus = (status: string): status is typeof boxStatus[number] => {
-    return boxStatus.includes(status as typeof boxStatus[number]);
-};
 
 const toNumericTokenId = (tokenId: string): number | undefined => {
     const numeric = Number(tokenId);
@@ -94,59 +74,66 @@ const toNumericTokenId = (tokenId: string): number | undefined => {
 export function convertBoxRowToMarketplaceBoxType(
     row: BoxRow & { metadata_boxes?: MetadataBoxRow | null, box_bidders?: any[] }
 ): BoxUnifiedType {
-    const { metadata_boxes, box_bidders, ...boxData } = row;
-    const camelCased = camelcaseKeys(boxData, { deep: true }) as any;
+    const { metadata_boxes, box_bidders } = row;
     
-    // Merge metadata if present
-    let metadataFields = {};
-    if (metadata_boxes) {
-        metadataFields = camelcaseKeys(metadata_boxes, { deep: true });
-    }
-
     // Build nested participant objects
-    const owner = { id: row.owner_address };
-    const minter = { id: row.minter_id };
-    const seller = row.seller_id ? { id: row.seller_id } : undefined;
-    const buyer = row.buyer_id ? { id: row.buyer_id } : undefined;
-    const completer = row.completer_id ? { id: row.completer_id } : undefined;
-    const publisher = row.publisher_id ? { id: row.publisher_id } : undefined;
-    const bidders = (box_bidders || []).map(b => ({ id: b.bidder_id || b.bidderId }));
+    const bidders = (box_bidders || []).map(b => b.bidder_id || b.bidderId);
 
     const status = calculateStatus(
         row.status,
-        (row as any).deadline,
-        (row as any).buyer_id
+        row.deadline,
+        row.buyer_id
     );
 
-    const listedMode = getListedMode(row.listed_mode);
+    const listed_mode = getListedMode(row.listed_mode);
 
     return {
-        ...camelCased,
-        ...metadataFields,
+        // Core DB fields (already snake_case)
         id: row.id,
-        tokenId: row.token_id || row.id,
-        tokenIdNumeric: toNumericTokenId(row.token_id || row.id),
+        token_id: row.token_id || row.id,
+        // token_id_numeric: toNumericTokenId(row.token_id || row.id),
+        price: row.price,
+        deadline: row.deadline,
         status,
-        listedMode,
-        acceptToken: row.accepted_token || undefined,
-        acceptedToken: row.accepted_token || undefined,
+        listed_mode,
+        accepted_token: row.accepted_token || undefined,
+        box_info_cid: row.box_info_cid || undefined,
+        private_key: row.private_key,
+        create_timestamp: row.create_timestamp,
         
-        // Ensure participant fields are set
-        owner,
-        minter,
-        seller,
-        buyer,
-        completer,
-        publisher,
+        minter_id: row.minter_id || '',
+        owner_address: row.owner_address || '',
+        publisher_id: row.publisher_id || undefined,
+        seller_id: row.seller_id || undefined,
+        buyer_id: row.buyer_id || null,
+        completer_id: row.completer_id || undefined,
+        refund_permit: row.refund_permit || undefined,
+
+        // Participant objects
         bidders,
 
-        // Profile image alias
-        image: (metadata_boxes as any)?.box_image || (metadata_boxes as any)?.nft_image || null,
+        // Metadata fields
+        title: metadata_boxes?.title ?? (row as any).title ?? '',
+        description: metadata_boxes?.description ?? (row as any).description ?? undefined,
+        nft_image: metadata_boxes?.nft_image ?? (row as any).nft_image ?? null,
+        box_image: metadata_boxes?.box_image ?? (row as any).box_image ?? null,
+        country: metadata_boxes?.country ?? (row as any).country ?? null,
+        state: metadata_boxes?.state ?? (row as any).state ?? null,
+        event_date: metadata_boxes?.event_date ?? (row as any).event_date ?? null,
+        type_of_crime: metadata_boxes?.type_of_crime ?? (row as any).type_of_crime ?? null,
+        label: metadata_boxes?.label ?? (row as any).label ?? null,
 
-        hasError: false,
-        title: (metadata_boxes as any)?.title ?? camelCased.title ?? '',
-        description: (metadata_boxes as any)?.description ?? camelCased.description ?? undefined,
-        typeOfCrime: (metadata_boxes as any)?.type_of_crime ?? camelCased.typeOfCrime ?? undefined,
+        // Timestamps
+        publish_timestamp: row.publish_timestamp,
+        listed_timestamp: row.listed_timestamp,
+        purchase_timestamp: row.purchase_timestamp,
+        complete_timestamp: row.complete_timestamp,
+        request_refund_deadline: row.request_refund_deadline,
+        review_deadline: row.review_deadline,
+
+        // Misc
+        relevance: (row as any).relevance,
+        has_error: false,
     };
 }
 

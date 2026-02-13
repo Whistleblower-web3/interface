@@ -5,7 +5,8 @@ import { useState, useCallback, useEffect, useRef } from 'react';
 import { queryMarketplaceBoxes, countMarketplaceBoxes } from '@dapp/services/supabase/marketplace';
 import { convertSearchResultToMarketplaceBoxData } from '@/services/supabase/types/types';
 import { useMarketplaceStore } from '../store/marketplaceStore';
-import type { MarketplaceBoxType } from '../types/marketplace.types';
+import type { BoxUnifiedType } from '@dapp/services/supabase/types/types';
+
 
 /**
  * Marketplace Boxes Hook (based on Supabase)
@@ -49,6 +50,7 @@ export const useMarketplaceBoxesSupabase = () => {
         queryKey: ['marketplace-boxes-count', filters],
         queryFn: async () => {
             const result = await countMarketplaceBoxes(filters);
+            
             if (result.error) {
                 console.error('[useMarketplaceBoxesSupabase] Count error:', result.error);
             }
@@ -66,7 +68,7 @@ export const useMarketplaceBoxesSupabase = () => {
 
     // Use normal query for pagination
     // Use default cache configuration (5 minutes), combined with placeholderData to achieve smooth page switching
-    const marketplaceQuery = useQuery<MarketplaceBoxType[]>({
+    const marketplaceQuery = useQuery<BoxUnifiedType[]>({
         queryKey: ['marketplace-boxes', filters, pageSize, currentPage],
         queryFn: async () => {
             const offset = (currentPage - 1) * pageSize;
@@ -84,8 +86,8 @@ export const useMarketplaceBoxesSupabase = () => {
             if (import.meta.env.DEV) {
                 console.log(
                     `[useMarketplaceBoxesSupabase] Query result: ` +
-                    `offset=${offset}, limit=${pageSize}, ` +
-                    `returned=${convertedData.length} items`
+                    `offset=${offset}, limit=${pageSize}:` +
+                    `${convertedData[0]}`
                 );
             }
             

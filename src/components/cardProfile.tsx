@@ -3,6 +3,7 @@ import { Card, Row, Col, Image } from 'antd';
 import BoxInfo, { BoxMetadata } from '@dapp/components/base/boxInfo';
 import FundsSection, { FundsData } from './fundsSection';
 import { ipfsCidToUrl } from '@/services/ipfsUrl/ipfsCidToUrl';
+import { useIpfsImage } from '@/hooks/useIpfsImage';
 
 // Type Definitions
 export interface CardProfileData {
@@ -29,6 +30,29 @@ export interface CardProfileProps {
     actions: CardProfileActions;
     className?: string;
 }
+
+/**
+ * Internal component to handle individual image caching and loading for CardProfile
+ */
+const CardProfileImage: React.FC<{
+    src: string;
+    alt: string;
+    width: number;
+    height: number;
+    style?: React.CSSProperties;
+}> = ({ src, alt, width, height, style }) => {
+    const { displayUrl } = useIpfsImage(src, true);
+
+    return (
+        <Image
+            src={displayUrl}
+            alt={alt}
+            width={width}
+            height={height}
+            style={style}
+        />
+    );
+};
 
 const CardProfile: React.FC<CardProfileProps> = ({
     data,
@@ -98,7 +122,7 @@ const CardProfile: React.FC<CardProfileProps> = ({
                             <Row gutter={[12, 12]} align="middle">
                                 <Col span={9}>
                                     <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-                                        <Image
+                                        <CardProfileImage
                                             src={ipfsCidToUrl(data.boxImage || '')}
                                             alt={`${data.title} #${data.tokenId}`}
                                             width={100}
@@ -134,7 +158,7 @@ const CardProfile: React.FC<CardProfileProps> = ({
                             >
                                 <Col md={8} lg={7} xl={6}>
                                     <div style={{ display: 'flex', justifyContent: 'center' }}>
-                                        <Image
+                                        <CardProfileImage
                                             src={ipfsCidToUrl(data.boxImage || '')}
                                             alt={`${data.title} #${data.tokenId}`}
                                             width={110}

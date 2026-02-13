@@ -36,7 +36,7 @@ export function calculateStatus(
     buyerId: string | number | null | undefined
 ): string {
     if (import.meta.env.DEV) {
-        console.log('status:', status, 'deadline:', deadline, 'buyerId:', buyerId);
+        console.log('status:', status, 'deadline:', deadline, 'buyer_id:', buyerId);
     }
 
     const statusStr = boxStatusMap_string[status];

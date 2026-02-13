@@ -141,7 +141,7 @@ export const pinataService = {
         const result: PinataUploadResult = {
           cid: uploadResponse.cid,
           ipfsHash: uploadResponse.cid,
-          isExisting: false, // Pinata SDK does not return duplicate field
+          is_existed: false, // Pinata SDK does not return duplicate field
           timestamp: uploadResponse.created_at,
           url: getFileUrl(uploadResponse.cid),
           size: uploadResponse.size
@@ -220,7 +220,7 @@ export const pinataService = {
       const result: PinataUploadResult = {
         cid: uploadResponse.cid,
         ipfsHash: uploadResponse.cid,
-        isExisting: false, // Pinata SDK does not return duplicate field
+        is_existed: false, // Pinata SDK does not return duplicate field
         timestamp: uploadResponse.created_at,
         url: getFileUrl(uploadResponse.cid),
         size: uploadResponse.size

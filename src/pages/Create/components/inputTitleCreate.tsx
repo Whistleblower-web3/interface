@@ -21,7 +21,7 @@ export const InputTitleCreate: React.FC<InputTitleCreateProps> = ({ className })
                 onBlur={handleBlur}
                 value={inputValue}
                 maxLength={maxLength}
-                placeholder="Please enter the title (40-150 characters)"
+                placeholder="Please enter the title (40-200 characters)"
                 allowClear={true}
                 showCount
             />

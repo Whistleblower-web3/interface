@@ -10,7 +10,7 @@ interface InputTypeOfCrimeProps {
 }
 
 export const InputTypeOfCrime: React.FC<InputTypeOfCrimeProps> = ({ className }) => {
-    const { inputValue, handleChange, handleBlur, error, maxLength } = useFormInputWithLimit('typeOfCrime', 20);
+    const { inputValue, handleChange, handleBlur, error, maxLength } = useFormInputWithLimit('type_of_crime', 20);
 
     const handleSanitizedChange = (value: string) => {
         const sanitizedValue = value.replace(/[^\p{L}\s]/gu, '');

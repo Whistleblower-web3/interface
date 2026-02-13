@@ -12,13 +12,13 @@ export function createMetadataNFTStep(): WorkflowStep<WorkflowPayload, MetadataN
     description: 'Create Metadata NFT',
 
     validate: (input) => {
-      const outputs = input.allStepOutputs;
-      if (!outputs.boxImageCid) {
-        console.error('Create Metadata: boxImageCid is missing');
+      const outputs = input.all_step_outputs;
+      if (!outputs.box_image_cid) {
+        console.error('Create Metadata: box_image_cid is missing');
         return false;
       }
-      if (!outputs.nftImageCid) {
-        console.error('Create Metadata: nftImageCid is missing');
+      if (!outputs.nft_image_cid) {
+        console.error('Create Metadata: nft_image_cid is missing');
         return false;
       }
       return true;
@@ -30,7 +30,7 @@ export function createMetadataNFTStep(): WorkflowStep<WorkflowPayload, MetadataN
         stores.workflow.setCurrentStep('metadataNFT');
       });
 
-      const outputs = input.allStepOutputs;
+      const outputs = input.all_step_outputs;
 
       const metadataNFTObj = await metadataService.createMetadataNFT(input.boxInfo, outputs);
 
@@ -39,8 +39,8 @@ export function createMetadataNFTStep(): WorkflowStep<WorkflowPayload, MetadataN
       const metadataNFTCid = await mintDataUpload(metadataNFTFile, input.isTestMode);
 
       const result: MetadataNFTOutput = {
-        metadataNFTFile,
-        metadataNFTCid,
+        metadata_nft_file: metadataNFTFile,
+        metadata_nft_cid: metadataNFTCid,
       };
 
       context.updateStore(stores => {

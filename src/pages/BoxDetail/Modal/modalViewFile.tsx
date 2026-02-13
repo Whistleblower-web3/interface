@@ -29,7 +29,7 @@ const ModalViewFile: React.FC<Props> = ({ onClose }) => {
         retry,
     } = useViewFileStep();
 
-    const isCreateMode = metadataBox?.mintMethod === 'create';
+    const isCreateMode = metadataBox?.mint_method === 'create';
 
     // Mark state once on open + start flow to avoid infinite loop from duplicate triggers
     const startedRef = useRef(false);

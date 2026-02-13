@@ -12,8 +12,8 @@ export const useBoxBidders = (
 
     const { network, layer } = CHAIN_CONFIG;
 
-    const shouldQuery = !!boxId && !!box && box.listedMode !== 'Storing' && box.listedMode !== 'Selling' && box.buyerId !== '';
-    const listedMode = box.listedMode || '';
+    const shouldQuery = !!boxId && !!box && box.listed_mode !== 'Storing' && box.listed_mode !== 'Selling' && box.buyer_id !== '';
+    const listed_mode = box.listed_mode || '';
 
     if(import.meta.env.DEV && shouldQuery){
         console.log('shouldQuery-useBoxBidders:', boxId);
@@ -22,11 +22,11 @@ export const useBoxBidders = (
     // Use React Query to query Box bidders data
     const { data, isLoading, error, isFetching } = useQuery({
         
-        queryKey: ['box-bidders', network, layer, boxId, listedMode],
+        queryKey: ['box-bidders', network, layer, boxId, listed_mode],
         queryFn: async () => {
             const result = await queryBoxDetail_BiddersIds(
                 boxId,
-                listedMode
+                listed_mode
             );
             
             if (result.error) {

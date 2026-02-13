@@ -24,10 +24,9 @@ export interface MarketplaceFilters {
 
 import type { BoxUnifiedType } from '@dapp/services/supabase/types/types';
 
-export type MarketplaceBoxType = BoxUnifiedType;
 
 export interface MarketplaceListResponse {
-  items: MarketplaceBoxType[];
+  items: BoxUnifiedType[];
   nextCursor?: number;
   hasMore: boolean;
   totalCount?: number;

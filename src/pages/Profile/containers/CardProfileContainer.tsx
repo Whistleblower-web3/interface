@@ -87,14 +87,14 @@ const CardProfileContainer: React.FC<CardProfileContainerProps> = ({
     ]);
 
     const cardData: CardProfileData = useMemo(() => ({
-        tokenId: data.tokenId,
-        title: data.title || `Box #${data.tokenId}`,
+        tokenId: data.token_id,
+        title: data.title || `Box #${data.token_id}`,
         description: data.description || 'No description available',
-        boxImage: data.boxImage ?? data.nftImage ?? data.image ?? undefined,
+        boxImage: data.box_image ?? data.nft_image ?? undefined,
         status: data.status,
         country: data.country ?? undefined,
         state: data.state ?? undefined,
-        eventDate: data.eventDate ?? undefined,
+        eventDate: data.event_date ?? undefined,
     }), [data]);
 
     const cardFunds: FundsData[] = useMemo(() => {

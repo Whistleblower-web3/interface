@@ -1,6 +1,5 @@
 ﻿import { WorkflowStep, WorkflowPayload } from '../core/types';
 import { UploadBoxImageOutput } from '../../types/stepType';
-// import { pinataService } from '@/dapp/services/pinata/pinataService';
 import { mintDataUpload } from '../utils/commonUpload';
 
 export function createUploadBoxImageStep(): WorkflowStep<WorkflowPayload, UploadBoxImageOutput> {
@@ -10,7 +9,7 @@ export function createUploadBoxImageStep(): WorkflowStep<WorkflowPayload, Upload
 
     validate: (input) => {
       if (!input.boxImages || input.boxImages.length === 0) {
-        console.error('Upload Box Image: images are missing');
+        console.error('Upload Box Image: boxImages is missing');
         return false;
       }
       return true;
@@ -22,18 +21,23 @@ export function createUploadBoxImageStep(): WorkflowStep<WorkflowPayload, Upload
         stores.workflow.setCurrentStep('uploadBoxImage');
       });
 
-      const image = input.boxImages[0];
-      const renamed = new File([image], image.name, { type: image.type });
-      const cid = await mintDataUpload(renamed, input.isTestMode);
+      try {
+        const image = input.boxImages[0];
+        // Renaming or wrapping file if necessary, but here we just upload
+        const cid = await mintDataUpload(image, input.isTestMode);
 
-      context.updateStore(stores => {
-        stores.nft.updateUploadBoxImageOutput({
-          boxImageCid: cid,
+        const result: UploadBoxImageOutput = {
+          box_image_cid: cid,
+        };
+
+        context.updateStore(stores => {
+          stores.nft.updateUploadBoxImageOutput(result);
         });
-      });
 
-
-      return { boxImageCid: cid };
+        return result;
+      } catch (error: any) {
+        throw new Error(`Upload box image failed: ${error.message}`);
+      }
     },
 
     onSuccess: (_, context) => {
@@ -47,7 +51,6 @@ export function createUploadBoxImageStep(): WorkflowStep<WorkflowPayload, Upload
       context.updateStore(stores => {
         stores.workflow.updateCreateProgress('uploadBoxImage_status', 'error');
         stores.workflow.updateCreateProgress('uploadBoxImage_Error', error.message);
-        // stores.workflow.updateCreateProgress('workflowStatus', 'error');
       });
     },
   };

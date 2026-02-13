@@ -1,5 +1,5 @@
 ﻿import { WorkflowStep, WorkflowPayload } from '../core/types';
-import { CreateNFTImageOutput } from '../../types/stepType';
+import { CreateNFTImageOutput, TimeType } from '../../types/stepType';
 import { filterNftData } from '../utils/filterNftData'
 import CreateNftImage from '@dapp/services/createNftImage';
 import backgroundImg from '@assets/nft/nft-light-1.jpg';
@@ -14,7 +14,7 @@ export function createCreateNFTImageStep(): WorkflowStep<WorkflowPayload, Create
 
     validate: (input) => {
       const { boxInfo, boxImages } = input;
-      if (!boxInfo.typeOfCrime || !boxInfo.title || !boxInfo.country || !boxInfo.eventDate) {
+      if (!boxInfo.type_of_crime || !boxInfo.title || !boxInfo.country || !boxInfo.event_date) {
         console.error('Create NFT Image: missing required box info fields');
         return false;
       }
@@ -33,14 +33,14 @@ export function createCreateNFTImageStep(): WorkflowStep<WorkflowPayload, Create
 
       const timestamp = Date.now();
       const createDate = timeToDate(timestamp);
-      const currentTime = { createDate, timestamp };
+      const currentTime:TimeType = { create_date:createDate, timestamp };
 
       const nftData = filterNftData({
-        typeOfCrime: input.boxInfo.typeOfCrime,
+        typeOfCrime: input.boxInfo.type_of_crime,
         title: input.boxInfo.title,
         country: input.boxInfo.country,
         state: input.boxInfo.state,
-        eventDate: input.boxInfo.eventDate,
+        eventDate: input.boxInfo.event_date,
         createDate,
       });
 
@@ -107,8 +107,8 @@ export function createCreateNFTImageStep(): WorkflowStep<WorkflowPayload, Create
       const { image, dataUrl } = await CreateNftImage(nftData, imageName, backgroundImg, input.boxImages[0]);
 
       const output: CreateNFTImageOutput = {
-        nftImage: image,
-        currentTime,
+        nft_image: image,
+        current_time: currentTime,
       };
 
       context.updateStore(stores => {

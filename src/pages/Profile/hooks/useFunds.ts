@@ -56,9 +56,9 @@ export const useFunds = ({ box, userId }: UseFundsParams): UseFundsReturn => {
     const selectedTab = useProfileStore((state) => state.filterState.selectedTab);
 
     const acceptedTokenMeta = useMemo(() => {
-        if (!box.acceptedToken) return null;
-        return supportedTokens.find((token) => token.address.toLowerCase() === box.acceptedToken?.toLowerCase());
-    }, [box.acceptedToken, supportedTokens]);
+        if (!box.accepted_token) return null;
+        return supportedTokens.find((token) => token.address.toLowerCase() === box.accepted_token?.toLowerCase());
+    }, [box.accepted_token, supportedTokens]);
 
     const { orderAmountsData, isLoading } = useBoxOrderAmounts(
         box,
@@ -67,7 +67,7 @@ export const useFunds = ({ box, userId }: UseFundsParams): UseFundsReturn => {
     );
 
     const result = useMemo(() => {
-        const acceptedAddress = box.acceptedToken ?? acceptedTokenMeta?.address;
+        const acceptedAddress = box.accepted_token ?? acceptedTokenMeta?.address;
         const decimals = acceptedTokenMeta?.decimals ?? 18;
         const symbol = acceptedTokenMeta?.symbol ?? fallbackSymbol(acceptedAddress);
         const tokens: TokenData[] = [];
@@ -97,15 +97,15 @@ export const useFunds = ({ box, userId }: UseFundsParams): UseFundsReturn => {
 
         const isRefundEligible = Boolean(
             userId &&
-            box.refundPermit &&
-            box.buyer?.id &&
-            String(box.buyer.id) === String(userId)
+            box.refund_permit &&
+            box.buyer_id &&
+            String(box.buyer_id) === String(userId)
         );
 
         const isOrderEligible = hasOrderAmounts || Boolean(
             userId &&
-            (!box.buyer?.id || String(box.buyer.id) !== String(userId)) &&
-            box.bidders?.some((bidder) => String(bidder.id) === String(userId))
+            (!box.buyer_id || String(box.buyer_id) !== String(userId)) &&
+            box.bidders?.some((bidder) => String(bidder) === String(userId))
         );
 
         const hasAccess = isRefundEligible || isOrderEligible;
@@ -124,10 +124,10 @@ export const useFunds = ({ box, userId }: UseFundsParams): UseFundsReturn => {
     }, [
         acceptedTokenMeta,
         box.id,
-        box.acceptedToken,
+        box.accepted_token,
         box.bidders,
-        box.buyer,
-        box.refundPermit,
+        box.buyer_id,
+        box.refund_permit,
         orderAmountsData,
         userId,
     ]);

@@ -16,11 +16,11 @@ export const useAddressInput = () => {
     const { register, formState, watch } = form;
 
     // Listen to current value
-    const inputValue = watch('nftOwner') || '';
+    const inputValue = watch('nft_owner') || '';
 
     // Get error state (only show after touched)
-    const error = formState.touchedFields.nftOwner
-        ? formState.errors.nftOwner?.message
+    const error = formState.touchedFields.nft_owner
+        ? formState.errors.nft_owner?.message
         : undefined;
 
   // Handle input change
@@ -28,15 +28,15 @@ export const useAddressInput = () => {
     // Automatically convert to lowercase and remove spaces
     const formattedValue = value.trim();
     
-    form.setValue('nftOwner', formattedValue, {
-      shouldValidate: formState.touchedFields.nftOwner, // If touched, validate in real-time
+    form.setValue('nft_owner', formattedValue, {
+      shouldValidate: formState.touchedFields.nft_owner, // If touched, validate in real-time
       shouldDirty: true,
     });
-  }, [form, formState.touchedFields.nftOwner]);
+  }, [form, formState.touchedFields.nft_owner]);
 
   // Handle blur event - mark as touched and trigger validation
   const handleBlur = useCallback(() => {
-    form.setValue('nftOwner', inputValue, {
+    form.setValue('nft_owner', inputValue, {
       shouldTouch: true,    // ✅ Mark as touched
       shouldValidate: true, // ✅ Trigger validation
     });

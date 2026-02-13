@@ -21,8 +21,8 @@ export const useInputChangeTracker = () => {
   const nftStore = useNFTCreateStore();
 
   const initialBoxInfoRef = useRef<BoxInfoSnapshot>(cloneBoxInfo(nftStore.boxInfoForm));
-  const initialFileListLengthRef = useRef(nftStore.fileData.fileList.length);
-  const initialImageListLengthRef = useRef(nftStore.fileData.boxImageList.length);
+  const initialFileListLengthRef = useRef(nftStore.fileData.file_list.length);
+  const initialImageListLengthRef = useRef(nftStore.fileData.box_image_list.length);
 
   const boxInfoInitialisedRef = useRef(false);
   const fileListInitialisedRef = useRef(false);
@@ -42,8 +42,8 @@ export const useInputChangeTracker = () => {
   const commitBaseline = (options: { syncStore?: boolean } = {}) => {
     const state = useNFTCreateStore.getState();
     initialBoxInfoRef.current = cloneBoxInfo(state.boxInfoForm);
-    initialFileListLengthRef.current = state.fileData.fileList.length;
-    initialImageListLengthRef.current = state.fileData.boxImageList.length;
+    initialFileListLengthRef.current = state.fileData.file_list.length;
+    initialImageListLengthRef.current = state.fileData.box_image_list.length;
     boxInfoInitialisedRef.current = true;
     fileListInitialisedRef.current = true;
     imageListInitialisedRef.current = true;
@@ -84,19 +84,19 @@ export const useInputChangeTracker = () => {
   }, [
     nftStore.boxInfoForm.title,
     nftStore.boxInfoForm.description,
-    nftStore.boxInfoForm.typeOfCrime,
+    nftStore.boxInfoForm.type_of_crime,
     nftStore.boxInfoForm.label,
     nftStore.boxInfoForm.country,
     nftStore.boxInfoForm.state,
-    nftStore.boxInfoForm.eventDate,
-    nftStore.boxInfoForm.nftOwner,
+    nftStore.boxInfoForm.event_date,
+    nftStore.boxInfoForm.nft_owner,
     nftStore.boxInfoForm.price,
-    nftStore.boxInfoForm.mintMethod,
+    nftStore.boxInfoForm.mint_method,
   ]);
 
   // Listen to file list
   useEffect(() => {
-    const currentLength = nftStore.fileData.fileList.length;
+    const currentLength = nftStore.fileData.file_list.length;
 
     if (!fileListInitialisedRef.current) {
       fileListInitialisedRef.current = true;
@@ -106,16 +106,16 @@ export const useInputChangeTracker = () => {
 
     updateChangedFields((draft) => {
       if (currentLength !== initialFileListLengthRef.current) {
-        draft.add('fileList');
+        draft.add('file_list');
       } else {
-        draft.delete('fileList');
+        draft.delete('file_list');
       }
     });
-  }, [nftStore.fileData.fileList.length]);
+  }, [nftStore.fileData.file_list.length]);
 
   // Listen to image list
   useEffect(() => {
-    const currentLength = nftStore.fileData.boxImageList.length;
+    const currentLength = nftStore.fileData.box_image_list.length;
 
     if (!imageListInitialisedRef.current) {
       imageListInitialisedRef.current = true;
@@ -125,12 +125,12 @@ export const useInputChangeTracker = () => {
 
     updateChangedFields((draft) => {
       if (currentLength !== initialImageListLengthRef.current) {
-        draft.add('boxImageList');
+        draft.add('box_image_list');
       } else {
-        draft.delete('boxImageList');
+        draft.delete('box_image_list');
       }
     });
-  }, [nftStore.fileData.boxImageList.length]);
+  }, [nftStore.fileData.box_image_list.length]);
 
   const resetTracking = () => {
     commitBaseline();

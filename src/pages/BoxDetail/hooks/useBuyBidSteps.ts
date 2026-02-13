@@ -4,10 +4,11 @@ import { getContractConfigByAddress, TokenMetadata, useAllContractConfigs } from
 import { useReadAllowance } from '@dapp/hooks/readContracts2/token/useReadAllowance';
 import { useAccount } from 'wagmi';
 import { parseUnits, maxUint256, formatUnits } from 'viem';
+import { parseAmountToBigInt } from '@/utils/parseAmountToBigInt';
 
 type writeStatus = 'idle' | 'pending' | 'success' | 'error';
 type StepStatus = 'wait' | 'process' | 'finish' | 'error';
-type StepKey = 'allowance' | 'approve' | 'buy' | 'bid' | 'payDelayFee';
+type StepKey = 'allowance' | 'approve' | 'buy' | 'bid' | 'delay';
 
 interface StepConfig {
     title: string;
@@ -58,13 +59,13 @@ const STEP_CONFIGS: Record<StepKey, StepConfig> = {
             error: 'Bid operation failed',
         },
     },
-    payDelayFee: {
-        title: 'PayDelayFee',
+    delay: {
+        title: 'Delay',
         descriptions: {
-            idle: 'Ready to pay confidentiality fee',
-            pending: 'Executing pay confidentiality fee operation...',
-            success: 'Pay confidentiality fee operation success',
-            error: 'Pay confidentiality fee operation failed',
+            idle: 'Ready to pay delay fee',
+            pending: 'Executing pay delay fee operation...',
+            success: 'Pay delay fee operation success',
+            error: 'Pay delay fee operation failed',
         },
     },
 };
@@ -83,7 +84,7 @@ const mapWriteStatusToStepStatus = (status: writeStatus): StepStatus => {
     }
 };
 
-const createSteps = (functionName: 'buy' | 'bid' | 'payDelayFee', isEnough: boolean): StepItem[] => {
+const createSteps = (functionName: 'buy' | 'bid' | 'delay', isEnough: boolean): StepItem[] => {
     const steps: StepItem[] = [
         {
             stepKey: 'allowance',
@@ -115,11 +116,11 @@ const createSteps = (functionName: 'buy' | 'bid' | 'payDelayFee', isEnough: bool
             description: STEP_CONFIGS.bid.descriptions.idle,
             status: 'wait',
         });
-    } else if (functionName === 'payDelayFee') {
+    } else if (functionName === 'delay') {
         steps.push({
-            stepKey: 'payDelayFee',
-            title: STEP_CONFIGS.payDelayFee.title,
-            description: STEP_CONFIGS.payDelayFee.descriptions.idle,
+            stepKey: 'delay',
+            title: STEP_CONFIGS.delay.title,
+            description: STEP_CONFIGS.delay.descriptions.idle,
             status: 'wait',
         });
     }
@@ -136,10 +137,10 @@ export const useBuyBidSteps = (
     boxId: string,
     tokenMetadata: TokenMetadata,
     amount: string,
-    functionName: 'buy' | 'bid' | 'payDelayFee',
+    functionName: 'buy' | 'bid' | 'delay',
 ) => {
     const allConfigs = useAllContractConfigs();
-    const { address } = useAccount();
+    const { address: owner } = useAccount();
     const { readAllowance, allowanceAmount, isEnough } = useReadAllowance();
     const { writeCustormV2, status, isLoading, isSuccessed } = useWriteCustormV2(boxId);
 
@@ -200,14 +201,17 @@ export const useBuyBidSteps = (
 
 
     const checkAllowance = useCallback(async (checkType: 'init' | 'approve') => {
-        if (!address || !tokenMetadata || !amount || !allConfigs.FundManager.address) {
+        if (!owner || !tokenMetadata || !amount || !allConfigs.FundManager.address) {
             return;
         }
-        const amountInWei = parseUnits(amount, tokenMetadata.decimals);
+        const amountInWei = parseAmountToBigInt(amount);
+        if (import.meta.env.DEV) {
+            console.log('checkAllowance:', tokenMetadata.address, owner, allConfigs.FundManager.address, amountInWei);
+        }
         try {
             const result = await readAllowance(
                 tokenMetadata.address,
-                address,
+                owner,
                 allConfigs.FundManager.address,
                 amountInWei,
             );
@@ -219,11 +223,11 @@ export const useBuyBidSteps = (
             console.error('Check allowance error:', error);
             updateStepStatus('allowance', 'error');
         }
-    }, [tokenMetadata, amount, readAllowance, address, initializeSteps, updateStepStatus]);
+    }, [tokenMetadata, amount, readAllowance, owner, initializeSteps, updateStepStatus]);
 
     const handleApproveClick = useCallback(async (isMax: boolean = false) => {
         if (!tokenMetadata || !amount || !allConfigs.FundManager.address) return;
-        const amountInWei = isMax ? maxUint256 : parseUnits(amount, tokenMetadata.decimals);
+        const amountInWei = isMax ? maxUint256 : parseAmountToBigInt(amount);
         try {
             updateStepStatus('approve', 'pending');
             const contractConfig = getContractConfigByAddress(tokenMetadata.address);
@@ -243,7 +247,7 @@ export const useBuyBidSteps = (
     const handleBuyBidClick = useCallback(async () => {
         if (!tokenMetadata || !amount || !allConfigs) return;
         let contract = allConfigs.Exchange;
-        if (functionName === 'payDelayFee') {
+        if (functionName === 'delay') {
             contract = allConfigs.TruthBox;
         }
         try {

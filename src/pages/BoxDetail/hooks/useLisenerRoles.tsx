@@ -53,10 +53,10 @@ export const useLisenerRoles = () => {
 
         // Convert to string for comparison, to avoid type mismatch problem
         const userIdStr = String(userId).trim();
-        const sellerId = box.sellerId ? String(box.sellerId).trim() : '';
-        const buyerId = box.buyerId ? String(box.buyerId).trim() : '';
-        const minterId = box.minterId ? String(box.minterId).trim() : '';
-        const completerId = box.completerId ? String(box.completerId).trim() : '';
+        const sellerId = box.seller_id ? String(box.seller_id).trim() : '';
+        const buyerId = box.buyer_id ? String(box.buyer_id).trim() : '';
+        const minterId = box.minter_id ? String(box.minter_id).trim() : '';
+        const completerId = box.completer_id ? String(box.completer_id).trim() : '';
 
         if (biddersIds && biddersIds.length > 0 && userIdStr && userIdStr !== '') {
             // bidders is now a string array

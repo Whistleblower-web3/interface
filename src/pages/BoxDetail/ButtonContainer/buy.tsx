@@ -4,7 +4,7 @@ import { Button } from 'antd';
 import { useBoxActionController } from '@BoxDetail/hooks/useBoxActionController';
 import { boxActionConfigs } from '@BoxDetail/actions/configs';
 import { useBoxDetailContext } from '@BoxDetail/contexts/BoxDetailContext';
-import ModalBuyBidPay from '@BoxDetail/Modal/modalBuyBidPay';
+import ModalBuyBidPay from '@/pages/BoxDetail/Modal/modalBuyBidDelay';
 // import { ButtonContainer } from './buttonContainer';
 import BoxActionButton from '@BoxDetail/components/boxActionButton';
 
@@ -18,7 +18,7 @@ const BuyButton: React.FC<Props> = ({ onClick, className }) => {
     const { box } = useBoxDetailContext();
     const [open, setOpen] = useState(false);
 
-    const tokenAddress = box?.acceptedToken as `0x${string}` | undefined;
+    const tokenAddress = box?.accepted_token as `0x${string}` | undefined;
     const amount = useMemo(() => {
         const price = box?.price;
         return price ? price.toString() : '0';

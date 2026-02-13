@@ -22,10 +22,10 @@ const useDecryptionViewFile = () => {
         try {
             
             if (
-                !metadataBox.publicKey || 
-                !metadataBox.encryptionFileCID || 
-                !metadataBox.encryptionPasswords ||
-                !metadataBox.encryptionSlicesMetadataCID
+                !metadataBox.public_key || 
+                !metadataBox.encryption_file_cid || 
+                !metadataBox.encryption_passwords ||
+                !metadataBox.encryption_slices_metadata_cid
             ) {
                 // console.log("metadataBox.publicKey:", metadataBox.publicKey);
                 // console.log("metadataBox.encryptionFileCID:", metadataBox.encryptionFileCID);
@@ -34,29 +34,29 @@ const useDecryptionViewFile = () => {
                 throw new Error('Metadata box is required!');
             }
 
-            const encryptionFileCIDList = metadataBox.encryptionFileCID.map((item) => {
+            const encryptionFileCIDList = metadataBox.encryption_file_cid.map((item) => {
                 return {
-                    iv_bytes: item.fileCID_iv,
-                    encrypted_bytes: item.fileCID_encryption,
+                    iv_bytes: item.encryption_iv,
+                    encrypted_bytes: item.encryption_data,
                 };
             });
 
             const fileCIDList = await decryptList(
-                metadataBox.publicKey, 
+                metadataBox.public_key, 
                 privateKey, 
                 encryptionFileCIDList
             );
             const slicesMetadataCID = await decrypt(
-                metadataBox.publicKey, 
+                metadataBox.public_key, 
                 privateKey, 
-                metadataBox.encryptionSlicesMetadataCID.slicesMetadataCID_iv, 
-                metadataBox.encryptionSlicesMetadataCID.slicesMetadataCID_encryption
+                metadataBox.encryption_slices_metadata_cid.encryption_iv, 
+                metadataBox.encryption_slices_metadata_cid.encryption_data
             );
             const password = await decrypt(
-                metadataBox.publicKey, 
+                metadataBox.public_key, 
                 privateKey, 
-                metadataBox.encryptionPasswords.password_iv, 
-                metadataBox.encryptionPasswords.password_encryption
+                metadataBox.encryption_passwords.encryption_iv, 
+                metadataBox.encryption_passwords.encryption_data
             );
 
             const result : ViewFileResult = {

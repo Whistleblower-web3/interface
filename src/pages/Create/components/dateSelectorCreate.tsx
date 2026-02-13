@@ -15,15 +15,15 @@ const DateSelectorCreate: React.FC<DateSelectorCreateProps> = ({
 }) => {
     const form = useCreateForm();
     const { formState } = form;
-    const eventDateValue = form.watch('eventDate');
+    const eventDateValue = form.watch('event_date');
     
     // Get error status (only show after touched)
-    const error = formState.touchedFields.eventDate 
-        ? formState.errors.eventDate?.message 
+    const error = formState.touchedFields.event_date 
+        ? formState.errors.event_date?.message 
         : undefined;
 
     const handleDateChange = useCallback((date: DateDataType) => {
-        form.setValue('eventDate', date.value, {
+        form.setValue('event_date', date.value, {
             shouldValidate: true,
             shouldDirty: true,
             shouldTouch: true,

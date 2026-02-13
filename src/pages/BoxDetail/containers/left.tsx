@@ -42,17 +42,17 @@ const ContentLeft: React.FC<Props> = ({ tokenId }) => {
                     {/* Owner Information */}
                     <Space direction="horizontal" size="middle">
                         <TextP>Minter:</TextP>{' '}
-                        <TextP size='lg' className='text-primary'>{box.minterId}</TextP>
+                        <TextP size='lg' className='text-primary'>{box.minter_id}</TextP>
                     </Space>
                 </div>
 
                 <Space direction="horizontal" size="middle">
                     <TextP>Owner:</TextP>{' '}
-                    <TextP>{box.ownerAddress}</TextP>
+                    <TextP>{box.owner_address}</TextP>
                 </Space>
                 <Space direction="horizontal" size="middle">
                     <TextP>Create date:</TextP>{' '}
-                    <TextP>{metadataBox?.createDate ? new Date(metadataBox?.createDate).toLocaleString() : ''}</TextP>
+                    <TextP>{metadataBox?.create_date ? new Date(metadataBox?.create_date).toLocaleString() : ''}</TextP>
                 </Space>
             </Space>
 
@@ -60,7 +60,7 @@ const ContentLeft: React.FC<Props> = ({ tokenId }) => {
             <div className="w-full bg-black rounded-xl md:rounded-2xl overflow-hidden">
                 <div className="aspect-video md:aspect-[4/3] lg:aspect-video">
                     <ImageSwiper
-                        images={[metadataBox?.boxImage || '', metadataBox?.nftImage || '']}
+                        images={[metadataBox?.box_image || '', metadataBox?.nft_image || '']}
                         className='w-full'
                     />
                 </div>
@@ -75,7 +75,7 @@ const ContentLeft: React.FC<Props> = ({ tokenId }) => {
             <div className="flex flex-col gap-2">
                 <TextP>{metadataBox?.country}</TextP>
                 <TextP>{metadataBox?.state}</TextP>
-                <TextP>{metadataBox?.eventDate}</TextP>
+                <TextP>{metadataBox?.event_date}</TextP>
             </div>
             <hr className="border-border/50" />
             {/* Description */}

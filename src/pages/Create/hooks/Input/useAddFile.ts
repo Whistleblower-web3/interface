@@ -18,17 +18,17 @@ export const useAddFile = () => {
     const [uploadError, setUploadError] = useState<string>('');
 
     // Listen to current value
-    const fileList = watch('fileList') || [];
+    const fileList = watch('file_list') || [];
 
     // Get error state (optional field, might not be touched)
-    const error = formState.touchedFields.fileList
-        ? formState.errors.fileList?.message
+    const error = formState.touchedFields.file_list
+        ? formState.errors.file_list?.message
         : uploadError; // Prioritize upload error
 
     // Handle file change
     const handleChange = (info: { fileList: UploadFile[] }) => {
-        form.setValue('fileList', info.fileList, {
-            shouldValidate: formState.touchedFields.fileList,
+        form.setValue('file_list', info.fileList, {
+            shouldValidate: formState.touchedFields.file_list,
             shouldDirty: true,
             shouldTouch: true,
         });
@@ -50,7 +50,7 @@ export const useAddFile = () => {
         if (!isLt5M) {
             setUploadError('The total size of the files must be less than 5MB');
             // Delete the last file
-            form.setValue('fileList', fileList.slice(0, -1), {
+            form.setValue('file_list', fileList.slice(0, -1), {
                 shouldValidate: true,
                 shouldDirty: true,
             });

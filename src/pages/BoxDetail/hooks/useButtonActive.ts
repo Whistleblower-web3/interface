@@ -17,7 +17,7 @@ export type ButtonActiveNameType =
   'agreeRefundActive' |
   'refuseRefundActive' |
   'completeActive' |
-  'payDelayFeeActive' |
+  'delayActive' |
   'publishActive' |
   'viewFileActive';
 
@@ -32,7 +32,7 @@ export const buttonActiveConfig: Record<ButtonActiveNameType, FunctionNameType[]
   agreeRefundActive: ['agreeRefund','cancelRefund','refuseRefund'],
   refuseRefundActive: ['agreeRefund','cancelRefund','refuseRefund'],
   completeActive: ['completeOrder','requestRefund','agreeRefund','refuseRefund'],
-  payDelayFeeActive: ['payDelayFee','publishByBuyer'],
+  delayActive: ['delay','publishByBuyer'],
   publishActive: ['publishByMinter','publishByBuyer','sell','auction'],
   viewFileActive: ['viewFile'],
 }
@@ -67,15 +67,15 @@ export const useButtonActive = (name: ButtonActiveNameType) => {
     const roles = userState.roles;
     const { isInDeadline, isInRequestRefundDeadline, isInReviewRefundDeadline } = deadlineCheckState || {};
 
-    const isInBlackListed = box.isInBlacklist || false;
+    const isInBlackListed = box.status === 'Blacklisted' || false;
     const status = box.status || 'Storing';
 
-    const purchaseTimestamp = Number(box.purchaseTimestamp) || 0;
+    const purchaseTimestamp = Number(box.purchase_timestamp) || 0;
     // const requestRefundDeadline = Number(box.requestRefundDeadline) || 0;
-    const reviewDeadline = Number(box.reviewDeadline) || 0;
-    const refundPermit = box.refundPermit || false;
+    const reviewDeadline = Number(box.review_deadline) || 0;
+    const refundPermit = box.refund_permit || false;
 
-    const buyerIsEmpty = !box.buyerId || box.buyerId === '';
+    const buyerIsEmpty = !box.buyer_id || box.buyer_id === '';
 
     const isMinter = roles.includes('Minter');
     const isAdmin = roles.includes('Admin');
@@ -217,12 +217,12 @@ export const useButtonActive = (name: ButtonActiveNameType) => {
           completeOrder_roleCheck() &&
           wroteListNotInclude(buttonActiveConfig.completeActive);
 
-      case 'payDelayFeeActive':
+      case 'delayActive':
         return !isInBlackListed &&
           status === 'Delaying' &&
           deadlineCheckState?.isInExtendDeadlineTimeWindow &&
           !isGuest &&
-          wroteListNotInclude(buttonActiveConfig.payDelayFeeActive);
+          wroteListNotInclude(buttonActiveConfig.delayActive);
 
       case 'publishActive':
         return !isInBlackListed &&

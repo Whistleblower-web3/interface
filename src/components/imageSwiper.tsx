@@ -3,7 +3,7 @@
 import React, { useEffect, useRef, useState, useCallback, useMemo } from 'react';
 import { cn } from '@/lib/utils';
 import { ipfsCidToUrl } from '@/services/ipfsUrl/ipfsCidToUrl';
-import { useIpfsImage } from '@/services/ipfsCache/useIpfsImage';
+import { useIpfsImage } from '@/hooks/useIpfsImage';
 
 interface ImageSwiperProps {
     images: string[];
@@ -47,6 +47,10 @@ const SwiperImage: React.FC<{
 }> = ({ src, alt, isActive, isVisible, transitionDuration, maskStyle, enableMask, onLoad, enableCache }) => {
     const { displayUrl } = useIpfsImage(src, enableCache && isVisible);
 
+    if (!displayUrl || displayUrl === "") {
+        return null;
+    }
+
     return (
         <img
             src={displayUrl}
@@ -88,6 +92,12 @@ const ImageSwiper: React.FC<ImageSwiperProps> = ({
     enableCache = true,
 }) => {
 
+    // Filter out null, undefined and empty strings from images array
+    const validImages = useMemo(() => 
+        (images || []).filter(img => img && typeof img === 'string' && img.trim() !== ""),
+        [images]
+    );
+
     // Current displayed image index
     const [currentIndex, setCurrentIndex] = useState(0);
     // Mask direction
@@ -102,11 +112,11 @@ const ImageSwiper: React.FC<ImageSwiperProps> = ({
 
     // Switch to the next image - remove function dependency to avoid circular reference
     const nextImage = useCallback(() => {
-        if (images.length <= 1) return;
+        if (validImages.length <= 1) return;
 
         setMaskDir(getRandomMaskDirection());
-        setCurrentIndex((prevIndex) => (prevIndex + 1) % images.length);
-    }, [images.length]);
+        setCurrentIndex((prevIndex) => (prevIndex + 1) % validImages.length);
+    }, [validImages.length]);
 
     // Auto play logic - use ref to avoid nextImage function dependency
     const nextImageRef = useRef(nextImage);
@@ -117,7 +127,7 @@ const ImageSwiper: React.FC<ImageSwiperProps> = ({
     }, [nextImage]);
 
     useEffect(() => {
-        if (!autoPlay || images.length <= 1) return;
+        if (!autoPlay || validImages.length <= 1) return;
 
         timerRef.current = setInterval(() => {
             nextImageRef.current();
@@ -128,10 +138,10 @@ const ImageSwiper: React.FC<ImageSwiperProps> = ({
                 clearInterval(timerRef.current);
             }
         };
-    }, [autoPlay, autoPlayInterval, images.length]);
+    }, [autoPlay, autoPlayInterval, validImages.length]);
 
-    // If there are no images, return empty
-    if (!images || images.length === 0) {
+    // If there are no valid images, return empty
+    if (validImages.length === 0) {
         return (
             <div 
                 className={cn(
@@ -180,7 +190,7 @@ const ImageSwiper: React.FC<ImageSwiperProps> = ({
 
         const isComplete = notifyOnFirstImageOnly 
             ? loadedImages.size >= 1 
-            : loadedImages.size === images.length;
+            : loadedImages.size === validImages.length;
 
         if (isComplete) {
             hasNotifiedRef.current = true;
@@ -190,13 +200,13 @@ const ImageSwiper: React.FC<ImageSwiperProps> = ({
             }, 0);
             return () => clearTimeout(timer);
         }
-    }, [loadedImages.size, images.length, onImageLoad, notifyOnFirstImageOnly]);
+    }, [loadedImages.size, validImages.length, onImageLoad, notifyOnFirstImageOnly]);
 
-    // When images change, reset loading state and notification flag
+    // When validImages change, reset loading state and notification flag
     useEffect(() => {
         setLoadedImages(new Set());
         hasNotifiedRef.current = false;
-    }, [images]);
+    }, [validImages]);
 
     return (
         <div 
@@ -207,9 +217,9 @@ const ImageSwiper: React.FC<ImageSwiperProps> = ({
             style={{ aspectRatio: aspectRatio }}
         >
             <div className="w-full h-full relative">
-                {images.map((image, index) => {
+                {validImages.map((image, index) => {
                     const isActive = index === currentIndex;
-                    const isVisible = isActive || index === (currentIndex - 1 + images.length) % images.length;
+                    const isVisible = isActive || index === (currentIndex - 1 + validImages.length) % validImages.length;
 
                     const imageUrl = enableIpfsUrl ? ipfsCidToUrl(image) : image;
 

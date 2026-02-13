@@ -9,16 +9,16 @@ export interface CountryProps {
 export type FormFieldName =
     'title' |
     'description' |
-    'typeOfCrime' |
+    'type_of_crime' |
     'label' |
     'country' |
     'state' |
-    'eventDate' |
-    'nftOwner' |
+    'event_date' |
+    'nft_owner' |
     'price' |
-    'mintMethod';
+    'mint_method';
 
-export type FileFieldName = 'fileList' | 'boxImageList';
+export type FileFieldName = 'file_list' | 'box_image_list';
 
 // All input field names
 export type AllInputFieldNames = FormFieldName | FileFieldName;
@@ -26,28 +26,28 @@ export type AllInputFieldNames = FormFieldName | FileFieldName;
 export const BOX_INFO_FIELDS: FormFieldName[] = [
     'title',
     'description',
-    'typeOfCrime',
+    'type_of_crime',
     'label',
     'country',
     'state',
-    'eventDate',
-    'nftOwner',
+    'event_date',
+    'nft_owner',
     'price',
-    'mintMethod',
+    'mint_method',
 ];
 
 export interface BoxInfoFormType {
     // tokenId: string | null;
-    typeOfCrime: string,
+    type_of_crime: string,
     title: string;
     country: string;
     state: string;
-    eventDate: string;
+    event_date: string;
     description: string;
     label: string[];
     // ---
-    mintMethod: MintMethodType,
-    nftOwner: string,
+    mint_method: MintMethodType,
+    nft_owner: string,
     price: string,
 }
 
@@ -57,9 +57,9 @@ export const initialBoxInfoForm: BoxInfoFormType = {
     label: [],
     country: '',
     state: '',
-    eventDate: '',
-    typeOfCrime: '',
-    mintMethod: 'create',
-    nftOwner: '',
+    event_date: '',
+    type_of_crime: '',
+    mint_method: 'create',
+    nft_owner: '',
     price: '',
 }

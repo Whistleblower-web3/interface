@@ -22,6 +22,32 @@ const toNullableNumber = (value: number | undefined): number | null => {
 
 const normalizeString = (value?: string | null): string => value?.trim() ?? '';
 
+export async function queryStatisticalStats(): Promise<{
+    data: StatisticalState | null;
+    error: QueryError;
+}> {
+    const { network, layer } = CHAIN_CONFIG;
+    try {
+        const { data, error } = await supabase
+            .from('statistical_state')
+            .select('*')
+            .eq('network', network)
+            .eq('layer', layer)
+            .eq('id', 'statistical')
+            .single();
+
+        if (error) {
+            return { data: null, error };
+        }
+
+        return { data, error: null };
+    } catch (error) {
+        console.error('Error querying marketplace stats:', error);
+        return { data: null, error: toQueryError(error) };
+    }
+}
+
+
 function convertFiltersToSearchParams(
     filters: MarketplaceFilters
 ): SearchBoxesArgs {
@@ -134,10 +160,6 @@ const toQueryError = (error: unknown): QueryError => {
 
 /**
  * Unify Box status returned by Supabase:
- * According to contract logic, when deadline expires:
- * - Selling/Auctioning + has buyer → Paid
- * - Selling/Auctioning + no buyer → Published
- * - Delaying → Published
  */
 
 export async function queryMarketplaceBoxes(
@@ -164,6 +186,10 @@ export async function queryMarketplaceBoxes(
         // Apply client-side filtering (e.g. ID range, state, etc.)
         const filteredData = applyClientSideFilters(data, filters);
 
+        if (import.meta.env.DEV) {
+            console.log('queryMarketplaceBoxes:', filteredData);
+        }
+
         return {
             data: filteredData,
             error: null,
@@ -174,30 +200,6 @@ export async function queryMarketplaceBoxes(
     }
 }
 
-export async function queryStatisticalStats(): Promise<{
-    data: StatisticalState | null;
-    error: QueryError;
-}> {
-    const { network, layer } = CHAIN_CONFIG;
-    try {
-        const { data, error } = await supabase
-            .from('statistical_state')
-            .select('*')
-            .eq('network', network)
-            .eq('layer', layer)
-            .eq('id', 'statistical')
-            .single();
-
-        if (error) {
-            return { data: null, error };
-        }
-
-        return { data, error: null };
-    } catch (error) {
-        console.error('Error querying marketplace stats:', error);
-        return { data: null, error: toQueryError(error) };
-    }
-}
 
 export async function countMarketplaceBoxes(
     filters: MarketplaceFilters,
@@ -212,6 +214,9 @@ export async function countMarketplaceBoxes(
         // Type assertion: Supabase RPC method type inference needs help
         const { data, error } = await (supabase.rpc as any)('search_boxes', searchParams);
 
+        if (import.meta.env.DEV) {
+            console.log('countMarketplaceBoxes:', data);
+        }
         if (error) {
             return { count: null, error };
         }

@@ -137,9 +137,9 @@ export class SmartWorkflowOrchestrator<TOutput = any> {
   }
 
   private getPersistedOutputs(): AllStepOutputs {
-    const stores = this.context.getStore<{ nft?: { allStepOutputs?: AllStepOutputs } }>();
-    if (stores?.nft?.allStepOutputs) {
-      return { ...stores.nft.allStepOutputs };
+    const stores = this.context.getStore<{ nft?: { all_step_outputs?: AllStepOutputs } }>();
+    if (stores?.nft?.all_step_outputs) {
+      return { ...stores.nft.all_step_outputs };
     }
     return createInitialAllStepOutputs();
   }
@@ -149,7 +149,7 @@ export class SmartWorkflowOrchestrator<TOutput = any> {
     return {
       ...persisted,
       ...base,
-      allStepOutputs: persisted,
+      all_step_outputs: persisted,
     } as WorkflowPayload;
   }
 

@@ -2,7 +2,7 @@
 import React from 'react';
 import {
     PublishButton,
-    PayDelayFeeButton,
+    DelayButton,
     ViewFileButton
 } from '@BoxDetail/ButtonContainer';
 import { useBoxDetailContext } from '../contexts/BoxDetailContext';
@@ -35,7 +35,7 @@ const Delaying: React.FC<Props> = ({  }) => {
                 </div>
             }
 
-            <PayDelayFeeButton />
+            <DelayButton />
             <PublishButton />
             <ViewFileButton />
         </div>

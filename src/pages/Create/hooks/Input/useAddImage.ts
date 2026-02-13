@@ -20,11 +20,11 @@ export const useAddImage = () => {
     const [uploadError, setUploadError] = useState<string>('');
 
     // Listen to current value
-    const boxImageList = watch('boxImageList') || [];
+    const boxImageList = watch('box_image_list') || [];
 
     // Get error state (only show after touched)
-    const error = formState.touchedFields.boxImageList
-        ? formState.errors.boxImageList?.message
+    const error = formState.touchedFields.box_image_list
+        ? formState.errors.box_image_list?.message
         : uploadError; // Prioritize upload error
 
     const onChange: UploadProps['onChange'] = (info: { fileList: UploadFile[] }) => {
@@ -39,8 +39,8 @@ export const useAddImage = () => {
             }));
 
             // Update form value
-            form.setValue('boxImageList', cleanFileList, {
-                shouldValidate: formState.touchedFields.boxImageList,
+            form.setValue('box_image_list', cleanFileList, {
+                shouldValidate: formState.touchedFields.box_image_list,
                 shouldDirty: true,
                 shouldTouch: true,
             });
@@ -83,7 +83,7 @@ export const useAddImage = () => {
                 const isLt500K = size < 0.3 * 1024 * 1024;
                 if (!isLt500K) {
                     setUploadError('The cropped image size must be less than 0.3MB');
-                    form.setValue('boxImageList', [], {
+                    form.setValue('box_image_list', [], {
                         shouldValidate: true,
                         shouldTouch: true,
                     });
@@ -102,7 +102,7 @@ export const useAddImage = () => {
                         type: file.type,
                     }];
 
-                    form.setValue('boxImageList', newFileList, {
+                    form.setValue('box_image_list', newFileList, {
                         shouldValidate: true,
                         shouldDirty: true,
                         shouldTouch: true,

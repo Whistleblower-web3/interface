@@ -30,54 +30,54 @@ export const metadataService = {
   ) : Promise<MetadataBoxType> => {
     try {
       // Verify required data
-      if(allStepOutputs.nftImageCid === '' ) {
+      if(allStepOutputs.nft_image_cid === '' ) {
         throw new Error('image is empty!');
       }
-      if (allStepOutputs.boxImageCid === '') {
+      if (allStepOutputs.box_image_cid === '') {
         throw new Error('image2 is empty!');
       }
-      if(allStepOutputs.fileCidList.length === 0) {
+      if(allStepOutputs.file_cid_list.length === 0) {
         throw new Error('file is empty!');
       }
       // 
-      let publicKey_let = '';
-      let fileList_let: string[] = [];
-      let encryptionSlicesMetadataCID_let = {
-        slicesMetadataCID_encryption: '',
-        slicesMetadataCID_iv: '',
+      let public_key_let = '';
+      let file_list_let: string[] = [];
+      let encryption_slices_metadata_cid_let = {
+        encryption_data: '',
+        encryption_iv: '',
       };
       // Verify encryption data
-      if(boxInfoForm.mintMethod === 'createAndPublish') {
+      if(boxInfoForm.mint_method === 'createAndPublish') {
         
-        fileList_let = allStepOutputs.fileCidList;
-      } else if(boxInfoForm.mintMethod === 'create') {
-        if(allStepOutputs.keyPair.publicKey_minter === '') {
-          throw new Error('publicKey_minter is empty!');
+        file_list_let = allStepOutputs.file_cid_list;
+      } else if(boxInfoForm.mint_method === 'create') {
+        if(allStepOutputs.key_pair.public_key_minter === '') {
+          throw new Error('public_key_minter is empty!');
         }
-        publicKey_let = allStepOutputs.keyPair.publicKey_minter;
+        public_key_let = allStepOutputs.key_pair.public_key_minter;
         // Verify file chunk count
         if (
-          allStepOutputs.encryptionSlicesMetadataCID.slicesMetadataCID_encryption === '' ||
-          allStepOutputs.encryptionSlicesMetadataCID.slicesMetadataCID_iv === ''
+          allStepOutputs.encryption_slices_metadata_cid.encryption_data === '' ||
+          allStepOutputs.encryption_slices_metadata_cid.encryption_iv === ''
         ) {
-          throw new Error('slicesMetadataCID_encryption is empty!');
+          throw new Error('slices_metadata_cid_encryption is empty!');
         }
-        encryptionSlicesMetadataCID_let = allStepOutputs.encryptionSlicesMetadataCID;
+        encryption_slices_metadata_cid_let = allStepOutputs.encryption_slices_metadata_cid;
 
         // Verify encryption data for each chunk
-        for (let i = 0; i < allStepOutputs.encryptionFileCID.length; i++) {
+        for (let i = 0; i < allStepOutputs.encryption_file_cid.length; i++) {
           if (
-            allStepOutputs.encryptionFileCID[i].fileCID_iv === '' || 
-            allStepOutputs.encryptionFileCID[i].fileCID_encryption === ''
+            allStepOutputs.encryption_file_cid[i].encryption_iv === '' || 
+            allStepOutputs.encryption_file_cid[i].encryption_data === ''
           ) {
-            throw new Error('encryptionFileCID is empty!');
+            throw new Error('encryption_file_cid is empty!');
           }
         }
 
         // Verify password encryption data
         if(
-          allStepOutputs.encryptionPasswords.password_iv === '' ||
-          allStepOutputs.encryptionPasswords.password_encryption === ''
+          allStepOutputs.encryption_passwords.encryption_iv === '' ||
+          allStepOutputs.encryption_passwords.encryption_data === ''
         ) {
           throw new Error('encryptionData is empty!');
         } 
@@ -89,27 +89,27 @@ export const metadataService = {
       const metadataBox: MetadataBoxType = {
         ...initialMetadataBox,
         // BoxInfo Data
-        typeOfCrime: boxInfoForm.typeOfCrime,
+        type_of_crime: boxInfoForm.type_of_crime,
         label: boxInfoForm.label || [], // Added label property
         title: boxInfoForm.title,
         country: boxInfoForm.country,
         state: boxInfoForm.state,
         description: boxInfoForm.description,
-        eventDate: boxInfoForm.eventDate,
-        createDate: allStepOutputs.currentTime.createDate,
-        timestamp: Number(allStepOutputs.currentTime.timestamp), // Convert to number
+        event_date: boxInfoForm.event_date,
+        create_date: allStepOutputs.current_time.create_date,
+        timestamp: Number(allStepOutputs.current_time.timestamp), // Convert to number
         // Image Data
-        nftImage: `ipfs://${allStepOutputs.nftImageCid}`,
-        boxImage: `ipfs://${allStepOutputs.boxImageCid}`,
+        nft_image: `ipfs://${allStepOutputs.nft_image_cid}`,
+        box_image: `ipfs://${allStepOutputs.box_image_cid}`,
         // Mint Method
-        mintMethod: boxInfoForm.mintMethod,
+        mint_method: boxInfoForm.mint_method,
         // Encryption Data
-        encryptionSlicesMetadataCID: encryptionSlicesMetadataCID_let,
-        encryptionFileCID: allStepOutputs.encryptionFileCID,
-        encryptionPasswords: allStepOutputs.encryptionPasswords,
-        publicKey: publicKey_let,
+        encryption_slices_metadata_cid: encryption_slices_metadata_cid_let,
+        encryption_file_cid: allStepOutputs.encryption_file_cid,
+        encryption_passwords: allStepOutputs.encryption_passwords,
+        public_key: public_key_let,
         // File Data
-        fileList: fileList_let,
+        file_list: file_list_let,
         // password: '',
       };
 
@@ -126,7 +126,7 @@ export const metadataService = {
   ) : Promise<MetadataNFTType> => {
     try {
       // Verify required data
-      if(allStepOutputs.nftImageCid === '' ) {
+      if(allStepOutputs.nft_image_cid === '' ) {
         throw new Error('image is empty!');
       }
 
@@ -134,14 +134,14 @@ export const metadataService = {
       const metadataNFT: MetadataNFTType = {
         ...initialMetadataNFT,
         // Basic Info
-        tokenId: '', // tokenId generated by contract after mint
-        typeOfCrime: boxInfoForm.typeOfCrime,
+        token_id: '', // tokenId generated by contract after mint
+        type_of_crime: boxInfoForm.type_of_crime,
         title: boxInfoForm.title,
         country: boxInfoForm.country,
         state: boxInfoForm.state,
         // Image
-        image: `ipfs://${allStepOutputs.nftImageCid}`,
-        eventDate: boxInfoForm.eventDate,
+        image: `ipfs://${allStepOutputs.nft_image_cid}`,
+        event_date: boxInfoForm.event_date,
         // Attributes
         // attributes: [
         //   ...initialMetadataNFT.attributes,
@@ -156,30 +156,30 @@ export const metadataService = {
   },
 
   createResultData: (
-    mintMethod: MintMethodType,
-    fileCidList: string[],
-    cidList: CIDIsExitingType[],
-    isSuccess: boolean,
+    mint_method: MintMethodType,
+    file_cid_list: string[],
+    cid_list: CIDIsExitingType[],
+    is_success: boolean,
     timestamp: string,
   ) => {
     try {
       if (!timestamp) {
         throw (' timestamp is empty!');
       }
-      if (fileCidList.length === 0) {
-        throw (' fileCidList is empty!');
+      if (file_cid_list.length === 0) {
+        throw (' file_cid_list is empty!');
       }
-      if (cidList.length === 0) {
-        throw (' cidList is empty!');
+      if (cid_list.length === 0) {
+        throw (' cid_list is empty!');
       }
 
       const resultData: ResultDataType = {
         ...initialResultData,
-        mintMethod: mintMethod,
-        fileCidList: fileCidList,
+        mint_method: mint_method,
+        file_cid_list: file_cid_list,
         timestamp: timestamp,
-        isSuccess: isSuccess,
-        cidList: cidList.map(cid => cid.cid),
+        is_success: is_success,
+        cid_list: cid_list.map(cid => cid.cid),
       };
       return resultData;
     } catch (error) {

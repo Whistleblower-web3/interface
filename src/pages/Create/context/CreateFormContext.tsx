@@ -35,20 +35,20 @@ export const CreateFormProvider: React.FC<CreateFormProviderProps> = ({ children
             // BoxInfo Default Values
             title: boxInfoForm.title || '',
             description: boxInfoForm.description || '',
-            typeOfCrime: boxInfoForm.typeOfCrime || '',
+            type_of_crime: boxInfoForm.type_of_crime || '',
             label: boxInfoForm.label || [],
             country: boxInfoForm.country || '',
             state: boxInfoForm.state || '',
-            eventDate: boxInfoForm.eventDate || '',
+            event_date: boxInfoForm.event_date || '',
 
             // NFT Default Values
-            nftOwner: boxInfoForm.nftOwner || '',
+            nft_owner: boxInfoForm.nft_owner || '',
             price: boxInfoForm.price || '',
-            mintMethod: boxInfoForm.mintMethod || 'create',
+            mint_method: boxInfoForm.mint_method || 'create',
 
             // File Default Values
-            boxImageList: fileData.boxImageList || [],
-            fileList: fileData.fileList || [],
+            box_image_list: fileData.box_image_list || [],
+            file_list: fileData.file_list || [],
         },
     });
 
@@ -62,8 +62,8 @@ export const CreateFormProvider: React.FC<CreateFormProviderProps> = ({ children
             if (formData.description !== undefined) {
                 updateBoxInfoForm('description', formData.description || '');
             }
-            if (formData.typeOfCrime !== undefined) {
-                updateBoxInfoForm('typeOfCrime', formData.typeOfCrime || '');
+            if (formData.type_of_crime !== undefined) {
+                updateBoxInfoForm('type_of_crime', formData.type_of_crime || '');
             }
             if (formData.label !== undefined) {
                 updateBoxInfoForm('label', formData.label || []);
@@ -74,28 +74,28 @@ export const CreateFormProvider: React.FC<CreateFormProviderProps> = ({ children
             if (formData.state !== undefined) {
                 updateBoxInfoForm('state', formData.state || '');
             }
-            if (formData.eventDate !== undefined) {
-                updateBoxInfoForm('eventDate', formData.eventDate || '');
+            if (formData.event_date !== undefined) {
+                updateBoxInfoForm('event_date', formData.event_date || '');
             }
 
             // Sync NFT Fields
-            if (formData.nftOwner !== undefined) {
-                updateBoxInfoForm('nftOwner', formData.nftOwner || '');
+            if (formData.nft_owner !== undefined) {
+                updateBoxInfoForm('nft_owner', formData.nft_owner || '');
             }
             
             if (formData.price !== undefined) {
                 updateBoxInfoForm('price', formData.price || '');
             }
-            if (formData.mintMethod !== undefined) {
-                updateBoxInfoForm('mintMethod', formData.mintMethod || 'create');
+            if (formData.mint_method !== undefined) {
+                updateBoxInfoForm('mint_method', formData.mint_method || 'create');
             }
 
             // Sync File Fields
-            if (formData.boxImageList !== undefined) {
-                updateBoxImageList(formData.boxImageList || []);
+            if (formData.box_image_list !== undefined) {
+                updateBoxImageList(formData.box_image_list || []);
             }
-            if (formData.fileList !== undefined) {
-                updateFileList(formData.fileList || []);
+            if (formData.file_list !== undefined) {
+                updateFileList(formData.file_list || []);
             }
         });
 

@@ -5,10 +5,10 @@ export interface ResultDataType {
     project: string;
     website: string;
     type: string;
-    mintMethod: MintMethodType;
-    fileCidList: string[];
-    cidList: string[];
-    isSuccess: boolean;
+    mint_method: MintMethodType;
+    file_cid_list: string[];
+    cid_list: string[];
+    is_success: boolean;
     timestamp: number | string;
 }
 
@@ -17,9 +17,9 @@ export const initialResultData: ResultDataType = {
     project: "Wiki Truth",
     website: "https://wikitruth.eth.limo/",
     type: "Mint",
-    mintMethod: 'create',
-    fileCidList: [],
-    cidList: [],
-    isSuccess: false,
+    mint_method: 'create',
+    file_cid_list: [],
+    cid_list: [],
+    is_success: false,
     timestamp: 0
 }; 

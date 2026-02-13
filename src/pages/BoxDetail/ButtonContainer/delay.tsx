@@ -6,9 +6,9 @@ import { useProtocolConstants } from '@dapp/config/contractsConfig';
 import { useBoxActionController } from '@BoxDetail/hooks/useBoxActionController';
 import { boxActionConfigs } from '@BoxDetail/actions/configs';
 import { useBoxDetailContext } from '@BoxDetail/contexts/BoxDetailContext';
-import ModalBuyBidPay from '@BoxDetail/Modal/modalBuyBidPay';
+import ModalBuyBidPay from '@/pages/BoxDetail/Modal/modalBuyBidDelay';
 import TextP from '@/components/base/text_p';
-// import { ButtonContainer } from '../components/buttonContainer';
+import { getTokenMetadataBySymbol } from '@dapp/config/contractsConfig';
 import BoxActionButton from '@BoxDetail/components/boxActionButton';
 
 interface Props {
@@ -16,8 +16,8 @@ interface Props {
   className?: string;
 }
 
-const PayDelayFeeButton: React.FC<Props> = ({ onClick, className }) => {
-  const controller = useBoxActionController(boxActionConfigs.payDelayFee);
+const DelayButton: React.FC<Props> = ({ onClick, className }) => {
+  const controller = useBoxActionController(boxActionConfigs.delay);
   const { box } = useBoxDetailContext();
   const {
     delayFeeExtensionPeriod,
@@ -25,12 +25,12 @@ const PayDelayFeeButton: React.FC<Props> = ({ onClick, className }) => {
   } = useProtocolConstants();
   const [open, setOpen] = useState(false);
 
-  const handlePayDelayFee = () => {
+  const handleDelay = () => {
     onClick?.();
     setOpen(true);
   };
 
-  const tokenAddress = box?.acceptedToken as `0x${string}` | undefined;
+  // const tokenAddress = box?.accepted_token as `0x${string}` | undefined;
   const amount = useMemo(() => {
     const price = box?.price;
     return price ? price.toString() : '0';
@@ -39,7 +39,7 @@ const PayDelayFeeButton: React.FC<Props> = ({ onClick, className }) => {
   // const disabled = controller.isDisabled || !tokenAddress;
 
   return (
-      <BoxActionButton controller={controller} className={className} onClick={handlePayDelayFee}>
+      <BoxActionButton controller={controller} className={className} onClick={handleDelay}>
 
       <div className={cn('flex flex-col items-start')}>
         <TextP>
@@ -50,18 +50,18 @@ const PayDelayFeeButton: React.FC<Props> = ({ onClick, className }) => {
         </TextP>
       </div>
 
-      {tokenAddress && (
-        <ModalBuyBidPay
-          open={open}
-          onClose={() => setOpen(false)}
-          boxId={box?.id?.toString() || ''}
-          tokenAddress={tokenAddress}
-          amount={amount}
-          functionName="payDelayFee"
-        />
-      )}
+
+      <ModalBuyBidPay
+        open={open}
+        onClose={() => setOpen(false)}
+        boxId={box?.id?.toString() || ''}
+        tokenAddress={getTokenMetadataBySymbol('WTRC.S').address}
+        amount={amount}
+        functionName="delay"
+      />
+
     </BoxActionButton>
   );
 };
 
-export default React.memo(PayDelayFeeButton); 
+export default React.memo(DelayButton); 

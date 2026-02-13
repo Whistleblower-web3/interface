@@ -8,10 +8,10 @@ const RadioSelectCreate: React.FC = () => {
     const form = useCreateForm();
     const { watch } = form;
     
-    const mintMethod = watch('mintMethod') || 'create';
+    const mintMethod = watch('mint_method') || 'create';
     
     const onChange = useCallback((value: string | number) => {
-        form.setValue('mintMethod', value as 'create' | 'createAndPublish', {
+        form.setValue('mint_method', value as 'create' | 'createAndPublish', {
             shouldValidate: true,
             shouldDirty: true,
         });

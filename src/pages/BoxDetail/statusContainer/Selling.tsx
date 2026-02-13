@@ -20,7 +20,7 @@ const Selling: React.FC<Props> = ({ }) => {
     return (
         <div className="flex flex-col items-start justify-center gap-4">
             {
-                (!box.buyerId && Number(box.deadline) < Math.floor(Date.now() / 1000)) &&
+                (!box.buyer_id && Number(box.deadline) < Math.floor(Date.now() / 1000)) &&
                 <div className="mb-4">
                     <Alert
                         type="warning"

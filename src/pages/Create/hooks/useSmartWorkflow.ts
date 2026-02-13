@@ -105,7 +105,7 @@ export const useSmartWorkflow = () => {
     let orchestrator: SmartWorkflowOrchestrator | null = null;
     try {
       const initialData = prepareWorkflowData();
-      const mode = initialData.boxInfo.mintMethod as MintMethodType;
+      const mode = initialData.boxInfo.mint_method as MintMethodType;
       const changedFields = [...(nftStore.changedFields || [])];
 
       workflowStore.startWorkflow();

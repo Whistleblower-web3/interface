@@ -13,8 +13,8 @@ export function createCompressFilesStep(): WorkflowStep<WorkflowPayload, Compres
         console.error('Compress Files: files are missing');
         return false;
       }
-      if (!input.boxInfo.mintMethod) {
-        console.error('Compress Files: mintMethod is missing');
+      if (!input.boxInfo.mint_method) {
+        console.error('Compress Files: mint_method is missing');
         return false;
       }
       return true;
@@ -36,7 +36,7 @@ export function createCompressFilesStep(): WorkflowStep<WorkflowPayload, Compres
     
       const files_any:any[] = fileEntries;
 
-      const handler = input.boxInfo.mintMethod === 'create' ? handleCreateMode : handlePublishMode;
+      const handler = input.boxInfo.mint_method === 'create' ? handleCreateMode : handlePublishMode;
       
       const result = await handler(files_any);
       context.throwIfCancelled();
@@ -72,11 +72,11 @@ async function handleCreateMode(files: any[]): Promise<CompressFilesOutput> {
   const splitResult = await zipFileService.splitZipFile(zipBlob, zipName, Math.ceil(zipBlob.size / 2));
 
   return {
-    zipFile: zipBlob,
-    fileName: zipName,
+    zip_file: zipBlob,
+    file_name: zipName,
     password: zipPassword,
-    fileChunks: splitResult.chunks,
-    slicesMetadata: splitResult.json,
+    file_chunks: splitResult.chunks,
+    slices_metadata_file: splitResult.json,
   };
 }
 
@@ -85,10 +85,10 @@ async function handlePublishMode(files: any[]): Promise<CompressFilesOutput> {
   const { zipBlob, zipName } = await compressService.compressWithoutPassword(files);
 
   return {
-    zipFile: zipBlob,
-    fileName: zipName,
+    zip_file: zipBlob,
+    file_name: zipName,
     password: '',
-    fileChunks: [zipBlob],
-    slicesMetadata: null,
+    file_chunks: [zipBlob],
+    slices_metadata_file: null,
   };
 }

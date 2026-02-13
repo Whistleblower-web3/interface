@@ -5,16 +5,16 @@ import { useNavigate } from 'react-router-dom';
 import TruthBoxCard from '@/components/truthBoxCard';
 import MarketplacePagination from './MarketplacePagination';
 import { cn } from '@/lib/utils';
-import type { MarketplaceBoxType } from '../types/marketplace.types';
 import SkeletonCard from '@/components/base/skeletonCard';
 import { 
     ProgressiveRevealCard,
     useProgressiveReveal 
 } from '@dapp/components/progressiveRevealCard';
+import type { BoxUnifiedType } from '@dapp/services/supabase/types/types';
 
 interface MarketplaceListProps {
     className?: string;
-    items: MarketplaceBoxType[];
+    items: BoxUnifiedType[];
     totalItems: number;
     pageSize: number;
     currentPage: number;
@@ -45,14 +45,14 @@ const MarketplaceList: React.FC<MarketplaceListProps> = ({
         });
 
     // Use useRef to track the previous items, to avoid unnecessary resets
-    const prevItemsRef = useRef<MarketplaceBoxType[]>([]);
+    const prevItemsRef = useRef<BoxUnifiedType[]>([]);
     const itemsKeyRef = useRef<string>('');
 
     // Generate unique identifier for items (based on length and id of the first/last item)
     const currentItemsKey = useMemo(() => {
         if (visibleItems.length === 0) return '';
-        const firstId = visibleItems[0]?.id || visibleItems[0]?.tokenId || '';
-        const lastId = visibleItems[visibleItems.length - 1]?.id || visibleItems[visibleItems.length - 1]?.tokenId || '';
+        const firstId = visibleItems[0]?.id || visibleItems[0]?.token_id || '';
+        const lastId = visibleItems[visibleItems.length - 1]?.id || visibleItems[visibleItems.length - 1]?.token_id || '';
         return `${visibleItems.length}-${firstId}-${lastId}`;
     }, [visibleItems]);
 
@@ -63,7 +63,7 @@ const MarketplaceList: React.FC<MarketplaceListProps> = ({
         appendReveal,
         reset,
         notifyCompleted,
-    } = useProgressiveReveal<MarketplaceBoxType>({
+    } = useProgressiveReveal<BoxUnifiedType>({
         initialCount: visibleItems.length || 0,
         waitForImageLoad: true, // Enable image loading wait mode
         transitionDuration: 300,
@@ -111,7 +111,7 @@ const MarketplaceList: React.FC<MarketplaceListProps> = ({
                                 contentComponent={TruthBoxCard}
                                 contentProps={{
                                     onClick: () => {
-                                        const itemId = progressiveItem.data?.id ?? progressiveItem.data?.tokenId;
+                                        const itemId = progressiveItem.data?.id ?? progressiveItem.data?.token_id;
                                         if (itemId !== undefined && itemId !== null) {
                                             handleCardClick(itemId);
                                         }

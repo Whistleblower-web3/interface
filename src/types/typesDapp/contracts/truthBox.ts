@@ -19,7 +19,7 @@ export type FunctionNameType_TruthBox =
 'createAndPublish' |
 'publishByMinter' | 
 'publishByBuyer' | 
-'payDelayFee' |
+'delay' |
 'addBoxToBlacklist' |
 'extendDeadline';
 

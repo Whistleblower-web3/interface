@@ -34,8 +34,8 @@ export const processBox = async (
         }
 
         // Convert IPFS CID to accessible URL
-        const nftImageUrl = ipfsCidToUrl(metadata.nftImage);
-        const boxImageUrl = ipfsCidToUrl(metadata.boxImage);
+        const nftImageUrl = ipfsCidToUrl(metadata.nft_image);
+        const boxImageUrl = ipfsCidToUrl(metadata.box_image);
 
         // Build complete data structure conforming to MetadataBoxType
         const metadataBox: MetadataBoxType = {
@@ -44,31 +44,31 @@ export const processBox = async (
             website: metadata.website,
             // Box base info
             name: metadata.name,
-            tokenId: id,
-            typeOfCrime: metadata.typeOfCrime,
+            token_id: id,
+            type_of_crime: metadata.type_of_crime,
             label: metadata.label || [],
             title: metadata.title,
-            nftImage: nftImageUrl,
-            boxImage: boxImageUrl,
+            nft_image: nftImageUrl,
+            box_image: boxImageUrl,
             country: metadata.country,
             state: metadata.state,
             description: metadata.description,
-            eventDate: metadata.eventDate,
-            createDate: metadata.createDate,
+            event_date: metadata.event_date,
+            create_date: metadata.create_date,
             timestamp: metadata.timestamp,
-            mintMethod: metadata.mintMethod,
+            mint_method: metadata.mint_method,
             // Encryption related data
-            encryptionSlicesMetadataCID: metadata.encryptionSlicesMetadataCID || {
+            encryption_slices_metadata_cid: metadata.encryption_slices_metadata_cid || {
                 slicesMetadataCID_encryption: "",
                 slicesMetadataCID_iv: "",
             },
-            encryptionFileCID: metadata.encryptionFileCID || [],
-            encryptionPasswords: metadata.encryptionPasswords || {
+            encryption_file_cid: metadata.encryption_file_cid || [],
+            encryption_passwords: metadata.encryption_passwords || {
                 password_encryption: "",
                 password_iv: "",
             },
-            publicKey: metadata.publicKey || '',
-            fileList: metadata.fileList || [],
+            public_key: metadata.public_key || '',
+            file_list: metadata.file_list || [],
             // password: metadata.password || '',
         };
 

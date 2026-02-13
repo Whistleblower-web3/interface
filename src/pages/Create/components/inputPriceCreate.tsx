@@ -16,7 +16,7 @@ export const InputPriceCreate: React.FC<InputPriceCreateProps> = ({className}) =
     const { inputValue, handlePriceChange, handleBlur, error } = usePriceInput();
     const supportedTokens = useSupportedTokens();
     const form = useCreateForm();
-    const mintMethod = form.watch('mintMethod');
+    const mintMethod = form.watch('mint_method');
     
     // Check if price is required
     const isRequired = mintMethod === 'create';

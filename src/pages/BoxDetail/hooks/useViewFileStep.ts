@@ -80,7 +80,7 @@ export const useViewFileStep = (
 
         try {
 
-            const pk = box.privateKey ? box.privateKey :  await getPrivateKey(box.id);
+            const pk = box.private_key ? box.private_key :  await getPrivateKey(box.id);
 
             if (!pk) {
                 throw new Error('Cannot read private key, please confirm that the signature authorization has been completed.');

@@ -8,7 +8,7 @@ export const boxActionConfigs: Record<string, BoxActionConfig> = {
   buy: {
     id: 'buy',
     label: 'Buy',
-    openModal: 'BuyBidPay',
+    openModal: 'BuyBidDelay',
     description: 'Buy this box.',
     activeKey: 'buyActive',
     requiresCustomArgs: true, 
@@ -16,16 +16,16 @@ export const boxActionConfigs: Record<string, BoxActionConfig> = {
   bid: {
     id: 'bid',
     label: 'Bid',
-    openModal: 'BuyBidPay',
+    openModal: 'BuyBidDelay',
     description: 'Bid for this box.',
     activeKey: 'bidActive',
     requiresCustomArgs: true, 
   },
-  payDelayFee: {
-    id: 'payDelayFee',
-    label: 'PayDelayFee',
-    openModal: 'BuyBidPay',
-    activeKey: 'payDelayFeeActive',
+  delay: {
+    id: 'delay',
+    label: 'Delay',
+    openModal: 'BuyBidDelay',
+    activeKey: 'delayActive',
     requiresCustomArgs: true, 
   },
   requestRefund: {

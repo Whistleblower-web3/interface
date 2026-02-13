@@ -29,22 +29,22 @@ export const useProcessData = (boxDataList: BoxData[]) => {
     const processedBoxes = useMemo((): ProcessedBoxData[] => {
         return boxDataList.map(box => ({
             id: box.id,
-            tokenId: box.tokenId,
+            tokenId: box.token_id,
             box,
             // Metadata is already included in BoxData (title, description, image, etc.)
             metadata: {
                 title: box.title,
                 description: box.description,
-                nftImage: box.nftImage,
-                boxImage: box.boxImage,
+                nftImage: box.nft_image,
+                boxImage: box.box_image,
                 country: box.country,
                 state: box.state,
-                eventDate: box.eventDate,
-                typeOfCrime: box.typeOfCrime,
+                eventDate: box.event_date,
+                typeOfCrime: box.type_of_crime,
             },
             isLoading: false,
-            hasError: box.hasError || false,
-            errorMessage: box.hasError ? 'Failed to load metadata' : undefined,
+            hasError: box.has_error || false,
+            errorMessage: box.has_error ? 'Failed to load metadata' : undefined,
         }));
     }, [boxDataList]);
 

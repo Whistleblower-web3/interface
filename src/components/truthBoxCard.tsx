@@ -9,12 +9,12 @@ import { getBoxCardData } from '@/utils/getBoxCardData';
 import { formatPrice } from '@/utils/formatPrice';
 
 export interface BoxCardProps {
-    boxImage: string;
-    nftImage: string;
+    box_image: string;
+    nft_image: string;
     title: string;
     country: string;
     state: string;
-    eventDate: string;
+    event_date: string;
     boxId: string;
     price: string;
     status: string;
@@ -73,7 +73,7 @@ const TruthBoxCard: React.FC<TruthBoxCardProps> = ({
                 // "rounded-t-xl md:rounded-t-2xl"
             )}>
                 <ImageSwiper
-                    images={[cardData.boxImage, cardData.nftImage]}
+                    images={[cardData.box_image, cardData.nft_image]}
                     enableIpfsUrl={enableIpfsUrl}
                     altPrefix={`truthbox-${cardData.boxId}`}
                     className="w-full"
@@ -115,7 +115,7 @@ const TruthBoxCard: React.FC<TruthBoxCardProps> = ({
                     <p
                         className="text-neutral-300 text-sm line-clamp-1"
                     >
-                        {cardData.eventDate}
+                        {cardData.event_date}
                     </p>
                 </div>
 

@@ -3,7 +3,7 @@ import { MetadataBoxOutput } from '../../types/stepType';
 import { metadataService } from '@dapp/services/metadata/metadataService';
 import { objToJson } from '@dapp/services/createJsonFile/objToJson';
 import { nameService } from '@/utils/nameService';
-// import { saveFile } from '@/dapp/services/saveFile';
+import { saveFile } from '@dapp/services/saveFile';
 import { mintDataUpload } from '../utils/commonUpload';
 
 
@@ -13,22 +13,22 @@ export function createMetadataBoxStep(): WorkflowStep<WorkflowPayload, MetadataB
     description: 'Create Metadata Box',
 
     validate: (input) => {
-      const outputs = input.allStepOutputs;
-      if (!outputs.boxImageCid) {
-        console.error('Create Metadata: boxImageCid is missing');
+      const outputs = input.all_step_outputs;
+      if (!outputs.box_image_cid) {
+        console.error('Create Metadata: box_image_cid is missing');
         return false;
       }
-      if (!outputs.nftImageCid) {
-        console.error('Create Metadata: nftImageCid is missing');
+      if (!outputs.nft_image_cid) {
+        console.error('Create Metadata: nft_image_cid is missing');
         return false;
       }
-      if (!outputs.fileCidList || outputs.fileCidList.length === 0) {
-        console.error('Create Metadata: fileCidList is missing');
+      if (!outputs.file_cid_list || outputs.file_cid_list.length === 0) {
+        console.error('Create Metadata: file_cid_list is missing');
         return false;
       }
-      if (input.boxInfo.mintMethod === 'create') {
-        if (!outputs.encryptionSlicesMetadataCID.slicesMetadataCID_encryption) {
-          console.error('Create Metadata: encryptionSlicesMetadataCID is missing');
+      if (input.boxInfo.mint_method === 'create') {
+        if (!outputs.encryption_slices_metadata_cid.encryption_data) {
+          console.error('Create Metadata: encryption_slices_metadata_cid is missing');
           return false;
         }
       }
@@ -41,16 +41,23 @@ export function createMetadataBoxStep(): WorkflowStep<WorkflowPayload, MetadataB
         stores.workflow.setCurrentStep('metadataBox');
       });
 
-      const outputs = input.allStepOutputs;
+      const outputs = input.all_step_outputs;
 
       const metadataBoxObj = await metadataService.createMetadataBox(input.boxInfo, outputs);
 
       const metadataBoxFile = objToJson(metadataBoxObj, nameService.metadataBoxName());
+
+      if (import.meta.env.DEV) {
+        // save file to local
+        saveFile(metadataBoxFile, nameService.metadataBoxName());
+      }
+
+
       const metadataBoxCid = await mintDataUpload(metadataBoxFile, input.isTestMode);
 
       const result: MetadataBoxOutput = {
-        metadataBoxFile,
-        metadataBoxCid,
+        metadata_box_file: metadataBoxFile,
+        metadata_box_cid: metadataBoxCid,
       };
 
       context.updateStore(stores => {

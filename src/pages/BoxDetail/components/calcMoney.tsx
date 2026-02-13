@@ -22,7 +22,7 @@ const CalcMoney: React.FC<Props> = () => {
         return <div>loading...</div>;
     }
 
-    const orderAmountData = orderAmountsData?.find((item: BoxUserOrderAmountData) => item.token === box.acceptedToken);
+    const orderAmountData = orderAmountsData?.find((item: BoxUserOrderAmountData) => item.token === box.accepted_token);
 
     // Directly calculate the amount paid and the amount to be paid
     const oldMoney = useMemo(() => {
@@ -34,7 +34,7 @@ const CalcMoney: React.FC<Props> = () => {
         return Math.max(0, Number(box.price) - oldMoney);
     }, [box.price, oldMoney]);
 
-    const tokenMetadata = getTokenMetadata(box.acceptedToken as `0x${string}`);
+    const tokenMetadata = getTokenMetadata(box.accepted_token as `0x${string}`);
 
     return (
         <>

@@ -6,23 +6,23 @@ export type MintMethodType = 'create' | 'createAndPublish';
 
 export interface BoxInfoType {
     name: string;
-    tokenId: string;
-    typeOfCrime: string;
+    token_id: string;
+    type_of_crime: string;
     label: string[];
     title: string;
-    nftImage: string;
-    boxImage:string;
+    nft_image: string;
+    box_image:string;
     country: string;
     state: string;
     description: string;
-    eventDate: string;
-    createDate: string;
+    event_date: string;
+    create_date: string;
     timestamp: number;
-    mintMethod: MintMethodType;
+    mint_method: MintMethodType;
 }
 
 export interface FileInfoType {
-    fileList: string[]; // Store file CIDs of multiple chunks
+    file_list: string[]; // Store file CIDs of multiple chunks
 }
 
 export interface MetadataBoxType extends BoxInfoType, ProjectDataType, FileInfoType, EncryptionDataType {}
@@ -31,28 +31,28 @@ export const initialMetadataBox: MetadataBoxType = {
     project: projectDataStore.project,
     website: projectDataStore.website,
     name: "Truth Box",
-    tokenId: "",
-    typeOfCrime: "",
+    token_id: "",
+    type_of_crime: "",
     label: [],
     title: "",
-    nftImage: "ipfs://",
-    boxImage: "ipfs://",
+    nft_image: "ipfs://",
+    box_image: "ipfs://",
     country: "",
     state: "",
     description: "",
-    eventDate: "",
-    createDate: "",
+    event_date: "",
+    create_date: "",
     timestamp: 0,
-    mintMethod: "create",
-    encryptionSlicesMetadataCID: {
-        slicesMetadataCID_encryption: "",
-        slicesMetadataCID_iv: "",
+    mint_method: "create",
+    encryption_slices_metadata_cid: {
+        encryption_data: "",
+        encryption_iv: "",
     },
-    encryptionFileCID: [],
-    encryptionPasswords: {
-        password_encryption: "",
-        password_iv: "",
+    encryption_file_cid: [],
+    encryption_passwords: {
+        encryption_data: "",
+        encryption_iv: "",
     },
-    publicKey: "",
-    fileList: [],
+    public_key: "",
+    file_list: [],
 };

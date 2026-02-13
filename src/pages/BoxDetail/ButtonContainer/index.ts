@@ -9,5 +9,5 @@ export { default as BuyButton } from './buy';
 export { default as SellButton } from './sell';
 export { default as AuctionButton } from './auction';
 export { default as RequestRefundButton } from './requestRefund';
-export { default as PayDelayFeeButton } from './payDelayFee'; 
+export { default as DelayButton } from './delay';
 export { default as ExtendDeadline } from './extendDeadline';

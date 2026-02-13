@@ -16,25 +16,25 @@ export function createMintStep(deps: MintStepDependencies): WorkflowStep<Workflo
     description: 'Mint Truth Box and NFT',
 
     validate: (input) => {
-      const outputs = input.allStepOutputs;
-      if (!outputs.metadataBoxCid) {
-        console.error('Mint: metadataBoxCid is missing');
+      const outputs = input.all_step_outputs;
+      if (!outputs.metadata_box_cid) {
+        console.error('Mint: metadata_box_cid is missing');
         return false;
       }
-      if (!outputs.metadataNFTCid) {
-        console.error('Mint: metadataNFTCid is missing');
+      if (!outputs.metadata_nft_cid) {
+        console.error('Mint: metadata_nft_cid is missing');
         return false;
       }
-      if (!input.boxInfo.nftOwner) {
-        console.error('Mint: nftOwner is missing');
+      if (!input.boxInfo.nft_owner) {
+        console.error('Mint: nft_owner is missing');
         return false;
       }
-      if (input.boxInfo.mintMethod === 'create') {
+      if (input.boxInfo.mint_method === 'create') {
         if (!input.boxInfo.price) {
           console.error('Mint: price is missing');
           return false;
         }
-        if (!outputs.keyPair?.privateKey_minter) {
+        if (!outputs.key_pair?.private_key_minter) {
           console.error('Mint: key pair is missing');
           return false;
         }
@@ -48,33 +48,33 @@ export function createMintStep(deps: MintStepDependencies): WorkflowStep<Workflo
         stores.workflow.setCurrentStep('mint');
       });
 
-      const outputs = input.allStepOutputs;
-      const { nftOwner, price, mintMethod } = input.boxInfo;
+      const outputs = input.all_step_outputs;
+      const { nft_owner, price, mint_method } = input.boxInfo;
 
       try {
         let functionName: string;
         let args: any[];
 
-        if (mintMethod === 'create') {
+        if (mint_method === 'create') {
           if (!price || typeof price !== 'string') {
             throw new Error(`Invalid price: ${price} (type: ${typeof price})`);
           }
-          if (!outputs.keyPair?.privateKey_minter) {
-            throw new Error('keyPair.privateKey_minter is missing');
+          if (!outputs.key_pair?.private_key_minter) {
+            throw new Error('key_pair.private_key_minter is missing');
           }
           
           const priceInWei = parseUnits(price, decimals || 18);
           functionName = 'create';
           args = [
-            nftOwner,
-            outputs.metadataNFTCid,
-            outputs.metadataBoxCid,
-            outputs.keyPair.privateKey_minter,
+            nft_owner,
+            outputs.metadata_nft_cid,
+            outputs.metadata_box_cid,
+            outputs.key_pair.private_key_minter,
             priceInWei,
           ];
         } else {
           functionName = 'createAndPublish';
-          args = [nftOwner, outputs.metadataNFTCid, outputs.metadataBoxCid];
+          args = [nft_owner, outputs.metadata_nft_cid, outputs.metadata_box_cid];
         }
 
         const invalidArgs = args.map((arg, index) => ({ 
@@ -97,15 +97,15 @@ export function createMintStep(deps: MintStepDependencies): WorkflowStep<Workflo
         }
 
         context.throwIfCancelled();
-        const transactionHash = await writeCustorm({
+        const transaction_hash = await writeCustorm({
           contract: contractConfig,
           functionName: functionName as any,
           args: args as any,
         });
 
         const result: MintOutput = {
-          transactionHash,
-          tokenId: '',
+          transaction_hash,
+          token_id: '',
         };
 
         context.updateStore(stores => {

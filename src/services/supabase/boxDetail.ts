@@ -5,7 +5,6 @@
  */
 
 import type { PostgrestError } from '@supabase/supabase-js';
-import camelcaseKeys from 'camelcase-keys';
 import { supabase, Database } from './config/supabase.config';
 import type { MetadataBoxType } from '@dapp/types/typesDapp/metadata/metadataBox';
 import type { 
@@ -39,18 +38,63 @@ export interface BoxDetailResult_BiddersIds {
 function convertBoxRow(
     boxRow: BoxRow,
 ): BoxDetailData {
-    const camelCased = camelcaseKeys(boxRow, { deep: true }) as any;
     return {
-        ...camelCased,
+        // Core fields
+        id: boxRow.id,
+        token_id: boxRow.token_id,
+        token_id_numeric: Number(boxRow.token_id) || 0,
+        price: boxRow.price,
+        deadline: boxRow.deadline,
         status: calculateStatus(
-            camelCased.status, 
-            camelCased.deadline, 
-            camelCased.buyerId || camelCased.buyer_id
+            boxRow.status, 
+            boxRow.deadline, 
+            boxRow.buyer_id
         ),
-        biddersIds: camelCased.biddersIds || [],
-        acceptedToken: camelCased.acceptedToken ?? undefined,
-        listedMode: getListedMode(camelCased.listedMode),
-    };
+        listed_mode: getListedMode(boxRow.listed_mode),
+        accept_token: boxRow.accepted_token || undefined,
+        accepted_token: boxRow.accepted_token || undefined,
+        box_info_cid: boxRow.box_info_cid || undefined,
+        private_key: boxRow.private_key,
+        create_timestamp: boxRow.create_timestamp,
+        
+        minter_id: boxRow.minter_id,
+        owner_address: boxRow.owner_address,
+        publisher_id: boxRow.publisher_id || undefined,
+        seller_id: boxRow.seller_id || undefined,
+        buyer_id: boxRow.buyer_id,
+        completer_id: boxRow.completer_id || undefined,
+        refund_permit: boxRow.refund_permit || undefined,
+
+        // Participant objects (initialized as shells, will be populated if needed)
+        owner: { id: boxRow.owner_address },
+        minter: { id: boxRow.minter_id },
+        seller: boxRow.seller_id ? { id: boxRow.seller_id } : undefined,
+        buyer: boxRow.buyer_id ? { id: boxRow.buyer_id } : undefined,
+        completer: boxRow.completer_id ? { id: boxRow.completer_id } : undefined,
+        publisher: boxRow.publisher_id ? { id: boxRow.publisher_id } : undefined,
+        bidders: [],
+
+        // Metadata placeholders (will be merged from metadata_boxes)
+        title: '',
+        nft_image: null,
+        box_image: null,
+        country: null,
+        state: null,
+        event_date: null,
+        type_of_crime: null,
+        label: null,
+
+        // Timestamps
+        sell_timestamp: (boxRow as any).sell_timestamp,
+        publish_timestamp: boxRow.publish_timestamp,
+        listed_timestamp: boxRow.listed_timestamp,
+        purchase_timestamp: boxRow.purchase_timestamp,
+        complete_timestamp: boxRow.complete_timestamp,
+        request_refund_deadline: boxRow.request_refund_deadline,
+        review_deadline: boxRow.review_deadline,
+
+        has_error: false,
+    } as BoxDetailData;
 }
 
 /**
@@ -64,42 +108,36 @@ function convertMetadataBoxRow(metadataRow: MetadataBoxRow): MetadataBoxType {
     const encPasswords: any = (metadataRow as any).encryption_passwords || {};
     const encFiles: any[] = Array.isArray((metadataRow as any).encryption_file_cid) ? (metadataRow as any).encryption_file_cid : [];
 
-    const encryptionSlicesMetadataCID = {
-        slicesMetadataCID_encryption:
-            encSlices.slicesMetadataCID_encryption ??
-            encSlices.slicesMetadataCidEncryption ??
-            encSlices.slices_metadata_cid_encryption ??
+    const encryption_slices_metadata_cid = {
+        encryption_data:
+            encSlices.encryption_data ??
+            encSlices.encryptionData ??
             '',
-        slicesMetadataCID_iv:
-            encSlices.slicesMetadataCID_iv ??
-            encSlices.slicesMetadataCidIv ??
-            encSlices.slices_metadata_cid_iv ??
+        encryption_iv:
+            encSlices.encryption_iv ??
+            encSlices.encryptionIv ??
             '',
     };
 
-    const encryptionPasswords = {
-        password_encryption:
-            encPasswords.password_encryption ??
-            encPasswords.passwordEncryption ??
-            encPasswords.password_encryption ??
+    const encryption_passwords = {
+        encryption_data:
+            encPasswords.encryption_data ??
+            encPasswords.encryptionData ??
             '',
-        password_iv:
-            encPasswords.password_iv ??
-            encPasswords.passwordIv ??
-            encPasswords.password_iv ??
+        encryption_iv:
+            encPasswords.encryption_iv ??
+            encPasswords.encryptionIv ??
             '',
     };
 
-    const encryptionFileCID = encFiles.map((item) => ({
-        fileCID_encryption:
-            item.fileCID_encryption ??
-            item.fileCidEncryption ??
-            item.file_cid_encryption ??
+    const encryption_file_cid = encFiles.map((item) => ({
+        encryption_data:
+            item.encryption_data ??
+            item.encryptionData ??
             '',
-        fileCID_iv:
-            item.fileCID_iv ??
-            item.fileCidIv ??
-            item.file_cid_iv ??
+        encryption_iv:
+            item.encryption_iv ??
+            item.encryptionIv ??
             '',
     }));
 
@@ -107,24 +145,24 @@ function convertMetadataBoxRow(metadataRow: MetadataBoxRow): MetadataBoxType {
         project: (metadataRow as any).project,
         website: (metadataRow as any).website,
         name: (metadataRow as any).name,
-        tokenId: (metadataRow as any).id?.toString?.() ?? '',
-        typeOfCrime: (metadataRow as any).type_of_crime ?? '',
+        token_id: (metadataRow as any).id?.toString?.() ?? '',
+        type_of_crime: (metadataRow as any).type_of_crime ?? '',
         label: (metadataRow as any).label ?? [],
         title: (metadataRow as any).title ?? '',
-        nftImage: (metadataRow as any).nft_image ?? '',
-        boxImage: (metadataRow as any).box_image ?? '',
+        nft_image: (metadataRow as any).nft_image ?? '',
+        box_image: (metadataRow as any).box_image ?? '',
         country: (metadataRow as any).country ?? '',
         state: (metadataRow as any).state ?? '',
         description: (metadataRow as any).description ?? '',
-        eventDate: (metadataRow as any).event_date ?? '',
-        createDate: (metadataRow as any).create_date ?? '',
+        event_date: (metadataRow as any).event_date ?? '',
+        create_date: (metadataRow as any).create_date ?? '',
         timestamp: Number((metadataRow as any).timestamp ?? 0),
-        mintMethod: (metadataRow as any).mint_method as MetadataBoxType['mintMethod'],
-        fileList: (metadataRow as any).file_list ?? [],
-        encryptionSlicesMetadataCID,
-        encryptionFileCID,
-        encryptionPasswords,
-        publicKey: (metadataRow as any).public_key ?? '',
+        mint_method: (metadataRow as any).mint_method as MetadataBoxType['mint_method'],
+        file_list: (metadataRow as any).file_list ?? [],
+        encryption_slices_metadata_cid,
+        encryption_file_cid,
+        encryption_passwords,
+        public_key: (metadataRow as any).public_key ?? '',
     } as MetadataBoxType;
 }
 
