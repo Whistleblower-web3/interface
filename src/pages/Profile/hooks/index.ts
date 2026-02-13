@@ -5,6 +5,7 @@ export { useWithdraw } from './useWithdraw';
 
 export { useUserProfile } from './useUserProfile';
 export { useUserBoxes } from './useUserBoxes';
+export { useBatchOrderAmounts } from './useBatchOrderAmounts';
 export { useProfileTable } from './useProfileTable';
 export { useLisener } from './useLisener';
 export { useUserRewardsSummary } from './useUserRewardsSummary';

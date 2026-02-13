@@ -7,10 +7,12 @@ import { useBoxOrderAmounts } from './useBoxOrderAmounts';
 import { ClaimableFund, ClaimMethodType, FundType, TokenData } from '../types/cardProfile.types';
 import type { BoxData } from '../types/profile.types';
 import { useProfileStore } from '../store/profileStore';
+import { type BoxUserOrderAmountData } from '@dapp/services/supabase/fundsBox';
 
 export interface UseFundsParams {
     box: BoxData;
     userId?: string | null;
+    prefetchedOrderAmounts?: BoxUserOrderAmountData[];
 }
 
 export interface UseFundsReturn {
@@ -51,7 +53,7 @@ const createTokenData = (params: {
     hasValidAmount: params.amount > BigInt(0),
 });
 
-export const useFunds = ({ box, userId }: UseFundsParams): UseFundsReturn => {
+export const useFunds = ({ box, userId, prefetchedOrderAmounts }: UseFundsParams): UseFundsReturn => {
     const supportedTokens = useSupportedTokens();
     const selectedTab = useProfileStore((state) => state.filterState.selectedTab);
 
@@ -60,11 +62,17 @@ export const useFunds = ({ box, userId }: UseFundsParams): UseFundsReturn => {
         return supportedTokens.find((token) => token.address.toLowerCase() === box.accepted_token?.toLowerCase());
     }, [box.accepted_token, supportedTokens]);
 
-    const { orderAmountsData, isLoading } = useBoxOrderAmounts(
+    // Use prefetched data if available, otherwise fetch it
+    const { orderAmountsData: fetchedOrderAmounts, isLoading: isFetching } = useBoxOrderAmounts(
         box,
         userId ?? '',
-        selectedTab
+        selectedTab,
+        // Disable fetching if we already have prefetched data
+        !!prefetchedOrderAmounts
     );
+
+    const orderAmountsData = prefetchedOrderAmounts ?? fetchedOrderAmounts;
+    const isLoading = prefetchedOrderAmounts ? false : isFetching;
 
     const result = useMemo(() => {
         const acceptedAddress = box.accepted_token ?? acceptedTokenMeta?.address;
@@ -75,7 +83,7 @@ export const useFunds = ({ box, userId }: UseFundsParams): UseFundsReturn => {
         const hasOrderAmounts = Boolean(orderAmountsData && orderAmountsData.length > 0);
 
         if (hasOrderAmounts && orderAmountsData) {
-            const totalRaw = orderAmountsData.reduce((acc, item) => {
+            const totalRaw = orderAmountsData.reduce((acc: bigint, item: BoxUserOrderAmountData) => {
                 try {
                     return acc + BigInt(item.amount || '0');
                 } catch {

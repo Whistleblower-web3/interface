@@ -10,12 +10,13 @@ import { BoxData } from '../types/profile.types';
 export const useBoxOrderAmounts = (
     box: BoxData,
     userId: string,
-    selectedTab: SelectedTabType
+    selectedTab: SelectedTabType,
+    skip: boolean = false
 ) => {
     const { network, layer } = CHAIN_CONFIG;
 
-    const bidderIds = box.bidders?.map((bidder) => String(bidder.id));
-    const buyerId = box.buyer?.id ? String(box.buyer.id) : undefined;
+    const bidderIds = box.bidders?.map((bidder) => String(bidder));
+    const buyerId = box.buyer_id ? String(box.buyer_id) : undefined;
     
     // if (import.meta.env.DEV) {
     //     console.log('box:', box);
@@ -54,7 +55,7 @@ export const useBoxOrderAmounts = (
             return result;
         },
         staleTime: 5 * 60 * 1000, 
-        enabled: shouldQuery && !!box.id && !!userId && userId.trim() !== '', 
+        enabled: !skip && shouldQuery && !!box.id && !!userId && userId.trim() !== '', 
     });
 
     if (import.meta.env.DEV && shouldQuery) {

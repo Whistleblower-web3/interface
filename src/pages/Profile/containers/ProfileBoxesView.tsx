@@ -6,7 +6,13 @@ import CardProfileContainer from './CardProfileContainer';
 import ProfileWithdrawPanel from '../components/ProfileWithdrawPanel';
 import SkeletonProfile from '@/components/base/skeletonProfile';
 import { LoaderModal } from '@/components/loaderModal';
-import { useProfileTable, useLisener, useUserProfile, useUserBoxes } from '../hooks';
+import { 
+    useProfileTable, 
+    useLisener, 
+    useUserProfile, 
+    useUserBoxes, 
+    useBatchOrderAmounts 
+} from '../hooks';
 
 interface ProfileBoxesViewProps {
     address?: string;
@@ -37,6 +43,13 @@ const ProfileBoxesView: React.FC<ProfileBoxesViewProps> = ({ address, userId, cl
     } = useUserBoxes(safeAddress, filters, safeUserId);
 
     const flatData = useMemo(() => boxPages?.pages.flatMap((page) => page.items) ?? [], [boxPages]);
+
+    const boxIds = useMemo(() => flatData.map(box => box.id), [flatData]);
+    const { orderAmountsMap } = useBatchOrderAmounts(
+        boxIds,
+        safeUserId,
+        filters.selectedTab === 'bought' || filters.selectedTab === 'bade'
+    );
 
     const navigate = useNavigate();
     const [open, setOpen] = useState(false);
@@ -102,6 +115,7 @@ const ProfileBoxesView: React.FC<ProfileBoxesViewProps> = ({ address, userId, cl
                                             data={boxData}
                                             userId={userId}
                                             onCardClick={() => handleCardClick(boxData.id)}
+                                            prefetchedOrderAmounts={orderAmountsMap[boxData.id]}
                                         />
                                     ))}
                                 </div>

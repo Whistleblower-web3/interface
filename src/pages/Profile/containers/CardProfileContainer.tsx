@@ -12,25 +12,32 @@ import { useWithdrawStore, SelectableItem } from '@Profile/store/withdrawStore';
 import { useAccountStore } from '@dapp/store/accountStore';
 import { CHAIN_ID } from '@dapp/config/contractsConfig';
 import { useWalletContext } from '@dapp/contexts/web3Context/useAccount/WalletContext';
+import { BoxUserOrderAmountData } from '@dapp/services/supabase/fundsBox';
 
 export interface CardProfileContainerProps {
     data: BoxData;
     userId?: string | null;
     onCardClick?: () => void;
     className?: string;
+    prefetchedOrderAmounts?: BoxUserOrderAmountData[];
 }
 
 const CardProfileContainer: React.FC<CardProfileContainerProps> = ({
-    data,
+    data: box,
     userId,
     onCardClick,
-    className
+    className,
+    prefetchedOrderAmounts
 }) => {
-    const boxId = useMemo(() => String(data.id), [data.id]);
-    const { funds, hasClaimableFunds } = useFunds({ box: data, userId });
+    const boxId = useMemo(() => String(box.id), [box.id]);
+    const { funds, isLoading, hasClaimableFunds } = useFunds({
+        box,
+        userId,
+        prefetchedOrderAmounts
+    });
     const hasWithdrawInteraction = useAccountStore((state) => state.hasWithdrawInteraction);
     const { address } = useWalletContext();
-    
+
     // Subscribe to withdrawInteractions changes to trigger re-render when withdrawal succeeds
     const withdrawInteractions = useAccountStore(
         useMemo(() => {
@@ -87,15 +94,15 @@ const CardProfileContainer: React.FC<CardProfileContainerProps> = ({
     ]);
 
     const cardData: CardProfileData = useMemo(() => ({
-        tokenId: data.token_id,
-        title: data.title || `Box #${data.token_id}`,
-        description: data.description || 'No description available',
-        boxImage: data.box_image ?? data.nft_image ?? undefined,
-        status: data.status,
-        country: data.country ?? undefined,
-        state: data.state ?? undefined,
-        eventDate: data.event_date ?? undefined,
-    }), [data]);
+        tokenId: box.token_id,
+        title: box.title || `Box #${box.token_id}`,
+        description: box.description || 'No description available',
+        boxImage: box.box_image ?? box.nft_image ?? undefined,
+        status: box.status,
+        country: box.country ?? undefined,
+        state: box.state ?? undefined,
+        eventDate: box.event_date ?? undefined,
+    }), [box]);
 
     const cardFunds: FundsData[] = useMemo(() => {
         return funds.tokens.map((token) => {

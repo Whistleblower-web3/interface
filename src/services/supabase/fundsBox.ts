@@ -175,6 +175,56 @@ export async function query_OrderAmountsData(
         };
     }
 }
+
+/**
+ * Batch Query Box user order amount data (box_user_order_amounts table)
+ * 
+ * @param boxIds - Array of Box IDs
+ * @param userId - Current User ID
+ * @returns User order amount data list
+ */
+export async function batchQuery_OrderAmountsData(
+    boxIds: string[],
+    userId: string,
+): Promise<Result_OrderAmountsData> {
+    try {
+        const { network, layer } = CHAIN_CONFIG;
+        let orderAmountsData: BoxUserOrderAmountData[] | null = null;
+
+        if (userId && boxIds.length > 0) {
+            const { data, error } = await supabase
+                .from('box_user_order_amounts')
+                .select('*')
+                .eq('network', network)
+                .eq('layer', layer)
+                .in('box_id', boxIds)
+                .eq('user_id', userId);
+
+            if (error) {
+                console.warn('Failed to batch fetch box_user_order_amounts:', error);
+                return {
+                    orderAmountsData: null,
+                    error: error,
+                };
+            }
+
+            // Convert data format
+            if (data && Array.isArray(data)) {
+                orderAmountsData = data.map(row => convertBoxUserOrderAmountsRow(row));
+            }
+        }
+
+        return {
+            orderAmountsData: orderAmountsData && orderAmountsData.length > 0 ? orderAmountsData : null,
+            error: null,
+        };
+    } catch (error) {
+        return {
+            orderAmountsData: null,
+            error: toQueryError(error),
+        };
+    }
+}
 /**
  * Convert error to QueryError type
  */
