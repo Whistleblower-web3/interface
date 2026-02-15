@@ -1,7 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useMemo, useState } from 'react';
-import type { MarketplaceBoxType } from '../types/marketplace.types';
+import type { BoxUnifiedType } from '@dapp/services/supabase/types/types';
 
 /**
  * Split array into fixed size groups
@@ -19,7 +19,7 @@ const chunkItems = <T,>(items: T[], size: number): T[][] => {
  * Pagination configuration
  */
 export interface UseMarketplacePaginationConfig {
-  items: MarketplaceBoxType[];
+  items: BoxUnifiedType[];
   loadBatchSize: number;
   /** Paginator page size (20, 40, 80, 160), use 8,16,32,64 for testing */
   pageSize: number;
@@ -31,7 +31,7 @@ export interface UseMarketplacePaginationConfig {
  * Pagination return value
  */
 export interface UseMarketplacePaginationReturn {
-  visibleItems: MarketplaceBoxType[];
+  visibleItems: BoxUnifiedType[];
   hasNextPage: boolean;
   fetchNextPage: () => void;
   resetPagination: () => void;

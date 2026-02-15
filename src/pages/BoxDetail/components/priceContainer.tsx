@@ -50,7 +50,7 @@ const PriceContainer: React.FC<Props> = ({ price, token, status, }) => {
                     mb-3 md:mb-5
                     text-lg md:text-xl lg:text-2xl font-bold
                     '>
-                        Price:
+                        {status === 'Delaying' ? 'Delay Fee:' : 'Price:'}
                     </h2>
                     <PriceLabel
                         size="xl"

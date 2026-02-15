@@ -1,6 +1,6 @@
 # WikiTruth DApp
 
-cloudflare deploy site:[https://interface-cloudflare.pages.dev/]
+cloudflare deploy site:[https://app.wikitruth.xyz]
 
 WikiTruth is a decentralized application (DApp) built on Oasis Sapphire, focused on creating a truth market platform for secure evidence storage and trading.
 
@@ -25,12 +25,14 @@ WikiTruth is a decentralized application (DApp) built on Oasis Sapphire, focused
 ## 🛠️ Installation
 
 1. Clone the repository:
+
 ```bash
 git clone <repository-url>
 cd interface
 ```
 
 2. Install dependencies:
+
 ```bash
 npm install
 ```
@@ -76,6 +78,7 @@ npm run lint
 The project is configured for static deployment. Build the project and deploy the `dist/` directory to any static hosting service (Vercel, Netlify, Fleek, etc.).
 
 For decentralized deployment on IPFS:
+
 1. Build the project: `npm run build`
 2. Upload the `dist/` directory to IPFS
 3. Access via IPFS gateway or pinning service
