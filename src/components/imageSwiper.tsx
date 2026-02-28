@@ -2,7 +2,6 @@
 
 import React, { useEffect, useRef, useState, useCallback, useMemo } from 'react';
 import { cn } from '@/lib/utils';
-import { ipfsCidToUrl } from '@/services/ipfsUrl/ipfsCidToUrl';
 import { useIpfsImage } from '@/hooks/useIpfsImage';
 
 interface ImageSwiperProps {
@@ -221,12 +220,10 @@ const ImageSwiper: React.FC<ImageSwiperProps> = ({
                     const isActive = index === currentIndex;
                     const isVisible = isActive || index === (currentIndex - 1 + validImages.length) % validImages.length;
 
-                    const imageUrl = enableIpfsUrl ? ipfsCidToUrl(image) : image;
-
                     return (
                         <SwiperImage
-                            key={`${imageUrl}-${index}`}
-                            src={imageUrl}
+                            key={`${image}-${index}`}
+                            src={image}
                             alt={`${altPrefix}-${index + 1}`}
                             isActive={isActive}
                             isVisible={isVisible}

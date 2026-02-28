@@ -8,7 +8,6 @@ import { useAccount } from 'wagmi';
 import { ConnectButton } from '@dapp/contexts/web3Context/connectButton';
 import { useSiweAuth } from '@dapp/hooks/SiweAuth';
 import { useGetMyUserId } from '@dapp/hooks/readContracts2/useGetMyUserId';
-import AlertCustom from '@/components/base/alertCustom';
 
 const { Text } = Typography;
 
@@ -192,53 +191,32 @@ const LoginDropdown: React.FC<LoginDropdownProps> = ({
     return (
         <div ref={dropdownRef} className={className} style={{ display: 'inline-flex', alignItems: 'center', gap: 8, position: 'relative' }}>
             <ConnectButton showBalance={false} accountStatus="address"/>
-            {menuItems.length > 0 && (
-                <div style={{ position: 'relative' }}>
-                    <Dropdown
-                        menu={{ items: menuItems }}
-                        trigger={['click']}
-                        placement="bottomRight"
-                        overlayStyle={{ minWidth: 150, border: '1px solid primary', borderRadius: 10 }}
-                        getPopupContainer={() => dropdownRef.current || document.body}
-                    >
-                        <Button
-                            type="text"
-                            size={size === 'sm' ? 'small' : size === 'lg' ? 'large' : 'middle'}
-                            icon={needsSiweLogin ? <UserOutlined style={{ fontSize: 22 }}/> : <UserOutlined style={{ fontSize: 22, color: 'var(--color-primary)' }}/>}
-                            // style={{ padding: '4px 8px' }}
-                        />
-                    </Dropdown>
-                    {/* If the wallet is connected but not logged in or the session is invalid, display a floating prompt */}
-                    {isConnected && needsSiweLogin && (
-                        <div
-                            style={{
-                                position: 'absolute',
-                                top: '100%',
-                                left: '50%',
-                                transform: 'translateX(-50%)',
-                                marginTop: '4px',
-                                zIndex: 1000,
-                                width: 'max-content',
-                                maxWidth: '160px',
-                            }}
-                        >
-                            <div style={{ margin: '-15px' }}>
-                                <AlertCustom
-                                    type="warning"
-                                    message="Unlogged"
-                                    showIcon={false}
-                                    enablePulse={true}
-                                    style={{
-                                        padding: '5px 8px',
-                                        fontSize: '12px',
-                                        lineHeight: '1.5',
-                                        margin: 0,
-                                    }}
-                                />
-                            </div>
-                        </div>
-                    )}
-                </div>
+            {needsSiweLogin ? (
+                <Button
+                    className="cursor-pointer"
+                    onClick={(e) => {
+                        e.stopPropagation();
+                        handleSiweLogin();
+                    }}
+                    disabled={isSiweLoading}
+                >
+                    {isSiweLoading ? "Signing..." : "Sign In"}
+                    
+                </Button>
+            ) : (
+                <Dropdown
+                    menu={{ items: menuItems }}
+                    trigger={['click']}
+                    placement="bottomRight"
+                    overlayStyle={{ minWidth: 150, border: '1px solid primary', borderRadius: 10 }}
+                    getPopupContainer={() => dropdownRef.current || document.body}
+                >
+                    <Button
+                        type="text"
+                        size={size === 'sm' ? 'small' : size === 'lg' ? 'large' : 'middle'}
+                        icon={<UserOutlined style={{ fontSize: 22, color: 'var(--color-primary)' }} />}
+                    />
+                </Dropdown>
             )}
         </div>
     );

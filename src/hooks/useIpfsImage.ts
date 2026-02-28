@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { fetchAndCacheImage } from '@/services/ipfsCache/ipfsCache';
+import { ipfsCidToUrl } from '@/services/ipfsUrl/ipfsCidToUrl';
 
 interface UseIpfsImageReturn {
     displayUrl: string;
@@ -13,15 +14,17 @@ interface UseIpfsImageReturn {
  */
 export const useIpfsImage = (url: string, enabled: boolean = true): UseIpfsImageReturn => {
     const [state, setState] = useState<UseIpfsImageReturn>({
-        displayUrl: url,
+        displayUrl: url ? ipfsCidToUrl(url) : url,
         isLoading: enabled,
         error: null,
         isCached: false,
     });
 
     useEffect(() => {
-        if (!enabled || !url) {
-            setState(prev => ({ ...prev, displayUrl: url, isLoading: false }));
+        const resolvedUrl = url ? ipfsCidToUrl(url) : url;
+
+        if (!enabled || !resolvedUrl) {
+            setState(prev => ({ ...prev, displayUrl: resolvedUrl, isLoading: false }));
             return;
         }
 
@@ -32,10 +35,10 @@ export const useIpfsImage = (url: string, enabled: boolean = true): UseIpfsImage
             setState(prev => ({ ...prev, isLoading: true }));
             try {
                 // If the URL is already a blob/data URL, don't re-cache
-                if (url.startsWith('blob:') || url.startsWith('data:')) {
+                if (resolvedUrl.startsWith('blob:') || resolvedUrl.startsWith('data:')) {
                     if (isMounted) {
                         setState({
-                            displayUrl: url,
+                            displayUrl: resolvedUrl,
                             isLoading: false,
                             error: null,
                             isCached: true
@@ -44,7 +47,7 @@ export const useIpfsImage = (url: string, enabled: boolean = true): UseIpfsImage
                     return;
                 }
 
-                const resultUrl = await fetchAndCacheImage(url);
+                const resultUrl = await fetchAndCacheImage(resolvedUrl);
                 
                 if (isMounted) {
                     const isNewBlob = resultUrl.startsWith('blob:');
@@ -60,7 +63,7 @@ export const useIpfsImage = (url: string, enabled: boolean = true): UseIpfsImage
             } catch (err) {
                 if (isMounted) {
                     setState({
-                        displayUrl: url,
+                        displayUrl: resolvedUrl,
                         isLoading: false,
                         error: err,
                         isCached: false

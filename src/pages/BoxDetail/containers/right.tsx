@@ -24,7 +24,6 @@ interface Props {
 const ContentRight: React.FC<Props> = ({ tokenId }) => {
     const { box, metadataBox, isLoading } = useBoxDetailContext();
 
-
     const [price, setPrice] = useState('');
     const [status, setStatus] = useState<BoxStatus>('Storing');
     const [listedMode, setListedMode] = useState<string>('');
@@ -72,10 +71,6 @@ const ContentRight: React.FC<Props> = ({ tokenId }) => {
 
     return (
         <div className="w-full space-y-4 md:space-y-6">
-
-            {/* <Typography.Title level={4} style={{ marginBottom: 2 }}>
-                    Status:
-                </Typography.Title> */}
             <StatusLabel status={status} />
             <StatusStep
                 status={status}
@@ -92,8 +87,6 @@ const ContentRight: React.FC<Props> = ({ tokenId }) => {
                 <Alert message="Warning" description="The NFT is in blacklist, can't do anything!" type="warning" />
             )}
 
-            
-
             <RoleContainer />
 
             {/* Status Action Buttons */}
@@ -109,13 +102,14 @@ const ContentRight: React.FC<Props> = ({ tokenId }) => {
                 )
             }
 
-
-            {/* Social Share - Commented out for now */}
+            {/* Social Share */}
             <ShareSocial
                 title={metadataBox?.title ?? ''}
                 description={metadataBox?.description ?? ''}
                 image={metadataBox?.nft_image ?? ''}
                 url={typeof window !== 'undefined' ? window.location.href : ''}
+                box={box}
+                metadataBox={metadataBox}
             />
         </div>
     );

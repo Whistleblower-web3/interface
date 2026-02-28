@@ -73,23 +73,3 @@ const PriceContainer: React.FC<Props> = ({ price, token, status, }) => {
 }
 
 export default PriceContainer;
-
-
-/**
- * formatPrice.ts:20 React has detected a change in the order of Hooks called by PriceContainer. This will lead to bugs and errors if not fixed. For more information, read the Rules of Hooks: https://react.dev/link/rules-of-hooks
-
-   Previous render            Next render
-   ------------------------------------------------------
-1. useMemo                    useMemo
-2. useMemo                    useMemo
-3. useMemo                    useMemo
-4. useMemo                    useMemo
-5. undefined                  useMemo
-   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-useGetTokenPrice.ts:36 price: 4.8 amount_decimal: 84699.32638087851
-useGetTokenPrice.ts:36 price: 4.8 amount_decimal: 84699.32638087851
-chunk-7CHZ2Z4V.js?v=fffdbb07:5792 Uncaught Error: Rendered more hooks than during the previous render.
-    at formatPrice (formatPrice.ts:20:28)
-    at PriceContainer (priceContainer.tsx:64:39)
-
- */

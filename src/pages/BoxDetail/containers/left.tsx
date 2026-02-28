@@ -35,21 +35,21 @@ const ContentLeft: React.FC<Props> = ({ tokenId }) => {
 
                 <div className='flex justify-between w-full'>
                     <Space direction="horizontal" size="middle" align='baseline'>
-                        <TextP>Box Id:</TextP>
+                        <TextP>Box ID:</TextP>
                         <TextP size='lg' className='text-white'>{tokenId}</TextP>
                     </Space>
 
                     {/* Owner Information */}
                     <Space direction="horizontal" size="middle">
-                        <TextP>Minter:</TextP>{' '}
+                        <TextP>Minter ID:</TextP>{' '}
                         <TextP size='lg' className='text-primary'>{box.minter_id}</TextP>
                     </Space>
                 </div>
 
-                <Space direction="horizontal" size="middle">
-                    <TextP>Owner:</TextP>{' '}
+                {/* <Space direction="horizontal" size="middle">
+                    <TextP>NFT Owner:</TextP>{' '}
                     <TextP>{box.owner_address}</TextP>
-                </Space>
+                </Space> */}
                 <Space direction="horizontal" size="middle">
                     <TextP>Create date:</TextP>{' '}
                     <TextP>{metadataBox?.create_date ? new Date(metadataBox?.create_date).toLocaleString() : ''}</TextP>

@@ -2,7 +2,6 @@ import React, { useMemo } from 'react';
 import { Card, Row, Col, Image } from 'antd';
 import BoxInfo, { BoxMetadata } from '@dapp/components/base/boxInfo';
 import FundsSection, { FundsData } from './fundsSection';
-import { ipfsCidToUrl } from '@/services/ipfsUrl/ipfsCidToUrl';
 import { useIpfsImage } from '@/hooks/useIpfsImage';
 
 // Type Definitions
@@ -123,7 +122,7 @@ const CardProfile: React.FC<CardProfileProps> = ({
                                 <Col span={9}>
                                     <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
                                         <CardProfileImage
-                                            src={ipfsCidToUrl(data.boxImage || '')}
+                                            src={data.boxImage || ''}
                                             alt={`${data.title} #${data.tokenId}`}
                                             width={100}
                                             height={100}
@@ -159,7 +158,7 @@ const CardProfile: React.FC<CardProfileProps> = ({
                                 <Col md={8} lg={7} xl={6}>
                                     <div style={{ display: 'flex', justifyContent: 'center' }}>
                                         <CardProfileImage
-                                            src={ipfsCidToUrl(data.boxImage || '')}
+                                            src={data.boxImage || ''}
                                             alt={`${data.title} #${data.tokenId}`}
                                             width={110}
                                             height={110}
