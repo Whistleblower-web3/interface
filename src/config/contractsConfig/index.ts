@@ -1,5 +1,6 @@
 
 export * from './types';
+export * from './token/typesToken';
 
 export * from './chains';
 
@@ -52,6 +53,6 @@ export {
   // getAcceptedTokens_WithChainId,
   getTokenMetadata,
   getTokenMetadataBySymbol,
-} from './tokens';
+} from './token/tokens';
 
 // export * from './eventSignatures';

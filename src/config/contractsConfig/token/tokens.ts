@@ -1,8 +1,8 @@
-import { ContractName, SupportedChainId, TokenMetadata } from './types';
-import { NETWORK_CONTRACTS } from './contracts';
-import { ABIS } from './chain-23295/abis';
-import { CHAIN_ID , OFFICIAL_TOKEN_CONFIG} from './current';
-import { TokenSymbolType, TokenAddressType } from './typesToken';
+import { ContractName, SupportedChainId,} from '../types';
+import { NETWORK_CONTRACTS } from '../contracts';
+import { ABIS } from '../chain-23295/abis';
+import { CHAIN_ID , OFFICIAL_TOKEN_CONFIG} from '../current';
+import { TokenSymbolType, TokenMetadata } from './typesToken';
 
 export function getSupportedTokens_WithChainId(chainId: SupportedChainId): TokenMetadata[] {
   const addresses = NETWORK_CONTRACTS[chainId];

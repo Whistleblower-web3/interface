@@ -3,7 +3,7 @@ import React, { useState, useEffect, useMemo } from 'react';
 // import { Typography } from 'antd';
 import TextP from '@/components/base/text_p';
 import { BoxStatus } from '@dapp/types/typesDapp/contracts/truthBox';
-import useGetTokenPrice from '@dapp/config/contractsConfig/useGetTokenPrice';
+import usePriceUSD from '@/hooks/usePriceUSD';
 import PriceLabel from '@/components/base/priceLabel';
 import { formatPrice } from '@/utils/formatPrice';
 import { getTokenMetadata, getTokenMetadataBySymbol } from '@dapp/config/contractsConfig';
@@ -17,9 +17,7 @@ interface Props {
 
 const PriceContainer: React.FC<Props> = ({ price, token, status, }) => {
 
-    const { getTokenPrice } = useGetTokenPrice();
-
-    // const [priceUSD, setPriceUSD] = useState<number>(0);
+    const { getPriceUSD } = usePriceUSD();
 
     const tokenMetadata = useMemo(() => {
         if (status === 'Delaying') {
@@ -30,11 +28,10 @@ const PriceContainer: React.FC<Props> = ({ price, token, status, }) => {
 
     const priceUSD = useMemo(() => {
         if (tokenMetadata) {
-            return getTokenPrice(tokenMetadata.address, Number(price));
+            return getPriceUSD(tokenMetadata.address, price.toString());
         }
         return 0;
     }, [tokenMetadata, price]);
-
 
 
     return (
@@ -62,7 +59,11 @@ const PriceContainer: React.FC<Props> = ({ price, token, status, }) => {
                             <TextP>≈</TextP>
                             <PriceLabel
                                 size="lg"
-                                data={formatPrice(priceUSD, 18, 1)}
+                                className='text-white/60'
+                                data={{
+                                    formattedPrice: priceUSD.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 }),
+                                    fullPrice: priceUSD.toString()
+                                }}
                                 symbol="USD"
                             />
                         </span>

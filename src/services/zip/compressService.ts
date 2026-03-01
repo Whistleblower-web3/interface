@@ -1,7 +1,8 @@
 import * as zip from "@zip.js/zip.js";
+import CryptoJS from 'crypto-js';
 import { saveAs } from 'file-saver';
 import type { UploadFile } from 'antd/es/upload/interface';
-import { generateRandomPassword, generateRandomFileName } from '@dapp/utils/random/random';
+import { generateRandomString_0_9_A_Z_a_z } from '@dapp/utils/random/random';
 
 export interface CompressResult {
   zipBlob: Blob;
@@ -26,8 +27,8 @@ export const compressService = {
         throw new Error('No files to compress');
       }
       
-      // Create password
-      const password = generateRandomPassword();
+      // Create password use CryptoJS
+      const password = CryptoJS.lib.WordArray.random(32).toString();
       
       // Create zip writer
       const writer = new zip.ZipWriter(new zip.BlobWriter("application/zip"));
@@ -45,7 +46,7 @@ export const compressService = {
       // Close zip and get blob
       const zipBlob = await writer.close();
 
-      const zipName = `${generateRandomFileName()}.zip`;
+      const zipName = `${generateRandomString_0_9_A_Z_a_z()}.zip`;
       
       if (isSave) {
         // Save file
@@ -95,7 +96,7 @@ export const compressService = {
       // Close zip and get blob
       const zipBlob = await writer.close();
 
-      const zipName = `${generateRandomFileName()}.zip`;
+      const zipName = `${generateRandomString_0_9_A_Z_a_z()}.zip`;
       
       // Save file
       if (isSave) {

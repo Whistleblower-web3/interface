@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
 import { useWalletContext } from '@dapp/contexts/web3Context/useAccount/WalletContext';
-import { BoxRoleType } from '@dapp/types/typesDapp/account';
+import { BoxRoleType } from '@/types/typesDapp/roles';
 import { useBoxDetailStore } from '../store/boxDetailStore';
 import { useBoxDetailContext } from '../contexts/BoxDetailContext';
 import { useAccountStore } from '@dapp/store/accountStore';

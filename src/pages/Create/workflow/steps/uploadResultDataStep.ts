@@ -2,7 +2,7 @@
 import { UploadResultDataOutput } from '../../types/stepType';
 import { metadataService } from '@dapp/services/metadata/metadataService';
 import { objToJson } from '@dapp/services/createJsonFile/objToJson';
-import { nameService } from '@/utils/nameService';
+import { fileNameCreate } from '@/pages/Create/workflow/utils/fileName';
 // import { saveFile } from '@dapp/services/saveFile';
 // import { pinataService } from '@dapp/services/pinata/pinataService';
 import { resultDataUpload } from '../utils/commonUpload';
@@ -34,7 +34,7 @@ export function createUploadResultDataStep(): WorkflowStep<WorkflowPayload, Uplo
           String(outputs.current_time.timestamp ?? Date.now())
         );
 
-        const resultDataFile = objToJson(resultData, nameService.resultDataName());
+        const resultDataFile = objToJson(resultData, fileNameCreate.resultDataName());
         
         const resultDataCid = await resultDataUpload(resultDataFile, input.isTestMode);
 

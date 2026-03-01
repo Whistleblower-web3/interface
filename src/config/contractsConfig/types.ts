@@ -89,26 +89,7 @@ export type ContractConfigs = {
   [key in ContractName]: ContractConfig;
 };
 
-/**
- * Token metadata interface
- */
-export interface TokenMetadata {
-  index: number;
-  name: string;
-  symbol: string;
-  decimals: number;
-  precision: number; // Precision, used to display the number of decimal places
-  address: `0x${string}`;
-  mappingAddress?: `0x${string}`; // erc20 -> secret, secret -> erc20
-  logo?: string;
-  types: 'ERC20' | 'Secret';
-  usdPrice?: number;
-  canAcceptToken: boolean; // sell and auction can accept other token
-  domainName?: string;
-  mintPeriod?: number; // seconds only official token
-  contractName: ContractName;
-  abi: Abi;
-}
+
 
 /**
  * Network contract configuration mapping

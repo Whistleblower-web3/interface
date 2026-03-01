@@ -10,7 +10,6 @@ import {
   ContractConfig,
   ContractConfigs,
   ContractAddresses,
-  TokenMetadata,
   ChainConfig,
 } from './types';
 import {
@@ -24,7 +23,8 @@ import {
   getSupportedTokens_WithChainId,
   getAcceptedTokens_WithChainId,
   getTokenMetadata,
-} from './tokens';
+} from './token/tokens';
+import { TokenMetadata } from './token/typesToken';
 import { CHAIN_ID, } from './current';
 
 

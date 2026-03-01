@@ -86,45 +86,41 @@ const Faucet: React.FC = () => {
                     </div>
 
                     {/* Mint area */}
-                    <Card size="small" title="Mint Tokens">
-                        <Space direction="vertical" size="middle" style={{ width: '100%' }}>
-                            <Row justify="space-between" align="middle">
-                                <Col>
-                                    <Text strong>Your Balance: </Text>
-                                    <Text>{formattedBalance} {OFFICIAL_TOKEN_CONFIG.symbol}</Text>
-                                </Col>
-                                <Col>
-                                    <Button
-                                        type="primary"
-                                        onClick={handleMint}
-                                        loading={isLoading}
-                                        disabled={
-                                            !address || 
-                                            isLoading ||
-                                            !mint_viable
-                                        }
-                                    >
-                                        Mint
-                                    </Button>
-                                </Col>
+                    <Space direction="vertical" size="middle" style={{ width: '100%' }}>
+                        <Row justify="space-between" align="middle">
+                            <Row>
+                                <TextP>Your Balance: </TextP>
+                                <TextP>{formattedBalance} {OFFICIAL_TOKEN_CONFIG.symbol}</TextP>
                             </Row>
-                            <Alert
-                                type="info"
-                                message={
-                                    <Space direction="vertical" size="small">
-                                        <Text>You can mint 1,000 tokens each time.</Text>
-                                        <Text>
-                                            You last minted on: {timeToDate(mint_data || 0)}
-                                        </Text>
-                                        <Text>
-                                            You can mint again on: {timeToDate(mint_data + 72*60*60 || 0)}
-                                        </Text>
-                                    </Space>
-                                }
-                                showIcon
-                            />
-                        </Space>
-                    </Card>
+                                <Button
+                                    type="primary"
+                                    onClick={handleMint}
+                                    loading={isLoading}
+                                    disabled={
+                                        !address || 
+                                        isLoading ||
+                                        !mint_viable
+                                    }
+                                >
+                                    Mint
+                                </Button>
+                        </Row>
+                        <Alert
+                            type="info"
+                            message={
+                                <Space direction="vertical" size="small">
+                                    <TextP>You can mint 1,000 tokens each time.</TextP>
+                                    <TextP>
+                                        You last minted on: {timeToDate(mint_data || 0)}
+                                    </TextP>
+                                    <TextP>
+                                        You can mint again on: {timeToDate(mint_data + 72*60*60 || 0)}
+                                    </TextP>
+                                </Space>
+                            }
+                            showIcon
+                        />
+                    </Space>
                 </Space>
             </Card>
 

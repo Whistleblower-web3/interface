@@ -1,7 +1,7 @@
 import { create } from 'zustand';
 import { devtools } from 'zustand/middleware';
 // import { BoxBaseDataType, BoxDetailDataType} from '@/dapp/types/contractDate';
-import { BoxRoleType } from '@dapp/types/typesDapp/account';
+import { BoxRoleType } from '@/types/typesDapp/roles';
 import { 
     ModalType,
 } from '@BoxDetail/types/stateType';

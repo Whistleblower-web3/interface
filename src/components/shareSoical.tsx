@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { FaTwitter, FaFacebook, FaTelegram, FaDownload, FaShareAlt } from 'react-icons/fa';
 import { toPng, toBlob } from 'html-to-image';
-import SharePoster from '@/services/createSharePoster/SharePoster';
+import SharePoster from '@/components/SharePoster'
 import { BoxUnifiedType } from '@/services/supabase/types/types';
 import { MetadataBoxType } from '@/types/typesDapp/metadata/metadataBox';
 import { PROJECT_NAME } from '@/project';

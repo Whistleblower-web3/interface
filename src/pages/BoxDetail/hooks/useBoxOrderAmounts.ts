@@ -3,7 +3,7 @@ import { useMemo } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { query_OrderAmountsData, type BoxUserOrderAmountData } from '@dapp/services/supabase/fundsBox';
 import { CHAIN_CONFIG } from '@dapp/config/contractsConfig';
-import { BoxRoleType } from '@dapp/types/typesDapp/account';
+import { BoxRoleType } from '@/types/typesDapp/roles';
 
 export const useBoxOrderAmounts = (
     boxId: string,

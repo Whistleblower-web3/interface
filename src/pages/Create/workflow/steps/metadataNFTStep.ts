@@ -2,7 +2,7 @@
 import { MetadataNFTOutput } from '../../types/stepType';
 import { metadataService } from '@dapp/services/metadata/metadataService';
 import { objToJson } from '@dapp/services/createJsonFile/objToJson';
-import { nameService } from '@/utils/nameService';
+import { fileNameCreate } from '@/pages/Create/workflow/utils/fileName';
 // import { saveFile } from '@/dapp/services/saveFile';
 import { mintDataUpload } from '../utils/commonUpload';
 
@@ -34,7 +34,7 @@ export function createMetadataNFTStep(): WorkflowStep<WorkflowPayload, MetadataN
 
       const metadataNFTObj = await metadataService.createMetadataNFT(input.boxInfo, outputs);
 
-      const metadataNFTFile = objToJson(metadataNFTObj, nameService.metadataNFTName());
+      const metadataNFTFile = objToJson(metadataNFTObj, fileNameCreate.metadataNFTName());
 
       const metadataNFTCid = await mintDataUpload(metadataNFTFile, input.isTestMode);
 

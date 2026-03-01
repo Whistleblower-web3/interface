@@ -1,9 +1,9 @@
 ﻿import { WorkflowStep, WorkflowPayload } from '../core/types';
 import { MetadataBoxOutput } from '../../types/stepType';
-import { metadataService } from '@dapp/services/metadata/metadataService';
-import { objToJson } from '@dapp/services/createJsonFile/objToJson';
-import { nameService } from '@/utils/nameService';
-import { saveFile } from '@dapp/services/saveFile';
+import { metadataService } from '@/services/metadata/metadataService';
+import { objToJson } from '@/services/createJsonFile/objToJson';
+import { fileNameCreate } from '@/pages/Create/workflow/utils/fileName';
+import { saveFile } from '@/utils/saveFile';
 import { mintDataUpload } from '../utils/commonUpload';
 
 
@@ -45,11 +45,11 @@ export function createMetadataBoxStep(): WorkflowStep<WorkflowPayload, MetadataB
 
       const metadataBoxObj = await metadataService.createMetadataBox(input.boxInfo, outputs);
 
-      const metadataBoxFile = objToJson(metadataBoxObj, nameService.metadataBoxName());
+      const metadataBoxFile = objToJson(metadataBoxObj, fileNameCreate.metadataBoxName());
 
       if (import.meta.env.DEV) {
         // save file to local
-        saveFile(metadataBoxFile, nameService.metadataBoxName());
+        saveFile(metadataBoxFile, fileNameCreate.metadataBoxName());
       }
 
 

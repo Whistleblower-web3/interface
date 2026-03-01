@@ -1,4 +1,4 @@
-﻿import type { BoxRoleType } from '@dapp/types/typesDapp/account';
+﻿import type { BoxRoleType } from '@/types/typesDapp/roles';
 import type { BoxDetailData } from '../types/boxDetailData';
 import type { ModalType } from '../types/stateType';
 import type { ContractConfig, ContractConfigs } from '@dapp/config/contractsConfig';

@@ -1,5 +1,6 @@
 import { useChainId } from "wagmi";
-import { ContractName, TokenMetadata } from "./types";
+import { ContractName,} from "./types";
+import { TokenMetadata } from "./token/typesToken";
 import { useEffect } from "react";
 import { getChainConfig, sapphireTestnet } from "./chains";
 
@@ -7,7 +8,7 @@ import {
     getSupportedTokens_WithChainId, 
     getOfficialTokenConfig_WithChainId ,
     getAcceptedTokens_WithChainId
-} from "./tokens";
+} from "./token/tokens";
 import { 
     getProtocolConstants, 
     ProtocolConstantsType, 

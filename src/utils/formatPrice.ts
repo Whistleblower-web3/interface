@@ -1,9 +1,7 @@
 "use client"
 
-import { Tooltip } from 'antd';
 import { formatUnits } from 'viem';
 import { formatAmount } from '@dapp/utils/formatAmount';
-import { cn } from '@/lib/utils';
 
 export interface PriceTextProps {
     formattedPrice: string;

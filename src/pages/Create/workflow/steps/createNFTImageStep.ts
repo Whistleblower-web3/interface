@@ -3,7 +3,7 @@ import { CreateNFTImageOutput, TimeType } from '../../types/stepType';
 import { filterNftData } from '../utils/filterNftData'
 import CreateNftImage from '@dapp/services/createNftImage';
 import backgroundImg from '@assets/nft/nft-light-1.jpg';
-import { nameService } from '@/utils/nameService';
+import { nameService } from '@/pages/Create/workflow/utils/fileName';
 import { openNFTPreview } from '@dapp/components/html/nftPreviewTemplate';
 import { timeToDate } from '@dapp/utils/time';
 
