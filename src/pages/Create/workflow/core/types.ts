@@ -257,7 +257,6 @@ export interface WorkflowInitialData {
     state: string;
     type_of_crime: string;
     event_date: string;
-    nft_owner: string;
     price: string;
     mint_method: 'create' | 'createAndPublish';
   };

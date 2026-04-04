@@ -1,9 +1,9 @@
 // import { useQuery } from '@tanstack/react-query';
-import { 
+import {
     // CHAIN_ID,
     SUPPORTED_TOKENS,
     TokenMetadata,
-} from '@/config/contractsConfig';
+} from '@/config/tokenConfig';
 import { parseAmountToBigInt } from '@/utils/parseAmountToBigInt';
 import { formatUnits } from 'viem';
 

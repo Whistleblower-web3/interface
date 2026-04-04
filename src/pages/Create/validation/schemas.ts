@@ -47,15 +47,6 @@ export const priceSchema = z
         'Price must be greater than or equal to 0.001'
     );
 
-// NFT Owner Address validation: Ethereum address format
-export const nftOwnerSchema = z
-    .string()
-    .min(1, 'Please enter the NFT owner address')
-    .refine(
-        (val) => /^0x[a-fA-F0-9]{40}$/.test(val),
-        'Invalid Ethereum address format'
-    );
-
 // Country validation
 export const countrySchema = z
     .string()
@@ -86,8 +77,16 @@ export const boxImageListSchema = z
         'Please upload an image'
     );
 
-// Attachment file validation (optional)
-export const fileListSchema = z.any().optional();
+// Attachment file validation (Required - at least 1 file)
+export const fileListSchema = z
+    .any()
+    .refine(
+        (files) => {
+            if (!files || !Array.isArray(files)) return false;
+            return files.length > 0;
+        },
+        'Please upload at least one evidence file'
+    );
 
 // Mint Method validation
 export const mintMethodSchema = z
@@ -106,7 +105,6 @@ export const createFormSchema = z.object({
     event_date: eventDateSchema,
 
     // NFT related fields
-    nft_owner: nftOwnerSchema,
     price: priceSchema,
     mint_method: mintMethodSchema,
 
@@ -146,8 +144,6 @@ export const step2Schema = z.object({
 });
 
 export const step3Schema = z.object({
-    nft_owner: nftOwnerSchema,
     price: priceSchema,
     boxImageList: boxImageListSchema,
 });
-

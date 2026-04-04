@@ -1,6 +1,6 @@
 "use client"
 import React, { useState } from 'react';
-import ImageSwiper from '@/components/imageSwiper';
+import ImageSwiper from '@/components/imageSwiperCache';
 import TextP from '@/components/base/text_p';
 import TextTitle from '@/components/base/text_title';
 import { Space, Button } from 'antd';
@@ -72,9 +72,11 @@ const ContentLeft: React.FC<Props> = ({ tokenId }) => {
             </div>
 
             {/* Location and Date */}
-            <div className="flex flex-col gap-2">
-                <TextP>{metadataBox?.country}</TextP>
-                <TextP>{metadataBox?.state}</TextP>
+            <div className="flex flex-col md:flex-row md:justify-between gap-2">
+                <div className='flex flex-col md:flex-row gap-2'>
+                    <TextP>{metadataBox?.country}</TextP>
+                    <TextP>{metadataBox?.state}</TextP>
+                </div>
                 <TextP>{metadataBox?.event_date}</TextP>
             </div>
             <hr className="border-border/50" />

@@ -1,6 +1,6 @@
 import { useMemo } from 'react';
 import { useAccount } from 'wagmi';
-import { useChainConfig } from '@dapp/config/contractsConfig';
+import { useChainConfig } from '@dapp/config/chainConfig';
 import { useAccountQuery } from '@dapp/oasisQuery/app/hooks/useAccountQuery';
 import { SearchScope } from '@dapp/oasisQuery/types/searchScope';
 import { RuntimeEvmBalance, RuntimeAccount, RuntimeSdkBalance } from '@dapp/oasisQuery/oasis-nexus/api';

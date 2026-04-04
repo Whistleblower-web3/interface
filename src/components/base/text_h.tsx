@@ -16,10 +16,10 @@ interface TextHProps {
     conservative?: boolean;
 }
 
-export default function TextH({ 
-    children, 
-    size = "h3", 
-    align = "center", 
+export default function TextH({
+    children,
+    size = "h3",
+    align = "center",
     weight = "semibold",
     lineHeight = "normal",
     tracking = "normal",
@@ -91,15 +91,15 @@ export default function TextH({
 
     // Spacing class name
     let mtClasses = '';
-        if (mt === "none") {
-            mtClasses = '';
-        } else if (mt === "small") {
-            mtClasses = 'mt-2';
-        } else if (mt === "medium") {
-            mtClasses = 'mt-6';
-        } else if (mt === "large") {
-            mtClasses = 'mt-9';
-        }
+    if (mt === "none") {
+        mtClasses = '';
+    } else if (mt === "small") {
+        mtClasses = 'mt-2';
+    } else if (mt === "medium") {
+        mtClasses = 'mt-6';
+    } else if (mt === "large") {
+        mtClasses = 'mt-9';
+    }
 
     let mbClasses = '';
     if (mb === "none") {
@@ -121,7 +121,6 @@ export default function TextH({
         trackingClasses[tracking],
         mtClasses,
         mbClasses,
-        "font-mono",
         className // Ensure the external passed className is applied last
     );
 

@@ -1,7 +1,7 @@
 /**
  * Smart Workflow Hook - Recommended
  * 
- * ✅ This is the latest workflow hook, integrating all smart features
+ * �?This is the latest workflow hook, integrating all smart features
  * 
  * Features:
  * - Unified workflow management, replacing all legacy workflow systems
@@ -22,7 +22,7 @@ import { useCallback, useMemo, useRef } from 'react';
 import { useCreateWorkflowStore } from '../store/useCreateWorkflowStore';
 import { useNFTCreateStore } from '../store/useNFTCreateStore';
 import { MintMethodType } from '@dapp/types/typesDapp/metadata/metadataBox';
-import { 
+import {
   SmartWorkflowOrchestrator,
   createWorkflowContext,
   prepareWorkflowData,
@@ -35,16 +35,14 @@ import {
   createUploadFilesStep,
   createEncryptDataStep,
   createUploadBoxImageStep,
-  createCreateNFTImageStep,
-  createUploadNFTImageStep,
   createMetadataBoxStep,
-  createMetadataNFTStep,
   createMintStep,
   createUploadResultDataStep,
 } from '../workflow/steps';
 
 // Import dependencies needed for Mint step
-import { useContractConfig, ContractName, useSupportedTokens } from '@dapp/config/contractsConfig';
+import { useContract, ContractName, } from "@dapp/config/contractsConfig";
+import { OFFICIAL_TOKEN_CONFIG } from "@dapp/config/tokenConfig";
 import { useWriteCustorm } from '@/hooks/useWriteCustorm';
 
 export interface SmartWorkflowResult {
@@ -63,15 +61,15 @@ export const useSmartWorkflow = () => {
 
   // Get Hook dependencies needed for Mint step
   const { writeCustorm } = useWriteCustorm();
-  const contractConfig = useContractConfig(ContractName.TRUTH_BOX);
-  const decimals = useSupportedTokens()[0]?.decimals;
+  const contractConfig = useContract(ContractName.TRUTH_BOX);
+  const decimals = OFFICIAL_TOKEN_CONFIG.decimals;
 
   /**
    * Create smart orchestrator
    */
   const createOrchestrator = useCallback(() => {
     const context = createWorkflowContext();
-    
+
     const orchestrator = new SmartWorkflowOrchestrator(context, {
       name: 'Smart NFT Create Workflow',
       enableLogging: true,
@@ -84,9 +82,6 @@ export const useSmartWorkflow = () => {
       .registerStep(createUploadFilesStep())
       .registerStep(createEncryptDataStep())
       .registerStep(createUploadBoxImageStep())
-      .registerStep(createCreateNFTImageStep())
-      .registerStep(createUploadNFTImageStep())
-      .registerStep(createMetadataNFTStep())
       .registerStep(createMetadataBoxStep())
       .registerStep(createMintStep({
         writeCustorm,
@@ -252,8 +247,8 @@ export const useSmartWorkflow = () => {
     }
     return true;
   }, [
-    workflowStore.workflowStatus, 
-    workflowStore.currentStep, 
+    workflowStore.workflowStatus,
+    workflowStore.currentStep,
     workflowStore.createProgress.mint_status
   ]);
 
@@ -262,18 +257,18 @@ export const useSmartWorkflow = () => {
     startWorkflow,
     cancelWorkflow,
     resetWorkflow,
-    
+
     // State check
     checkData,
     canStart,
     canRetry,
     canCancel,
-    
+
     // State retrieval
     workflowStatus: workflowStore.workflowStatus,
     currentStep: workflowStore.currentStep,
     changedFields: nftStore.changedFields,
-    
+
     // Utility methods
     getCompletedSteps,
     getStepIndex

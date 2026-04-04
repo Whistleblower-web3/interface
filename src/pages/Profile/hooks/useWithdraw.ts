@@ -1,14 +1,13 @@
 // import { useState } from "react";
 import { useWriteCustormV3 } from "@/hooks/useWriteCustormV3";
-import { useAllContractConfigs } from "@dapp/config/contractsConfig";
+import { useAllContracts } from "@dapp/config/contractsConfig";
 import { useWithdrawStore } from "../store/withdrawStore";
-import { useSupportedTokens } from "@dapp/config/contractsConfig";
+import { useSupportedTokens } from "@dapp/config/tokenConfig";
 
 export const useWithdraw = () => {
     const supportedTokens = useSupportedTokens();
-    const allConfigs = useAllContractConfigs();
-    const { writeCustormV3, error, isLoading, isSuccessed,} = useWriteCustormV3();
-
+    const allContracts = useAllContracts();
+    const { writeCustormV3, error, isLoading, isSuccessed, reset } = useWriteCustormV3();
 
     const withdraw = async () => {
         const withdrawData = useWithdrawStore.getState().withdrawData;
@@ -35,7 +34,7 @@ export const useWithdraw = () => {
             args = [tokenAddress, boxList];
 
             const hash = await writeCustormV3({
-                contract: allConfigs.FundManager,
+                contract: allContracts.FundManager,
                 functionName: selectedClaimMethod,
                 tokenAddress: tokenAddress,
                 args: args
@@ -52,6 +51,7 @@ export const useWithdraw = () => {
         withdraw,
         error,
         isLoading,
-        isSuccessed
+        isSuccessed,
+        reset
     }
 }

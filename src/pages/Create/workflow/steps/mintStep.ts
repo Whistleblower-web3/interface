@@ -1,19 +1,20 @@
-﻿import { WorkflowStep, WorkflowPayload } from '../core/types';
+import { WorkflowStep, WorkflowPayload } from '../core/types';
 import { MintOutput } from '../../types/stepType';
 import { parseUnits } from 'viem';
 
 export interface MintStepDependencies {
   writeCustorm: (params: any) => Promise<string>;
   contractConfig: any;
-  decimals?: number ;
+  decimals?: number;
+  address?: string; // Add address as a dependency
 }
 
 export function createMintStep(deps: MintStepDependencies): WorkflowStep<WorkflowPayload, MintOutput> {
-  const { writeCustorm, contractConfig, decimals } = deps;
+  const { writeCustorm, contractConfig, decimals, address: walletAddress } = deps;
 
   return {
     name: 'mint',
-    description: 'Mint Truth Box and NFT',
+    description: 'Mint Truth Box',
 
     validate: (input) => {
       const outputs = input.all_step_outputs;
@@ -21,14 +22,7 @@ export function createMintStep(deps: MintStepDependencies): WorkflowStep<Workflo
         console.error('Mint: metadata_box_cid is missing');
         return false;
       }
-      if (!outputs.metadata_nft_cid) {
-        console.error('Mint: metadata_nft_cid is missing');
-        return false;
-      }
-      if (!input.boxInfo.nft_owner) {
-        console.error('Mint: nft_owner is missing');
-        return false;
-      }
+
       if (input.boxInfo.mint_method === 'create') {
         if (!input.boxInfo.price) {
           console.error('Mint: price is missing');
@@ -49,7 +43,10 @@ export function createMintStep(deps: MintStepDependencies): WorkflowStep<Workflo
       });
 
       const outputs = input.all_step_outputs;
-      const { nft_owner, price, mint_method } = input.boxInfo;
+      const { price, mint_method } = input.boxInfo;
+
+      // Use the provided walletAddress or the one from store if available
+      const nft_owner = walletAddress || context.getStore().wallet?.address;
 
       try {
         let functionName: string;
@@ -62,24 +59,22 @@ export function createMintStep(deps: MintStepDependencies): WorkflowStep<Workflo
           if (!outputs.key_pair?.private_key_minter) {
             throw new Error('key_pair.private_key_minter is missing');
           }
-          
+
           const priceInWei = parseUnits(price, decimals || 18);
           functionName = 'create';
           args = [
-            nft_owner,
-            outputs.metadata_nft_cid,
             outputs.metadata_box_cid,
             outputs.key_pair.private_key_minter,
             priceInWei,
           ];
         } else {
           functionName = 'createAndPublish';
-          args = [nft_owner, outputs.metadata_nft_cid, outputs.metadata_box_cid];
+          args = [outputs.metadata_box_cid]; // metadata_nft_cid removed
         }
 
-        const invalidArgs = args.map((arg, index) => ({ 
-          index, 
-          arg, 
+        const invalidArgs = args.map((arg, index) => ({
+          index,
+          arg,
           isUndefined: arg === undefined,
           isNull: arg === null,
           type: typeof arg,

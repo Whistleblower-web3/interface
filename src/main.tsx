@@ -11,7 +11,7 @@ import '@/styles/globals.css'
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <StrictMode>
     <ThemeProvider {...{
-      currentThemeName: 'purple',
+      currentThemeName: 'default',
       isDarkMode: true,
     }}>
       <BrowserRouter

@@ -141,7 +141,7 @@ export function DateSelector({
     return (
         <div className={cn("space-y-3", className)}>
             {label && (
-                <label className="text-sm font-medium font-mono flex items-center gap-2">
+                <label className="text-sm font-medium  flex items-center gap-2">
                     <Calendar className="h-4 w-4" />
                     {label}
                 </label>
@@ -161,13 +161,13 @@ export function DateSelector({
                         size={size}
                         variant={variant}
                         style={{ width: '100%' }}
-                        className="font-mono"
+                        className=""
                     />
                 </Space>
 
                 {/* Selected date display */}
                 {selectedDate && !error && (
-                    <div className="text-sm text-muted-foreground font-mono">
+                    <div className="text-sm text-muted-foreground ">
                         Selected: {selectedDate.format(displayFormat)}
                     </div>
                 )}
@@ -179,7 +179,7 @@ export function DateSelector({
                     type="error"
                     message={error}
                     icon={<AlertCircle className="h-4 w-4" />}
-                    className="mt-2 font-mono text-sm"
+                    className="mt-2  text-sm"
                 />
             )}
         </div>

@@ -2,7 +2,7 @@ import { create } from 'zustand';
 import type { EIP712Permit, PermitType } from '@dapp/hooks/EIP712';
 import type { SessionInfo } from '@dapp/hooks/SiweAuth/types';
 import { useAccountStore } from './accountStore';
-import { CHAIN_ID } from '@dapp/config/contractsConfig';
+import { CHAIN_ID } from '@dapp/config/chainConfig';
 
 type PermitBySpender = Record<string, EIP712Permit>;
 type PermitByContract = Record<string, Record<PermitType, PermitBySpender>>;
@@ -71,7 +71,7 @@ const createEmptySession = (): SessionInfo => ({
 });
 
 const resolveContext = (chainId?: number, address?: string) => {
-  const { currentAccount} = useAccountStore.getState();
+  const { currentAccount } = useAccountStore.getState();
   const resolvedChainId = chainId ?? CHAIN_ID ?? undefined;
   const resolvedAddress = address ?? currentAccount ?? undefined;
 
@@ -150,11 +150,11 @@ export const useSimpleSecretStore = create<EphemeralSecretStore>((set, get) => (
   currentSession: createEmptySession(),
 
   setEip712Permit: (
-    permitType, 
-    spender, 
+    permitType,
+    spender,
     contractAddress,
-    permit, 
-    chainId, 
+    permit,
+    chainId,
     address
   ) => {
     const context = resolveContext(chainId, address);
@@ -200,10 +200,10 @@ export const useSimpleSecretStore = create<EphemeralSecretStore>((set, get) => (
   },
 
   getEip712Permit: (
-    permitType, 
-    spender, 
+    permitType,
+    spender,
     contractAddress,
-    chainId, 
+    chainId,
     address
   ) => {
     const context = resolveContext(chainId, address);
@@ -276,7 +276,7 @@ export const useSimpleSecretStore = create<EphemeralSecretStore>((set, get) => (
       chainEntry[context.address] = normalizedSession;
       sessionsClone[context.chainId] = chainEntry;
 
-      const { currentAccount} = useAccountStore.getState();
+      const { currentAccount } = useAccountStore.getState();
       const shouldUpdateCurrent =
         currentAccount &&
         CHAIN_ID !== null &&
@@ -450,7 +450,7 @@ export const useSimpleSecretStore = create<EphemeralSecretStore>((set, get) => (
         }
       }
 
-      const { currentAccount} = useAccountStore.getState();
+      const { currentAccount } = useAccountStore.getState();
       const shouldResetSession =
         currentAccount &&
         CHAIN_ID !== null &&

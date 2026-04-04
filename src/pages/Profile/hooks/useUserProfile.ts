@@ -1,7 +1,7 @@
 "use client"
 
 import { useQuery } from '@tanstack/react-query';
-import { CHAIN_CONFIG  } from '@dapp/config/contractsConfig';
+import { CHAIN_CONFIG } from '@dapp/config/chainConfig';
 import { queryUserStats } from '@dapp/services/supabase/profile';
 import { UserProfileData } from '../types/profile.types';
 
@@ -17,7 +17,7 @@ export const useUserProfile = (
     address: string,
     userId: string
 ) => {
-    const {network,layer} = CHAIN_CONFIG
+    const { network, layer } = CHAIN_CONFIG
 
     // Use React Query to query user statistics data
     const {

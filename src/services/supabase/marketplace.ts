@@ -1,8 +1,8 @@
 ﻿import type { PostgrestError } from '@supabase/supabase-js';
-import { supabase, Database  } from './config/supabase.config';
+import { supabase, Database } from './config/supabase.config';
 import type { MarketplaceFilters } from '@Marketplace/types/marketplace.types';
 import type { SearchBoxesResult, StatisticalState } from './types/types';
-import { CHAIN_CONFIG } from '@dapp/config/contractsConfig';
+import { CHAIN_CONFIG } from '@dapp/config/chainConfig';
 import { boxStatusMap_number } from "@dapp/types/typesDapp/contracts/truthBox";
 
 const MAX_COUNT_LIMIT = 200;

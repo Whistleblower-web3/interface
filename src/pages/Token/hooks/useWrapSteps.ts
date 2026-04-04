@@ -160,9 +160,9 @@ export const useWrapSteps = (tokenPair: TokenPair, amount: string) => {
 
     // ---
 
-    
+
     const checkAllowance = useCallback(async (checkType: 'init' | 'approve') => {
-        if (!address || !tokenPair.erc20.address || !amount || !tokenPair.secret?.address) {
+        if (!address || !tokenPair.erc20.address || !amount || !tokenPair.erc20Privacy?.address) {
             return;
         }
 
@@ -172,7 +172,7 @@ export const useWrapSteps = (tokenPair: TokenPair, amount: string) => {
             const result = await readAllowance(
                 tokenPair.erc20.address,
                 address,
-                tokenPair.secret?.address,
+                tokenPair.erc20Privacy?.address,
                 amountInWei,
             );
             if (checkType === 'init') {
@@ -185,7 +185,7 @@ export const useWrapSteps = (tokenPair: TokenPair, amount: string) => {
     }, [tokenPair, amount, readAllowance, address, initializeSteps]);
 
     useEffect(() => {
-        
+
         if (activeButton === 'approve') {
             if (status !== 'idle') {
                 updateStepStatus('approve', status);
@@ -194,17 +194,17 @@ export const useWrapSteps = (tokenPair: TokenPair, amount: string) => {
             if (status !== 'idle') {
                 updateStepStatus('wrap', status);
             }
-        } 
+        }
     }, [activeButton, status]);
 
     const handleApproveClick = useCallback(async () => {
-        if (!tokenPair || !amount || !tokenPair.secret?.address) return;
+        if (!tokenPair || !amount || !tokenPair.erc20Privacy?.address) return;
 
         const amountInWei = parseUnits(amount, tokenPair.erc20.decimals);
         try {
             await approve(
                 tokenPair.erc20.address,
-                tokenPair.secret?.address,
+                tokenPair.erc20Privacy?.address,
                 amountInWei,
             );
         } catch (error) {
@@ -214,12 +214,12 @@ export const useWrapSteps = (tokenPair: TokenPair, amount: string) => {
     }, [tokenPair, amount, approve, updateStepStatus]);
 
     const handleApproveMaxClick = useCallback(async () => {
-        if (!tokenPair || !tokenPair.secret?.address) return;   
+        if (!tokenPair || !tokenPair.erc20Privacy?.address) return;
         const amountInWei = maxUint256;
         try {
             await approve(
                 tokenPair.erc20.address,
-                tokenPair.secret?.address,
+                tokenPair.erc20Privacy?.address,
                 amountInWei,
             );
         } catch (error) {
@@ -229,9 +229,9 @@ export const useWrapSteps = (tokenPair: TokenPair, amount: string) => {
     }, [tokenPair, approve, updateStepStatus]);
 
     const handleWrapClick = useCallback(async () => {
-        if (!tokenPair || !amount || !tokenPair.secret?.address) return;
+        if (!tokenPair || !amount || !tokenPair.erc20Privacy?.address) return;
         await wrap(
-            tokenPair.secret?.address,
+            tokenPair.erc20Privacy?.address,
             amount,
             tokenPair.erc20.decimals,
         );

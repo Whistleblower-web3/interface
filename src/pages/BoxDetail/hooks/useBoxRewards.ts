@@ -7,8 +7,8 @@
 
 import { useMemo } from 'react';
 import { useQuery } from '@tanstack/react-query';
-import { query_BoxRewardsData, type BoxRewardData } from '@dapp/services/supabase/fundsBox';
-import { CHAIN_CONFIG } from '@dapp/config/contractsConfig';
+import { query_BoxRewardsData, type BoxRewardData } from '@/services/supabase/boxRewards';
+import { CHAIN_CONFIG } from '@dapp/config/chainConfig';
 import type { BoxDetailData } from '@BoxDetail/types/boxDetailData';
 
 export const useBoxRewards = (
@@ -27,14 +27,14 @@ export const useBoxRewards = (
             const result = await query_BoxRewardsData(
                 boxId
             );
-            
+
             if (result.error) {
                 throw result.error;
             }
 
             return result;
         },
-        staleTime: 5 * 60 * 1000, 
+        staleTime: 5 * 60 * 1000,
         enabled: shouldQuery, // Only when enabled is true and boxId exists to query
     });
 

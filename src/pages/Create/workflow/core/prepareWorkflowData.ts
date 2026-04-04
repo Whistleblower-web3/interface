@@ -47,7 +47,6 @@ export function prepareWorkflowData(): WorkflowInitialData {
       state: boxInfoForm.state,
       type_of_crime: boxInfoForm.type_of_crime,
       event_date: boxInfoForm.event_date,
-      nft_owner: boxInfoForm.nft_owner,
       price: boxInfoForm.price,
       mint_method: boxInfoForm.mint_method,
     },
@@ -89,7 +88,6 @@ function validateRequiredFields(
     { path: 'boxInfo.type_of_crime', label: 'Type of Crime' },
     { path: 'boxInfo.country', label: 'Country' },
     { path: 'boxInfo.event_date', label: 'Event Date' },
-    { path: 'boxInfo.nft_owner', label: 'NFT Owner' },
     { path: 'boxInfo.mint_method', label: 'Mint Method' },
     { path: 'files', label: 'Files' },
     { path: 'box_images', label: 'Box Images' },
@@ -197,4 +195,3 @@ export function getValidationErrors(): string[] {
     return [String(error)];
   }
 }
-

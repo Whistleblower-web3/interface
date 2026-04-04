@@ -1,6 +1,7 @@
 import { useCallback, useState, } from 'react';
 import { useWriteCustormV2 } from '@/hooks/useWriteCustormV2';
-import { getContractConfigByAddress, TokenMetadata, useAllContractConfigs } from '@dapp/config/contractsConfig';
+import { TokenMetadata, getTokenByAddress } from "@dapp/config/tokenConfig";
+import { useAllContracts } from "@dapp/config/contractsConfig";
 import { useReadAllowance } from '@dapp/hooks/readContracts2/token/useReadAllowance';
 import { useAccount } from 'wagmi';
 import { parseUnits, maxUint256, formatUnits } from 'viem';
@@ -139,7 +140,7 @@ export const useBuyBidSteps = (
     amount: string,
     functionName: 'buy' | 'bid' | 'delay',
 ) => {
-    const allConfigs = useAllContractConfigs();
+    const allContracts = useAllContracts();
     const { address: owner } = useAccount();
     const { readAllowance, allowanceAmount, isEnough } = useReadAllowance();
     const { writeCustormV2, status, isLoading, isSuccessed } = useWriteCustormV2(boxId);
@@ -201,18 +202,18 @@ export const useBuyBidSteps = (
 
 
     const checkAllowance = useCallback(async (checkType: 'init' | 'approve') => {
-        if (!owner || !tokenMetadata || !amount || !allConfigs.FundManager.address) {
+        if (!owner || !tokenMetadata || !amount || !allContracts.FundManager.address) {
             return;
         }
         const amountInWei = parseAmountToBigInt(amount);
         if (import.meta.env.DEV) {
-            console.log('checkAllowance:', tokenMetadata.address, owner, allConfigs.FundManager.address, amountInWei);
+            console.log('checkAllowance:', tokenMetadata.address, owner, allContracts.FundManager.address, amountInWei);
         }
         try {
             const result = await readAllowance(
                 tokenMetadata.address,
                 owner,
-                allConfigs.FundManager.address,
+                allContracts.FundManager.address,
                 amountInWei,
             );
             if (checkType === 'init' || checkType === 'approve') {
@@ -226,15 +227,16 @@ export const useBuyBidSteps = (
     }, [tokenMetadata, amount, readAllowance, owner, initializeSteps, updateStepStatus]);
 
     const handleApproveClick = useCallback(async (isMax: boolean = false) => {
-        if (!tokenMetadata || !amount || !allConfigs.FundManager.address) return;
+        if (!tokenMetadata || !amount || !allContracts.FundManager.address) return;
         const amountInWei = isMax ? maxUint256 : parseAmountToBigInt(amount);
         try {
             updateStepStatus('approve', 'pending');
-            const contractConfig = getContractConfigByAddress(tokenMetadata.address);
+            const contractConfig = getTokenByAddress(tokenMetadata.address);
             await writeCustormV2({
-                contract: contractConfig,
+                contractAddress: contractConfig.address,
+                abi: contractConfig.abi,
                 functionName: 'approve',
-                args: [allConfigs.FundManager.address, amountInWei],
+                args: [allContracts.FundManager.address, amountInWei],
             });
             updateStepStatus('approve', 'success');
             // NOTE: No need to read again, success directly enter the next step.
@@ -245,15 +247,16 @@ export const useBuyBidSteps = (
     }, [tokenMetadata, amount, writeCustormV2, checkAllowance, updateStepStatus]);
 
     const handleBuyBidClick = useCallback(async () => {
-        if (!tokenMetadata || !amount || !allConfigs) return;
-        let contract = allConfigs.Exchange;
+        if (!tokenMetadata || !amount || !allContracts) return;
+        let contract = allContracts.Exchange;
         if (functionName === 'delay') {
-            contract = allConfigs.TruthBox;
+            contract = allContracts.TruthBox;
         }
         try {
             updateStepStatus(functionName, 'pending');
             await writeCustormV2({
-                contract,
+                contractAddress: contract.address,
+                abi: contract.abi,
                 functionName: functionName,
                 args: [boxId],
             });

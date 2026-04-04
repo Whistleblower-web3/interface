@@ -1,3 +1,19 @@
+<div align="center">
+  <img width="1200" alt="Wiki Truth Banner" src="https://github.com/Whistleblower-web3/project-resources/blob/main/image/app-interface-marketplace.jpg" />
+  
+  <h1>Wiki Truth</h1>
+  <p><strong>Decentralized whistleblower bounty and crime evidence marketplace.</strong></p>
+
+  <p>
+    <a href="https://oasisprotocol.org/sapphire">
+      <img src="https://img.shields.io/badge/Network-Oasis%20Sapphire-blue?style=flat-square" alt="Network" />
+    </a>
+    <img src="https://img.shields.io/badge/Status-Beta-orange?style=flat-square" alt="Status" />
+    <img src="https://img.shields.io/badge/License-MIT-green?style=flat-square" alt="License" />
+  </p>
+</div>
+
+
 # WikiTruth DApp
 
 cloudflare deploy site:[https://app.wikitruth.xyz]

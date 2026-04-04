@@ -1,10 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import { Card, Button, Space, Typography, Alert, Row, Col,} from 'antd';
-import { useAllContractConfigs } from '@dapp/config/contractsConfig';
-import { OFFICIAL_TOKEN_CONFIG } from '@dapp/config/contractsConfig';
+import { Card, Button, Space, Typography, Alert, Row, Col, } from 'antd';
+import { OFFICIAL_TOKEN_CONFIG } from '@dapp/config/tokenConfig';
 import { useAccount } from 'wagmi';
 import { useWriteContract } from 'wagmi';
-import { formatUnits , zeroAddress} from 'viem';
+import { formatUnits, zeroAddress } from 'viem';
 import { timeToDate } from '@dapp/utils/time';
 import { useERC20 } from '@dapp/hooks/readContracts/useERC20';
 import TextP from '@/components/base/text_p';
@@ -15,15 +14,15 @@ const Faucet: React.FC = () => {
     const { writeContract, status, isPending } = useWriteContract();
     const { balanceOf, mintDate } = useERC20();
     const { address } = useAccount();
-    const allContracts = useAllContractConfigs();
-    
+
+
     const [balance, setBalance] = useState<bigint>(BigInt(0));
     const [mint_data, setMint_data] = useState<number>(0);
     const [mint_viable, setMint_viable] = useState(false);
     const [isMinting, setIsMinting] = useState(false);
-    
-    const tokenContract = allContracts.OfficialToken;
-    
+
+    const tokenContract = OFFICIAL_TOKEN_CONFIG;
+
     useEffect(() => {
         const fetchBalance = async () => {
             if (!address || address === zeroAddress) return;
@@ -32,7 +31,7 @@ const Faucet: React.FC = () => {
             const mint_data = await mintDate(tokenContract.address, address);
             setMint_data(mint_data);
             // Calculate if it can be minted
-            const mint_viable = mint_data + 72*60*60 < Date.now()/1000;
+            const mint_viable = mint_data + 72 * 60 * 60 < Date.now() / 1000;
             setMint_viable(mint_viable);
         }
 
@@ -92,18 +91,18 @@ const Faucet: React.FC = () => {
                                 <TextP>Your Balance: </TextP>
                                 <TextP>{formattedBalance} {OFFICIAL_TOKEN_CONFIG.symbol}</TextP>
                             </Row>
-                                <Button
-                                    type="primary"
-                                    onClick={handleMint}
-                                    loading={isLoading}
-                                    disabled={
-                                        !address || 
-                                        isLoading ||
-                                        !mint_viable
-                                    }
-                                >
-                                    Mint
-                                </Button>
+                            <Button
+                                type="primary"
+                                onClick={handleMint}
+                                loading={isLoading}
+                                disabled={
+                                    !address ||
+                                    isLoading ||
+                                    !mint_viable
+                                }
+                            >
+                                Mint
+                            </Button>
                         </Row>
                         <Alert
                             type="info"
@@ -114,7 +113,7 @@ const Faucet: React.FC = () => {
                                         You last minted on: {timeToDate(mint_data || 0)}
                                     </TextP>
                                     <TextP>
-                                        You can mint again on: {timeToDate(mint_data + 72*60*60 || 0)}
+                                        You can mint again on: {timeToDate(mint_data + 72 * 60 * 60 || 0)}
                                     </TextP>
                                 </Space>
                             }
@@ -131,7 +130,7 @@ const Faucet: React.FC = () => {
                         <a href="https://faucet.testnet.oasis.io/?" target="_blank" rel="noopener noreferrer">https://faucet.testnet.oasis.io/?</a>
                     </TextP>
                     <TextP >
-                        The symbol of the token is “TEST”, which can be used for payment of transaction fees in oasis sapphire (testnet), and can also be wrapped into WROSE.S tokens.
+                        The symbol of the token is “TEST”, which can be used for payment of transaction fees in oasis sapphire (testnet), and can also be wrapped into WROSE.Privacy tokens.
                     </TextP>
                 </Space>
             </Card>

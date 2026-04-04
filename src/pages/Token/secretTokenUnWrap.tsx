@@ -1,17 +1,17 @@
 import React, { useState, useEffect, useCallback, useMemo } from 'react';
 import { Card, Space, Typography, Select, Tabs, Row, Col, Alert } from 'antd';
-import { useAllContractConfigs, ContractName } from '@dapp/config/contractsConfig';
+import { useSupportedTokens, TokenName } from '@/config/tokenConfig';
 import TokenUnwrapForm from './components/TokenUnwrapForm';
 import TokenWithdrawForm from './components/TokenWithdrawForm';
 import { useTokenOperations } from './hooks/useTokenOperations';
 import { useTokenPairs2 } from './hooks/useTokenPairs2';
-import { TokenPair } from './types';
+import { type TokenPair } from './types';
 
 const { Text } = Typography;
 const { Option } = Select;
 
 const SecretTokenUnWrap: React.FC = () => {
-    const allContracts = useAllContractConfigs();
+    const supportedTokens = useSupportedTokens();
     const [activeTab, setActiveTab] = useState<string>('unwrap');
     const [selectedPairIndex, setSelectedPairIndex] = useState<number>(0);
 
@@ -40,29 +40,30 @@ const SecretTokenUnWrap: React.FC = () => {
     }, [selectedPair]);
 
     // Get Secret contract configuration
-    const secretContract = useMemo(() => {
-        if (!selectedPair || !selectedPair.secret?.address) return null;
+    const privacyContract = useMemo(() => {
+        if (!selectedPair || !selectedPair.erc20Privacy?.address) return null;
 
-        const contractByAddress = Object.values(allContracts).find(
-            (c) => c && c.address && c.address.toLowerCase() === selectedPair.secret!.address.toLowerCase()
+        // Find the token metadata in the supported tokens list
+        const foundToken = supportedTokens.find(
+            (t) => t.address.toLowerCase() === selectedPair.erc20Privacy!.address.toLowerCase()
         );
-        if (contractByAddress) {
-            return contractByAddress;
-        }
 
+        if (foundToken) return foundToken;
+
+        // Fallback or explicit TokenName usage
         if (selectedPair.isNativeROSE) {
-            return allContracts[ContractName.WROSE_SECRET] || null;
+            return supportedTokens.find(t => t.tokenName === TokenName.WROSE_PRIVACY) || null;
         } else {
-            return allContracts.OfficialTokenSecret || null;
+            return supportedTokens.find(t => t.tokenName === TokenName.OFFICIAL_TOKEN_PRIVACY) || null;
         }
-    }, [selectedPair, allContracts]);
+    }, [selectedPair, supportedTokens]);
 
     // Withdraw operation: wROSE.S -> Native ROSE
     const handleWithdraw = useCallback(
         async (tokenAddress: `0x${string}`, amount: string) => {
-            if (!selectedPair || !selectedPair.secret?.address) return;
+            if (!selectedPair || !selectedPair.erc20Privacy?.address) return;
             try {
-                await withdraw(selectedPair.secret.address, amount, selectedPair.secret.decimals);
+                await withdraw(selectedPair.erc20Privacy.address as `0x${string}`, amount, selectedPair.erc20Privacy.decimals);
             } catch (error) {
                 console.error('Withdraw error:', error);
             }
@@ -73,9 +74,9 @@ const SecretTokenUnWrap: React.FC = () => {
     // Unwrap operation: Secret Token -> ERC20
     const handleUnwrap = useCallback(
         async (tokenAddress: `0x${string}`, amount: string) => {
-            if (!selectedPair || !selectedPair.secret?.address) return;
+            if (!selectedPair || !selectedPair.erc20Privacy?.address) return;
             try {
-                await unwrap(selectedPair.secret.address, amount, selectedPair.secret.decimals);
+                await unwrap(selectedPair.erc20Privacy.address as `0x${string}`, amount, selectedPair.erc20Privacy.decimals);
             } catch (error) {
                 console.error('Unwrap error:', error);
             }
@@ -128,7 +129,7 @@ const SecretTokenUnWrap: React.FC = () => {
         <Card style={{ marginTop: '24px' }}>
             <Space direction="vertical" size="large" style={{ width: '100%' }}>
                 <Col>
-                    <Row>
+                    <Row align="middle">
                         <Text strong style={{ marginRight: '8px' }}>Select Token Pair: </Text>
                         <Select
                             value={selectedPairIndex}
@@ -138,7 +139,7 @@ const SecretTokenUnWrap: React.FC = () => {
                         >
                             {tokenPairs.map((pair, index) => (
                                 <Option key={index} value={index}>
-                                    {pair.secret?.symbol || `${pair.erc20.symbol}.S`} - {pair.erc20.symbol}
+                                    {pair.erc20Privacy?.symbol || `${pair.erc20.symbol}.S`} - {pair.erc20.symbol}
                                     {pair.isNativeROSE && ' (Native ROSE)'}
                                 </Option>
                             ))}
@@ -146,13 +147,12 @@ const SecretTokenUnWrap: React.FC = () => {
                     </Row>
                     <Space style={{ marginTop: '12px' }} direction="vertical" size="small">
                         <Text strong>
-                            {selectedPair.secret && selectedPair.secret.name }
+                            {selectedPair.erc20Privacy && selectedPair.erc20Privacy.name}
                             {` ---> ${selectedPair.erc20.name}`}
-                            
                         </Text>
-                        {selectedPair.secret?.address && (
+                        {selectedPair.erc20Privacy?.address && (
                             <Text type="secondary" copyable>
-                                Secret: {selectedPair.secret.address}
+                                Secret: {selectedPair.erc20Privacy.address}
                             </Text>
                         )}
                         {selectedPair.erc20?.address && (
@@ -165,7 +165,7 @@ const SecretTokenUnWrap: React.FC = () => {
 
                 <Tabs activeKey={activeTab} onChange={setActiveTab} items={tabItems} />
 
-                {selectedPair && !secretContract && (
+                {selectedPair && !privacyContract && (
                     <Alert
                         type="warning"
                         message="Secret contract configuration not found for this token pair. Please check contract configuration."

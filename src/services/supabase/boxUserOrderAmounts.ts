@@ -1,0 +1,154 @@
+
+import type { PostgrestError } from '@supabase/supabase-js';
+import camelcaseKeys from 'camelcase-keys';
+import { supabase, Database } from './config/supabase.config';
+import { CHAIN_CONFIG } from '@dapp/config/chainConfig';
+
+type BoxUserOrderAmountsRow = Database['public']['Tables']['box_user_order_amounts']['Row'];
+
+type QueryError = PostgrestError | Error | null;
+
+export interface BoxUserOrderAmountData {
+    id: string;
+    userId: string;
+    boxId: string;
+    token: string;
+    amount: string;
+}
+
+export interface Result_OrderAmountsData {
+    orderAmountsData: BoxUserOrderAmountData[] | null;
+    error: QueryError;
+}
+
+/**
+ * Convert BoxUserOrderAmountsRow to BoxUserOrderAmountData
+ * @param boxUserOrderAmountsRow - Data row from box_user_order_amounts table
+ * @returns Converted BoxUserOrderAmountData
+ */
+function convertBoxUserOrderAmountsRow(boxUserOrderAmountsRow: BoxUserOrderAmountsRow): BoxUserOrderAmountData {
+    const camelCased = camelcaseKeys(boxUserOrderAmountsRow, { deep: true }) as any;
+    return {
+        id: camelCased.id || '',
+        userId: camelCased.userId || camelCased.user_id?.toString() || '',
+        boxId: camelCased.boxId || camelCased.box_id?.toString() || '',
+        token: camelCased.token || '',
+        amount: camelCased.amount?.toString() || '0',
+    };
+}
+
+
+/**
+ * Query Box user order amount data (box_user_order_amounts table)
+ * 
+ * Decide whether to query based on situation: call when user fund status in this Box needs to be displayed
+ * Requires boxId, currentUserId, and acceptedToken to all exist to query data
+ * 
+ * @param boxId - Box ID (string format)
+ * @param userId - Current User ID (string format)
+ * @returns User order amount data list
+ */
+export async function query_OrderAmountsData(
+    boxId: string,
+    userId: string,
+): Promise<Result_OrderAmountsData> {
+    try {
+        const { network, layer } = CHAIN_CONFIG;
+        let orderAmountsData: BoxUserOrderAmountData[] | null = null;
+
+        if (userId) {
+            const { data, error } = await supabase
+                .from('box_user_order_amounts')
+                .select('*')
+                .eq('network', network)
+                .eq('layer', layer)
+                .eq('box_id', boxId)
+                .eq('user_id', userId)
+            if (error) {
+                console.warn('Failed to fetch box_user_order_amounts:', error);
+                return {
+                    orderAmountsData: null,
+                    error: error,
+                };
+            }
+
+            // Convert data format
+            if (data && Array.isArray(data)) {
+                orderAmountsData = data.map(row => convertBoxUserOrderAmountsRow(row));
+            }
+        }
+
+        return {
+            orderAmountsData: orderAmountsData && orderAmountsData.length > 0 ? orderAmountsData : null,
+            error: null,
+        };
+    } catch (error) {
+        return {
+            orderAmountsData: null,
+            error: toQueryError(error),
+        };
+    }
+}
+
+/**
+ * Batch Query Box user order amount data (box_user_order_amounts table)
+ * 
+ * @param boxIds - Array of Box IDs
+ * @param userId - Current User ID
+ * @returns User order amount data list
+ */
+export async function batchQuery_OrderAmountsData(
+    boxIds: string[],
+    userId: string,
+): Promise<Result_OrderAmountsData> {
+    try {
+        const { network, layer } = CHAIN_CONFIG;
+        let orderAmountsData: BoxUserOrderAmountData[] | null = null;
+
+        if (userId && boxIds.length > 0) {
+            const { data, error } = await supabase
+                .from('box_user_order_amounts')
+                .select('*')
+                .eq('network', network)
+                .eq('layer', layer)
+                .in('box_id', boxIds)
+                .eq('user_id', userId);
+
+            if (error) {
+                console.warn('Failed to batch fetch box_user_order_amounts:', error);
+                return {
+                    orderAmountsData: null,
+                    error: error,
+                };
+            }
+
+            // Convert data format
+            if (data && Array.isArray(data)) {
+                orderAmountsData = data.map(row => convertBoxUserOrderAmountsRow(row));
+            }
+        }
+
+        return {
+            orderAmountsData: orderAmountsData && orderAmountsData.length > 0 ? orderAmountsData : null,
+            error: null,
+        };
+    } catch (error) {
+        return {
+            orderAmountsData: null,
+            error: toQueryError(error),
+        };
+    }
+}
+/**
+ * Convert error to QueryError type
+ */
+function toQueryError(error: unknown): QueryError {
+    if (!error) {
+        return null;
+    }
+    if (typeof error === 'object' && 'message' in (error as Record<string, unknown>)) {
+        return error as PostgrestError | Error;
+    }
+    return new Error('Unknown Supabase error');
+}
+

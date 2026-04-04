@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useState } from 'react';
 import { useWriteCustormV3 } from '@/hooks/useWriteCustormV3';
-import { useAllContractConfigs,CHAIN_CONFIG } from '@dapp/config/contractsConfig';
+import { useAllContracts, } from '@dapp/config/contractsConfig';
 import type { RewardWithdrawMethod } from './useUserRewardsSummary';
 
 interface WithdrawArgs {
@@ -8,11 +8,11 @@ interface WithdrawArgs {
     tokenAddress: string;
 }
 
-interface CurrentAction extends WithdrawArgs {}
+interface CurrentAction extends WithdrawArgs { }
 
 export const useRewardsWithdraw = (userId: string | null) => {
     const { writeCustormV3, error, isLoading, isSuccessed } = useWriteCustormV3();
-    const allConfigs = useAllContractConfigs();
+    const allContracts = useAllContracts();
     const [currentAction, setCurrentAction] = useState<CurrentAction | null>(null);
 
     const withdrawRewards = useCallback(async ({ method, tokenAddress }: WithdrawArgs) => {
@@ -24,7 +24,7 @@ export const useRewardsWithdraw = (userId: string | null) => {
 
         try {
             const hash = await writeCustormV3({
-                contract: allConfigs.FundManager,
+                contract: allContracts.FundManager,
                 functionName: method,
                 tokenAddress: tokenAddress,
                 args: [tokenAddress],
@@ -36,7 +36,7 @@ export const useRewardsWithdraw = (userId: string | null) => {
             setCurrentAction(null);
             throw err;
         }
-    }, [allConfigs.FundManager, writeCustormV3]);
+    }, [allContracts.FundManager, writeCustormV3]);
 
     const pendingKey = currentAction ? `${currentAction.method}-${currentAction.tokenAddress.toLowerCase()}` : null;
 

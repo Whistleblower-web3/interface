@@ -1,25 +1,18 @@
 
 export * from './types';
-export * from './token/typesToken';
-
-export * from './chains';
+// Re-export token types from new location
 
 export { ABIS, getABI } from './chain-23295/abis';
 
-export { 
-  NETWORK_CONTRACTS, 
-  TESTNET_ADDRESSES, 
-  MAINNET_ADDRESSES 
+export {
+  NETWORK_CONTRACTS,
+  TESTNET_ADDRESSES,
+  MAINNET_ADDRESSES
 } from './contracts';
 
 export {
-  SUPPORTED_TOKENS,
-  ACCEPTED_TOKENS,
-  CHAIN_ID,
-  CHAIN_CONFIG,
-  OFFICIAL_TOKEN_CONFIG,
   PROTOCOL_CONSTANTS,
-  useSetCurrentChainConfig,
+  useSetProtocolConstants,
 } from './current';
 
 export {
@@ -29,30 +22,16 @@ export {
 
 export {
   configManager,
-  getContractConfig,
+  getContract,
   getContractAddress,
   getAllContractAddresses,
-  getAllContractConfigs,
-  getContractConfigByAddress,
+  getAllContracts,
+  getContractByAddress,
 } from './config';
 
 export {
   useAllContractAddresses,
-  useContractConfig,
-  useAllContractConfigs,
-  useSupportedTokens,
+  useContract,
+  useAllContracts,
   useContractAddress,
-  useChainConfig,
-  useTokenMetadata,
-  useAcceptedTokens,
 } from './hooks';
-
-export {
-  // getSupportedTokens_WithChainId,
-  // getOfficialTokenConfig_WithChainId,
-  // getAcceptedTokens_WithChainId,
-  getTokenMetadata,
-  getTokenMetadataBySymbol,
-} from './token/tokens';
-
-// export * from './eventSignatures';

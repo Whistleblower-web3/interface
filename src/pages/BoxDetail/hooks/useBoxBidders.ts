@@ -2,7 +2,7 @@
 import { useMemo } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { queryBoxDetail_BiddersIds } from '@dapp/services/supabase/boxDetail';
-import { CHAIN_CONFIG} from '@dapp/config/contractsConfig';
+import { CHAIN_CONFIG } from '@dapp/config/chainConfig';
 import type { BoxDetailData } from '@BoxDetail/types/boxDetailData';
 
 export const useBoxBidders = (
@@ -15,28 +15,28 @@ export const useBoxBidders = (
     const shouldQuery = !!boxId && !!box && box.listed_mode !== 'Storing' && box.listed_mode !== 'Selling' && box.buyer_id !== '';
     const listed_mode = box.listed_mode || '';
 
-    if(import.meta.env.DEV && shouldQuery){
+    if (import.meta.env.DEV && shouldQuery) {
         console.log('shouldQuery-useBoxBidders:', boxId);
     }
 
     // Use React Query to query Box bidders data
     const { data, isLoading, error, isFetching } = useQuery({
-        
+
         queryKey: ['box-bidders', network, layer, boxId, listed_mode],
         queryFn: async () => {
             const result = await queryBoxDetail_BiddersIds(
                 boxId,
                 listed_mode
             );
-            
+
             if (result.error) {
                 throw result.error;
             }
 
             return result;
         },
-        staleTime: 5 * 60 * 1000, 
-        enabled: shouldQuery, 
+        staleTime: 5 * 60 * 1000,
+        enabled: shouldQuery,
     });
 
     // Convert data format

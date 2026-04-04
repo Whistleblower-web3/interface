@@ -64,7 +64,7 @@ const CountdownTimer: React.FC<CountdownTimerProps> = ({
 
 
     return (
-        <div 
+        <div
             className={cn(
                 "flex flex-col items-center justify-center",
                 className
@@ -80,22 +80,21 @@ const CountdownTimer: React.FC<CountdownTimerProps> = ({
              ">
 
 
-            <p className={cn(
-                "font-mono",
-                "text-xl md:text-2xl lg:text-3xl font-semibold" 
-            )}>
-                {displayValue}
-            </p>
+                <p className={cn(
+                    "text-xl md:text-2xl lg:text-3xl font-semibold"
+                )}>
+                    {displayValue}
+                </p>
 
-            <div className="relative">
+                <div className="relative">
 
-                        <LiquidChargeGauge 
-                            value={percentage} 
-                            size={200} 
-                            primaryColor="#FFA500" 
-                            secondaryColor="#FF4500"
-                        />
-                    </div>
+                    <LiquidChargeGauge
+                        value={percentage}
+                        size={200}
+                        primaryColor="#FFA500"
+                        secondaryColor="#FF4500"
+                    />
+                </div>
             </div>
 
 

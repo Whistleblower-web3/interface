@@ -63,10 +63,10 @@ const TokenWrapModal: React.FC<TokenWrapModalProps> = ({
             closable={status !== 'pending'}
             maskClosable={status !== 'pending'}
             footer={[
-                <Button 
-                key="close" 
-                onClick={handleClose} 
-                disabled={status === 'pending' || isLoading}>
+                <Button
+                    key="close"
+                    onClick={handleClose}
+                    disabled={status === 'pending' || isLoading}>
                     {isSuccessed ? 'Complete' : 'Cancel'}
                 </Button>,
             ]}
@@ -79,7 +79,7 @@ const TokenWrapModal: React.FC<TokenWrapModalProps> = ({
                     message={
                         <Space direction="vertical" size="small">
                             <Text strong>
-                                {tokenPair.erc20.symbol} - {tokenPair.secret?.symbol || `${tokenPair.erc20.symbol}.S`}
+                                {tokenPair.erc20.symbol} - {tokenPair.erc20Privacy?.symbol || `${tokenPair.erc20.symbol}.Privacy`}
                             </Text>
                             <Text>Amount: {amount} {tokenPair.erc20.symbol}</Text>
                         </Space>
@@ -139,7 +139,7 @@ const TokenWrapModal: React.FC<TokenWrapModalProps> = ({
                         disabled={!canWrap}
                         block
                     >
-                        {isLoading ? 'Waiting...' : `Wrap ${amount} ${tokenPair.erc20.symbol} to ${tokenPair.secret?.symbol || 'Secret Token'}...`}
+                        {isLoading ? 'Waiting...' : `Wrap ${amount} ${tokenPair.erc20.symbol} to ${tokenPair.erc20Privacy?.symbol || 'Secret Token'}...`}
                     </Button>
                 )}
 

@@ -6,7 +6,7 @@ import { BoxStatus } from '@dapp/types/typesDapp/contracts/truthBox';
 import usePriceUSD from '@/hooks/usePriceUSD';
 import PriceLabel from '@/components/base/priceLabel';
 import { formatPrice } from '@/utils/formatPrice';
-import { getTokenMetadata, getTokenMetadataBySymbol } from '@dapp/config/contractsConfig';
+import { getTokenByAddress, getTokenBySymbol } from "@dapp/config/tokenConfig";
 
 
 interface Props {
@@ -21,9 +21,9 @@ const PriceContainer: React.FC<Props> = ({ price, token, status, }) => {
 
     const tokenMetadata = useMemo(() => {
         if (status === 'Delaying') {
-            return getTokenMetadataBySymbol('WTRC.S');
+            return getTokenBySymbol('WTRC.Privacy');
         }
-        return token ? getTokenMetadata(token as `0x${string}`) : null;
+        return token ? getTokenByAddress(token as `0x${string}`) : null;
     }, [token, status]);
 
     const priceUSD = useMemo(() => {
@@ -42,33 +42,33 @@ const PriceContainer: React.FC<Props> = ({ price, token, status, }) => {
         bg-primary/5
         rounded-xl
         '>
-                <div className="w-full flex flex-col items-start ">
-                    <h2 className='
+            <div className="w-full flex flex-col items-start ">
+                <h2 className='
                     mb-3 md:mb-5
                     text-lg md:text-xl lg:text-2xl font-bold
                     '>
-                        {status === 'Delaying' ? 'Delay Fee:' : 'Price:'}
-                    </h2>
-                    <PriceLabel
-                        size="xl"
-                        data={formatPrice(price, tokenMetadata?.decimals, tokenMetadata?.precision)}
-                        symbol={tokenMetadata?.symbol}
-                    />
-                    {priceUSD > 0 && (
-                        <span className="flex items-baseline flex-row gap-2">
-                            <TextP>≈</TextP>
-                            <PriceLabel
-                                size="lg"
-                                className='text-white/60'
-                                data={{
-                                    formattedPrice: priceUSD.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 }),
-                                    fullPrice: priceUSD.toString()
-                                }}
-                                symbol="USD"
-                            />
-                        </span>
-                    )}
-                </div>
+                    {status === 'Delaying' ? 'Delay Fee:' : 'Price:'}
+                </h2>
+                <PriceLabel
+                    size="xl"
+                    data={formatPrice(price, tokenMetadata?.decimals, tokenMetadata?.precision)}
+                    symbol={tokenMetadata?.symbol}
+                />
+                {priceUSD > 0 && (
+                    <span className="flex items-baseline flex-row gap-2">
+                        <TextP> ≈ </TextP>
+                        <PriceLabel
+                            size="lg"
+                            className='text-white/60'
+                            data={{
+                                formattedPrice: priceUSD.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 }),
+                                fullPrice: priceUSD.toString()
+                            }}
+                            symbol="USD"
+                        />
+                    </span>
+                )}
+            </div>
         </div>
     );
 }

@@ -1,27 +1,12 @@
 
-export interface CreateArgsType{
-    to_: string;
-    tokenCID_: string;
-    boxInfoCID_: string;
-    key_: string;
-    price_: number;
-}
-
-export interface CreateAndPublishArgsType{
-    to_: string;
-    tokenCID_: string;
-    boxInfoCID_: string;
-    key_: string;
-}
-
-export type FunctionNameType_TruthBox = 
-'create' |
-'createAndPublish' |
-'publishByMinter' | 
-'publishByBuyer' | 
-'delay' |
-'addBoxToBlacklist' |
-'extendDeadline';
+export type FunctionNameType_TruthBox =
+    'create' |
+    'createAndPublish' |
+    'publishByMinter' |
+    'publishByBuyer' |
+    'delay' |
+    'addToBlacklist' |
+    'extendDeadline';
 
 
 export const boxStatus = [
@@ -37,7 +22,6 @@ export const boxStatus = [
 
 export type BoxStatus = typeof boxStatus[number];
 
-// 将number 转换为 string
 export const boxStatusMap_string: Record<number, BoxStatus> = {
     0: 'Storing',
     1: 'Selling',
@@ -49,7 +33,6 @@ export const boxStatusMap_string: Record<number, BoxStatus> = {
     7: 'Blacklisted',
 };
 
-// 将string 转换为 number
 export const boxStatusMap_number: Record<BoxStatus, number> = {
     'Storing': 0,
     'Selling': 1,
@@ -71,12 +54,12 @@ export interface BoxBasicDataType {
 //----
 
 export interface BoxUserDataType {
-    minter:string,
-    owner:string,
-    seller:string,
-    buyer:string,
-    bidders:string[],
-    completer:string,
+    minter: string,
+    owner: string,
+    seller: string,
+    buyer: string,
+    bidders: string[],
+    completer: string,
     // -----
     hasBuyer: boolean,
     hasSeller: boolean,
@@ -85,19 +68,18 @@ export interface BoxUserDataType {
 }
 
 
-// NftDetail_two
 export interface BoxDetailDataType {
     refundRequestTimestamp: number,
     purchaseTimestamp: number,
-    overDeadline:boolean,
-    isInBlacklist:boolean,
+    overDeadline: boolean,
+    isInBlacklist: boolean,
     refundPermit: boolean,
     inRefundDeadline: boolean,
     inReviewDeadline: boolean,
-    
-    owner:string,
-    buyer:string,
+
+    owner: string,
+    buyer: string,
     noBuyer: boolean,
-    fileUri:string,
+    fileUri: string,
 }
 

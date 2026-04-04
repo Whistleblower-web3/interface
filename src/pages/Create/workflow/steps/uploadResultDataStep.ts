@@ -1,4 +1,4 @@
-﻿import { WorkflowStep, WorkflowPayload } from '../core/types';
+import { WorkflowStep, WorkflowPayload } from '../core/types';
 import { UploadResultDataOutput } from '../../types/stepType';
 import { metadataService } from '@dapp/services/metadata/metadataService';
 import { objToJson } from '@dapp/services/createJsonFile/objToJson';
@@ -26,9 +26,7 @@ export function createUploadResultDataStep(): WorkflowStep<WorkflowPayload, Uplo
           outputs.file_cid_list,
           [
             outputs.box_image_cid && { cid: outputs.box_image_cid, isExisting: false },
-            outputs.nft_image_cid && { cid: outputs.nft_image_cid, isExisting: false },
             outputs.metadata_box_cid && { cid: outputs.metadata_box_cid, isExisting: false },
-            outputs.metadata_nft_cid && { cid: outputs.metadata_nft_cid, isExisting: false },
           ].filter(Boolean) as any,
           true,
           String(outputs.current_time.timestamp ?? Date.now())

@@ -130,7 +130,7 @@ export const useTokenOperations = () => {
     }, [address, writeToken]);
 
     /**
-     * Deposit operation: Native ROSE -> wROSE.S
+     * Deposit operation: Native ROSE -> wROSE.Privacy
      * function deposit() external payable{}
      */
     const deposit = useCallback(async (
@@ -162,7 +162,7 @@ export const useTokenOperations = () => {
     }, [address, writeToken]);
 
     /**
-     * Withdraw operation: wROSE.S -> Native ROSE
+     * Withdraw operation: wROSE.Privacy -> Native ROSE
      */
     const withdraw = useCallback(async (
         secretTokenAddress: `0x${string}`,

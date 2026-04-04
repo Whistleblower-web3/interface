@@ -5,7 +5,7 @@ import { Typography } from "antd";
 import { Copy, Check } from "lucide-react";
 
 // Define type-safe style options
-type ColorVariant = 'white' |'gray-3' | 'gray-5' | 'black' | 'muted-foreground' | 'primary' | 'secondary';
+type ColorVariant = 'white' | 'gray-3' | 'gray-5' | 'black' | 'muted-foreground' | 'primary' | 'secondary';
 type SizeVariant = 'xs' | 'sm' | 'md' | 'lg';
 type WeightVariant = 'light' | 'normal' | 'medium' | 'semibold';
 
@@ -23,7 +23,7 @@ const colorStyles: Record<ColorVariant, string> = {
 const sizeStyles: Record<SizeVariant, string> = {
     'xs': 'text-xs',
     'sm': 'text-sm',
-    'md': 'text-md', 
+    'md': 'text-md',
     'lg': 'text-lg',
 };
 
@@ -51,19 +51,19 @@ interface ParagraphProps {
     size?: SizeVariant;
     weight?: WeightVariant;
     isCopy?: boolean;
-    lineClamp?: number| 'none';
+    lineClamp?: number | 'none';
     className?: string;
     maxLength?: number;
     maxWidth?: number;
 }
 
 
-export default function Paragraph({ 
-    children, 
-    color = "white", 
-    size = "md", 
-    weight = "normal", 
-    lineClamp = 2, 
+export default function Paragraph({
+    children,
+    color = "white",
+    size = "md",
+    weight = "normal",
+    lineClamp = 2,
     isCopy = false,
     className,
     maxLength,
@@ -86,7 +86,7 @@ export default function Paragraph({
     return (
         <Typography.Paragraph
             className={cn(
-                "leading-relaxed font-mono",
+                "leading-relaxed ",
                 colorStyles[color],
                 !hasResponsiveText && sizeStyles[size],
                 weightStyles[weight],

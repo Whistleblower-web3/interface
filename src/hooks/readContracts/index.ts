@@ -5,7 +5,6 @@ export { useExchange } from './useExchange';
 export { useFundManager } from './useFundManager';
 // export { useAddressManager } from './useAddressManager';
 export { useReadSiweAuth } from './useSiweAuth';
-export { useUserId } from './useUserId';
+export { useUserManager } from './useUserManager';
 export { useERC20 } from './useERC20';
-export { useERC20Secret } from './useERC20Secret';
-
+export { useERC20Privacy } from './useERC20Privacy';

@@ -1,9 +1,9 @@
 import { useBoxDetailStore } from '../store/boxDetailStore';
-import { useMemo,} from 'react';
+import { useMemo, } from 'react';
 import { useWalletContext } from '@dapp/contexts/web3Context/useAccount/WalletContext';
 import { BoxInteractionRecord, useAccountStore, AccountStoreState } from '@dapp/store/accountStore';
 import { useBoxDetailContext } from '../contexts/BoxDetailContext';
-import { CHAIN_ID } from '@dapp/config/contractsConfig';
+import { CHAIN_ID } from '@dapp/config/chainConfig';
 import { FunctionNameType } from '@dapp/types/typesDapp/contracts';
 
 export type ButtonActiveNameType =
@@ -21,19 +21,19 @@ export type ButtonActiveNameType =
   'publishActive' |
   'viewFileActive';
 
-export const buttonActiveConfig: Record<ButtonActiveNameType, FunctionNameType[]>  = {
-  extendActive: ['sell','auction','publishByMinter'],
-  sellActive: ['sell','auction','publishByMinter'],
-  auctionActive: ['sell','auction','publishByMinter'],
-  buyActive: ['buy','bid','publishByMinter'],
-  bidActive: ['buy','bid','publishByMinter'],
-  requestRefundActive: ['requestRefund','completeOrder'],
-  cancelRefundActive: ['cancelRefund','agreeRefund','refuseRefund'],
-  agreeRefundActive: ['agreeRefund','cancelRefund','refuseRefund'],
-  refuseRefundActive: ['agreeRefund','cancelRefund','refuseRefund'],
-  completeActive: ['completeOrder','requestRefund','agreeRefund','refuseRefund'],
-  delayActive: ['delay','publishByBuyer'],
-  publishActive: ['publishByMinter','publishByBuyer','sell','auction'],
+export const buttonActiveConfig: Record<ButtonActiveNameType, FunctionNameType[]> = {
+  extendActive: ['sell', 'auction', 'publishByMinter'],
+  sellActive: ['sell', 'auction', 'publishByMinter'],
+  auctionActive: ['sell', 'auction', 'publishByMinter'],
+  buyActive: ['buy', 'bid', 'publishByMinter'],
+  bidActive: ['buy', 'bid', 'publishByMinter'],
+  requestRefundActive: ['requestRefund', 'completeOrder'],
+  cancelRefundActive: ['cancelRefund', 'agreeRefund', 'refuseRefund'],
+  agreeRefundActive: ['agreeRefund', 'cancelRefund', 'refuseRefund'],
+  refuseRefundActive: ['agreeRefund', 'cancelRefund', 'refuseRefund'],
+  completeActive: ['completeOrder', 'requestRefund', 'agreeRefund', 'refuseRefund'],
+  delayActive: ['delay', 'publishByBuyer'],
+  publishActive: ['publishByMinter', 'publishByBuyer', 'sell', 'auction'],
   viewFileActive: ['viewFile'],
 }
 
@@ -87,15 +87,15 @@ export const useButtonActive = (name: ButtonActiveNameType) => {
 
     const publishActive_roleCheck = (): boolean => {
       if (status === 'Storing') {
-        return isMinter ;
+        return isMinter;
       } else if (status === 'Delaying') {
-        return isBuyer ;
+        return isBuyer;
       }
       return false;
     }
     const sellOrAuction_roleCheck = (): boolean => {
       if (isInDeadline) {
-        return isMinter ; // If not expired, must be minter
+        return isMinter; // If not expired, must be minter
       } else {
         return !isGuest; // If expired, as long as it is not guest
       }
@@ -103,19 +103,19 @@ export const useButtonActive = (name: ButtonActiveNameType) => {
 
     const agreeRefund_roleCheck = (): boolean => {
       if (isInReviewRefundDeadline) {
-        return isAdmin || (isMinter ); // If within the review refund deadline, must be admin or minter
+        return isAdmin || (isMinter); // If within the review refund deadline, must be admin or minter
       } else {
         return !isGuest; // If expired, as long as it is not guest
       }
     }
 
     const refuseRefund_roleCheck = (): boolean => {
-        return isAdmin; // Must be admin/DAO
+      return isAdmin; // Must be admin/DAO
     }
 
     const completeOrder_roleCheck = (): boolean => {
       if (isInRequestRefundDeadline) {
-        return isBuyer ; // If within the request refund deadline, must be buyer
+        return isBuyer; // If within the request refund deadline, must be buyer
       } else {
         return !isGuest; // If expired, as long as it is not guest
       }
@@ -123,9 +123,9 @@ export const useButtonActive = (name: ButtonActiveNameType) => {
 
     const viewFileActive = (): boolean => {
       if (status === 'Storing' || status === 'Selling' || status === 'Auctioning') {
-        return isMinter ;
+        return isMinter;
       } else if (status === 'Delaying' || status === 'Paid') {
-        return isBuyer ;
+        return isBuyer;
       } else if (status === 'Refunding') {
         return !isGuest;
       } else if (status === 'Published') {
@@ -143,10 +143,10 @@ export const useButtonActive = (name: ButtonActiveNameType) => {
     switch (name) {
       case 'extendActive':
         return !isInBlackListed &&
-          isMinter  &&
+          isMinter &&
           isInDeadline &&
           deadlineCheckState?.isInExtendDeadlineTimeWindow &&
-          wroteListNotInclude(buttonActiveConfig.extendActive)&&
+          wroteListNotInclude(buttonActiveConfig.extendActive) &&
           modalStatus.ExtendDeadline === 'close';
 
       case 'sellActive':
@@ -168,14 +168,14 @@ export const useButtonActive = (name: ButtonActiveNameType) => {
           purchaseTimestamp === 0 &&
           buyerIsEmpty &&
           status === 'Selling' &&
-          isOther  &&
+          isOther &&
           // isInDeadline &&
           wroteListNotInclude(buttonActiveConfig.buyActive);
 
       case 'bidActive':
         return !isInBlackListed &&
           status === 'Auctioning' &&
-          (isOther || isBidder)  &&
+          (isOther || isBidder) &&
           isInDeadline &&
           wroteListNotInclude(buttonActiveConfig.bidActive);
 
@@ -185,14 +185,14 @@ export const useButtonActive = (name: ButtonActiveNameType) => {
           isInRequestRefundDeadline &&
           reviewDeadline === 0 &&
           status === 'Paid' &&
-          isBuyer  &&
+          isBuyer &&
           wroteListNotInclude(buttonActiveConfig.requestRefundActive);
 
       case 'cancelRefundActive':
         return !isInBlackListed &&
           !refundPermit &&
           status === 'Refunding' &&
-          isBuyer  &&
+          isBuyer &&
           wroteListNotInclude(buttonActiveConfig.cancelRefundActive);
 
       case 'agreeRefundActive':

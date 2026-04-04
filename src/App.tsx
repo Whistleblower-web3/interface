@@ -2,11 +2,13 @@ import { lazy, useEffect } from 'react';
 import { Routes, Route } from 'react-router-dom';
 import { Web3ContextProvider } from '@/contexts/web3Context';
 import '@rainbow-me/rainbowkit/styles.css';
-import DappHeader from '@/components/dappHeader';
+import Header from '@/components/Header';
 import { useSecureAccount } from '@/hooks/useSecureAccount';
 // import { QueryClientProvider } from '@tanstack/react-query'
 // import { defaultQueryClient } from '@/config/queryClient';
-import { useSetCurrentChainConfig } from '@/config/contractsConfig';
+import { useSetProtocolConstants } from '@/config/contractsConfig';
+import { useSetCurrentTokenConfig } from '@/config/tokenConfig';
+import { useSetCurrentChainConfig } from '@/config/chainConfig';
 
 import { startIpfsGatewayPolling, stopIpfsGatewayPolling } from '@/services/ipfsUrl/sync'
 import { cleanupIpfsCache } from '@/services/ipfsCache/ipfsCache';
@@ -24,7 +26,9 @@ const BoxDetailPage = lazy(() => import('@/pages/BoxDetail'));
 function DappRoutes() {
     useSecureAccount();
     useSetCurrentChainConfig();
-    
+    useSetCurrentTokenConfig();
+    useSetProtocolConstants();
+
     useEffect(() => {
         startIpfsGatewayPolling();
         cleanupIpfsCache();
@@ -50,7 +54,7 @@ export default function Dapp() {
     return (
         // <QueryClientProvider client={defaultQueryClient}>
         <Web3ContextProvider>
-            <DappHeader />
+            <Header />
             <DappRoutes />
         </Web3ContextProvider>
         // </QueryClientProvider>

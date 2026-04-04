@@ -1,8 +1,8 @@
 "use client"
 
 import { useQuery } from '@tanstack/react-query';
-import { batchQuery_OrderAmountsData, type BoxUserOrderAmountData } from '@dapp/services/supabase/fundsBox';
-import { CHAIN_CONFIG } from '@dapp/config/contractsConfig';
+import { batchQuery_OrderAmountsData, type BoxUserOrderAmountData } from '@/services/supabase/boxUserOrderAmounts';
+import { CHAIN_CONFIG } from '@dapp/config/chainConfig';
 import { useMemo } from 'react';
 
 /**
@@ -11,17 +11,28 @@ import { useMemo } from 'react';
 export const useBatchOrderAmounts = (
     boxIds: string[],
     userId: string,
+    selectedTab: string,
     enabled: boolean = true
 ) => {
     const { network, layer } = CHAIN_CONFIG;
+
+    // Only query when tab is 'bought' or 'bade', not 'all' or other tabs
+    const shouldQuery = useMemo(() => {
+        if (selectedTab !== 'bought' && selectedTab !== 'bade') {
+            return false;
+        }
+
+        return true;
+    }, [selectedTab]);
+
 
     const { data, isLoading, error, isFetching } = useQuery({
         queryKey: ['batch-box-order-amounts', network, layer, boxIds.sort().join(','), userId],
         queryFn: async () => {
             if (boxIds.length === 0) return { orderAmountsData: [] };
-            
+
             const result = await batchQuery_OrderAmountsData(boxIds, userId);
-            
+
             if (result.error) {
                 throw result.error;
             }
@@ -29,7 +40,7 @@ export const useBatchOrderAmounts = (
             return result;
         },
         staleTime: 5 * 60 * 1000,
-        enabled: enabled && boxIds.length > 0 && !!userId && userId.trim() !== '',
+        enabled: enabled && shouldQuery && boxIds.length > 0 && !!userId && userId.trim() !== '',
     });
 
     // Create a map for quick lookup by boxId

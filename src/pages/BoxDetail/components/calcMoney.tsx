@@ -4,8 +4,8 @@ import React, { useMemo } from 'react';
 import { useBoxDetailContext } from '../contexts/BoxDetailContext';
 import PriceLabel from '@/components/base/priceLabel';
 import { formatPrice } from '@/utils/formatPrice';
-import { getTokenMetadata } from '@dapp/config/contractsConfig';
-import type { BoxUserOrderAmountData } from '@dapp/services/supabase/fundsBox';
+import { getTokenByAddress } from "@dapp/config/tokenConfig";
+import type { BoxUserOrderAmountData } from '@/services/supabase/boxUserOrderAmounts';
 import { useWalletContext } from '@dapp/contexts/web3Context/useAccount/WalletContext';
 import TextP from '@/components/base/text_p';
 
@@ -34,7 +34,7 @@ const CalcMoney: React.FC<Props> = () => {
         return Math.max(0, Number(box.price) - oldMoney);
     }, [box.price, oldMoney]);
 
-    const tokenMetadata = getTokenMetadata(box.accepted_token as `0x${string}`);
+    const tokenMetadata = getTokenByAddress(box.accepted_token as `0x${string}`);
 
     return (
         <>

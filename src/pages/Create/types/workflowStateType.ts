@@ -6,9 +6,6 @@ export interface MintProgressType {
     uploadFiles_Progress: number;
     encryptData_Progress: number;
     uploadBoxImage_Progress: number;
-    createNFTImage_Progress: number;
-    uploadNFTImage_Progress: number;
-    metadataNFT_Progress: number;
     metadataBox_Progress: number;
     mint_Progress: number;
     uploadResultData_Progress: number;
@@ -21,9 +18,6 @@ export type StepNameType =
 'uploadFiles' | 
 'encryptData' | 
 'uploadBoxImage' | 
-'createNFTImage' | 
-'uploadNFTImage' | 
-'metadataNFT' | 
 'metadataBox' | 
 'mint' | 
 'uploadResultData';
@@ -31,7 +25,7 @@ export type StepNameType =
 // All steps: in index order
 export const allSteps: StepNameType[] = [
     'compressFiles', 'uploadFiles', 'encryptData', 'uploadBoxImage', 
-    'createNFTImage', 'uploadNFTImage', 'metadataNFT','metadataBox',  
+    'metadataBox',  
     'mint', 'uploadResultData'
 ];
 
@@ -55,17 +49,8 @@ export interface ExtendedMintProgressType extends MintProgressType {
     uploadBoxImage_status: StepStatus;
     uploadBoxImage_Error: string;
 
-    createNFTImage_status: StepStatus;
-    createNFTImage_Error: string;
-
-    uploadNFTImage_status: StepStatus;
-    uploadNFTImage_Error: string;
-
     metadataBox_status: StepStatus;
     metadataBox_Error: string;
-
-    metadataNFT_status: StepStatus;
-    metadataNFT_Error: string;
 
     mint_status: StepStatus;
     mint_Error: string;

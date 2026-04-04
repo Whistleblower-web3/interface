@@ -10,8 +10,8 @@ export interface TokenInfo {
 // Token pair
 export interface TokenPair {
     erc20: TokenInfo;
-    secret: TokenInfo | null;
-    isNativeROSE: boolean; // Whether it is a native ROSE -> wROSE.S
+    erc20Privacy: TokenInfo | null;
+    isNativeROSE: boolean; // Whether it is a native ROSE -> wROSE.Privacy
 }
 
 // Operation button status

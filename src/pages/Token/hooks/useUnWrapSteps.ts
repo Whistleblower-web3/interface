@@ -10,11 +10,11 @@ export const useUnWrapSteps = (tokenPair: TokenPair, amount?: string) => {
     const [currentStep, setCurrentStep] = useState<string>('EIP712Permit');
     const [signError, setSignError] = useState<Error | null>(null);
     const { signAndSavePermit, getCurrentEip712Permit, isLoading: isEIP712Loading, error: eip712Error } = useEIP712Permit();
-    const { readBalance, balance, isLoading,error: balanceError } = useReadBalance();
+    const { readBalance, balance, isLoading, error: balanceError } = useReadBalance();
     const initStepsRef = useRef(false);
 
     const initSteps = useCallback(async () => {
-        if (!address || !tokenPair.secret?.address) {
+        if (!address || !tokenPair.erc20Privacy?.address) {
             setCurrentStep('EIP712Permit');
             initStepsRef.current = false;
             return;
@@ -29,26 +29,26 @@ export const useUnWrapSteps = (tokenPair: TokenPair, amount?: string) => {
         const permit = getCurrentEip712Permit(
             PermitType.VIEW,
             address,
-            tokenPair.secret.address
+            tokenPair.erc20Privacy.address
         );
-        
+
         if (permit) {
             setCurrentStep('checkBalance');
-            await readBalance(tokenPair.secret.address, address, true);
+            await readBalance(tokenPair.erc20Privacy.address, address, true);
         } else {
             setCurrentStep('EIP712Permit');
         }
         initStepsRef.current = false;
-    }, [getCurrentEip712Permit, address, tokenPair.secret?.address, readBalance]);
+    }, [getCurrentEip712Permit, address, tokenPair.erc20Privacy?.address, readBalance]);
 
     const handleEIP712Permit = useCallback(async () => {
-        if (!address || !tokenPair.secret?.address) {
+        if (!address || !tokenPair.erc20Privacy?.address) {
             return;
         }
         setSignError(null);
         try {
             const signPermitParams: SignPermitParams = {
-                contractAddress: tokenPair.secret.address,
+                contractAddress: tokenPair.erc20Privacy.address,
                 amount: BigInt(0),
                 label: PermitType.VIEW,
                 spender: address,
@@ -57,22 +57,22 @@ export const useUnWrapSteps = (tokenPair: TokenPair, amount?: string) => {
             if (result) {
                 setCurrentStep('checkBalance');
                 setSignError(null);
-                
-                await readBalance(tokenPair.secret.address, address, true);
+
+                await readBalance(tokenPair.erc20Privacy.address, address, true);
             }
         } catch (error) {
             console.error('Check EIP712Permit error:', error);
             setSignError(error instanceof Error ? error : new Error('Failed to sign EIP712 permit'));
         }
-    }, [tokenPair.secret?.address, signAndSavePermit, address, readBalance]);
+    }, [tokenPair.erc20Privacy?.address, signAndSavePermit, address, readBalance]);
 
     // When tokenPair changes, reset initialization flag and reinitialize
     useEffect(() => {
         initStepsRef.current = false;
-        if (tokenPair.secret?.address && address) {
+        if (tokenPair.erc20Privacy?.address && address) {
             initSteps();
         }
-    }, [tokenPair.secret?.address, address]);
+    }, [tokenPair.erc20Privacy?.address, address]);
 
     return {
         initSteps,

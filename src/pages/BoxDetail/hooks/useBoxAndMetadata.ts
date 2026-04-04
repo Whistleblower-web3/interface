@@ -2,7 +2,7 @@
 import { useMemo } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { queryBoxAndMetadata } from '@dapp/services/supabase/boxDetail';
-import { CHAIN_CONFIG} from '@dapp/config/contractsConfig';
+import { CHAIN_CONFIG } from '@dapp/config/chainConfig';
 import type { MetadataBoxType } from '@dapp/types/typesDapp/metadata/metadataBox';
 import type { BoxDetailData } from '@BoxDetail/types/boxDetailData';
 
@@ -14,15 +14,15 @@ export const useBoxAndMetadata = (boxId: string) => {
         queryKey: ['box-detail', network, layer, boxId],
         queryFn: async () => {
             const result = await queryBoxAndMetadata(boxId);
-            
+
             if (result.error) {
                 throw result.error;
             }
 
             return result;
         },
-        staleTime: 5 * 60 * 1000, 
-        enabled: !!boxId, 
+        staleTime: 5 * 60 * 1000,
+        enabled: !!boxId,
     });
 
     // Convert data format

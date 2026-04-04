@@ -1,8 +1,8 @@
 import { useEffect, useState, useRef, useCallback } from 'react';
 import { useAccountStore } from '@dapp/store/accountStore';
-import { useUserId } from '../readContracts/useUserId';
+import { useUserManager } from '../readContracts/useUserManager';
 import { useWalletContext } from '@dapp/contexts/web3Context/useAccount/WalletContext';
-import { CHAIN_ID } from '@dapp/config/contractsConfig';
+import { CHAIN_ID } from '@dapp/config/chainConfig';
 import { useSiweAuth } from '@dapp/hooks/SiweAuth';
 
 type AccountStoreSnapshot = ReturnType<typeof useAccountStore.getState>;
@@ -47,13 +47,13 @@ export function useGetMyUserId(): string {
     const [userId, setUserId] = useState<string>('');
     const fetchingRef = useRef(false); // Prevent duplicate requests
 
-    const { setUserId: setUserIdToStore} = useAccountStore();
-    const { myUserId } = useUserId();
+    const { setUserId: setUserIdToStore } = useAccountStore();
+    const { myUserId } = useUserManager();
     const { address, chainId } = useWalletContext();
-    
+
     // Use useSiweAuth to get the responsive session validation status and token
     const { isValidateSession, session } = useSiweAuth();
-    
+
     // Use selector to precisely listen for changes in the userId of the current account
     const currentUserIdFromStore = useAccountStore((state) => {
         const targetChainId = chainId || CHAIN_ID;
@@ -110,13 +110,13 @@ export function useGetMyUserId(): string {
         fetchingRef.current = true;
 
         try {
-            
+
             // Call the contract to get the userId
             const fetchedUserId = await myUserId(session.token!);
 
             if (fetchedUserId && fetchedUserId > 0) {
                 const userIdString = fetchedUserId.toString();
-                
+
                 // Save to accountStore
                 setUserIdToStore(userIdString);
                 setUserId(userIdString);

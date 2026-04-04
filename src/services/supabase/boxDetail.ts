@@ -7,10 +7,10 @@
 import type { PostgrestError } from '@supabase/supabase-js';
 import { supabase, Database } from './config/supabase.config';
 import type { MetadataBoxType } from '@dapp/types/typesDapp/metadata/metadataBox';
-import type { 
-    BoxDetailData, 
+import type {
+    BoxDetailData,
 } from '@BoxDetail/types/boxDetailData';
-import { CHAIN_CONFIG } from '@dapp/config/contractsConfig';
+import { CHAIN_CONFIG } from '@dapp/config/chainConfig';
 
 import { calculateStatus, getListedMode } from './utils/status';
 
@@ -46,8 +46,8 @@ function convertBoxRow(
         price: boxRow.price,
         deadline: boxRow.deadline,
         status: calculateStatus(
-            boxRow.status, 
-            boxRow.deadline, 
+            boxRow.status,
+            boxRow.deadline,
             boxRow.buyer_id
         ),
         listed_mode: getListedMode(boxRow.listed_mode),
@@ -56,7 +56,7 @@ function convertBoxRow(
         box_info_cid: boxRow.box_info_cid || undefined,
         private_key: boxRow.private_key,
         create_timestamp: boxRow.create_timestamp,
-        
+
         minter_id: boxRow.minter_id,
         owner_address: boxRow.owner_address,
         publisher_id: boxRow.publisher_id || undefined,

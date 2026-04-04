@@ -33,7 +33,7 @@ interface CreateWorkflowActions {
   completeWorkflow: () => void;
   failWorkflow: (error: string, failedStepIndex?: number) => void;
   cancelWorkflow: () => void;
-  resetCreateProgressList: (steps:StepNameType[]) => void;
+  resetCreateProgressList: (steps: StepNameType[]) => void;
 
   resetCreateProgress: () => void;
   resetAllWorkflowStore: () => void;
@@ -46,9 +46,6 @@ const initialMintProgress: ExtendedMintProgressType = {
   uploadFiles_Progress: 0,
   encryptData_Progress: 0,
   uploadBoxImage_Progress: 0,
-  createNFTImage_Progress: 0,
-  uploadNFTImage_Progress: 0,
-  metadataNFT_Progress: 0,
   metadataBox_Progress: 0,
   mint_Progress: 0,
   uploadResultData_Progress: 0,
@@ -65,17 +62,8 @@ const initialMintProgress: ExtendedMintProgressType = {
   uploadBoxImage_status: 'pending',
   uploadBoxImage_Error: '',
 
-  createNFTImage_status: 'pending',
-  createNFTImage_Error: '',
-
-  uploadNFTImage_status: 'pending',
-  uploadNFTImage_Error: '',
-
   metadataBox_status: 'pending',
   metadataBox_Error: '',
-
-  metadataNFT_status: 'pending',
-  metadataNFT_Error: '',
 
   mint_status: 'pending',
   mint_Error: '',
@@ -269,7 +257,7 @@ export const useCreateWorkflowStore = create<CreateWorkflowStore>()(
         set(
           (state) => {
             const newCreateProgress: ExtendedMintProgressType = { ...state.createProgress };
-            
+
             // Iterate steps to reset
             for (const step of steps) {
 

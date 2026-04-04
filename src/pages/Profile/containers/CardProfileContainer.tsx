@@ -1,18 +1,18 @@
 "use client"
 
 import React, { useMemo, useEffect } from 'react';
-import CardProfile, { 
-    CardProfileData, 
-    CardProfileActions 
+import CardProfile, {
+    CardProfileData,
+    CardProfileActions
 } from '@/components/cardProfile';
 import { FundsData } from '@/components/fundsSection';
 import { BoxData } from '@dapp/pages/Profile/types/profile.types';
 import { useFunds } from '@Profile/hooks/useFunds';
 import { useWithdrawStore, SelectableItem } from '@Profile/store/withdrawStore';
 import { useAccountStore } from '@dapp/store/accountStore';
-import { CHAIN_ID } from '@dapp/config/contractsConfig';
+import { CHAIN_ID } from '@dapp/config/chainConfig';
 import { useWalletContext } from '@dapp/contexts/web3Context/useAccount/WalletContext';
-import { BoxUserOrderAmountData } from '@dapp/services/supabase/fundsBox';
+import { BoxUserOrderAmountData } from '@/services/supabase/boxUserOrderAmounts';
 
 export interface CardProfileContainerProps {
     data: BoxData;
@@ -45,7 +45,7 @@ const CardProfileContainer: React.FC<CardProfileContainerProps> = ({
                 return () => [];
             }
             const normalizedAddress = address.toLowerCase();
-            return (state) => 
+            return (state) =>
                 state.accounts[CHAIN_ID]?.[normalizedAddress]?.withdrawInteractions || [];
         }, [address])
     );
@@ -107,10 +107,10 @@ const CardProfileContainer: React.FC<CardProfileContainerProps> = ({
     const cardFunds: FundsData[] = useMemo(() => {
         return funds.tokens.map((token) => {
             // Check if this token has been withdrawn (based on claimMethod and tokenAddress)
-            const hasInteraction = token.address 
+            const hasInteraction = token.address
                 ? hasWithdrawInteraction(funds.claimMethod, token.address)
                 : false;
-            
+
             // If withdrawn, hide the token by setting amount to 0 and disabled to true
             if (hasInteraction) {
                 return {
@@ -121,7 +121,7 @@ const CardProfileContainer: React.FC<CardProfileContainerProps> = ({
                     disabled: true,
                 };
             }
-            
+
             // Normal case
             return {
                 amount: token.amount,

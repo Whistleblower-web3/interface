@@ -1,15 +1,15 @@
 
-import { 
-  SupportedChainId, 
-  ContractName, 
-  ContractConfig, 
-  ContractConfigs, 
-  ContractAddresses 
+import {
+  SupportedChainId,
+  ContractName,
+  ContractConfig,
+  ContractConfigs,
+  ContractAddresses
 } from './types';
 import { ABIS } from './chain-23295/abis';
 import { NETWORK_CONTRACTS } from './contracts';
-import { isSupportedChain } from './chains';
-import { CHAIN_CONFIG } from './current';
+import { isSupportedChain } from '../chainConfig/chains';
+import { CHAIN_CONFIG } from '../chainConfig/current';
 
 /**
  * Configuration management class
@@ -26,7 +26,7 @@ class ConfigManager {
    */
   getAllContractAddresses(chainId?: number): ContractAddresses {
     const targetChainId = chainId ?? this.currentChainId;
-    
+
     if (!isSupportedChain(targetChainId)) {
       console.warn(
         `Unsupported chain ID: ${targetChainId}. Using default chain: ${CHAIN_CONFIG.id}`
@@ -43,7 +43,7 @@ class ConfigManager {
    * Note: this method ensures that a valid configuration is always returned, and will not return undefined
    * Mainnet temporarily uses Testnet configuration to avoid returning empty values
    */
-  getContractConfig(
+  getContract(
     contractName: ContractName,
     chainId?: number
   ): ContractConfig {
@@ -61,8 +61,8 @@ class ConfigManager {
   /**
    * Get the configuration of a contract by address
    */
-  getContractConfigByAddress(address: `0x${string}`): ContractConfig {
-    const configs = this.getAllContractConfigs();
+  getContractByAddress(address: `0x${string}`): ContractConfig {
+    const configs = this.getAllContracts();
     const config = Object.values(configs).find((config) => config.address === address);
     if (!config) {
       throw new Error(`Contract config not found for address: ${address}`);
@@ -75,13 +75,13 @@ class ConfigManager {
    * 
    * Note: this method ensures that a complete configuration object is always returned
    */
-  getAllContractConfigs(chainId?: number): ContractConfigs {
+  getAllContracts(chainId?: number): ContractConfigs {
     const targetChainId = chainId ?? this.currentChainId;
     const configs: Partial<ContractConfigs> = {};
 
     // Iterate through all contract names to generate configurations
     Object.values(ContractName).forEach((contractName) => {
-      configs[contractName as ContractName] = this.getContractConfig(
+      configs[contractName as ContractName] = this.getContract(
         contractName as ContractName,
         targetChainId
       );
@@ -99,11 +99,11 @@ export const configManager = new ConfigManager();
 /**
  * Convenient function: get contract configuration
  */
-export function getContractConfig(
+export function getContract(
   contractName: ContractName,
   chainId?: number
 ): ContractConfig {
-  return configManager.getContractConfig(contractName, chainId);
+  return configManager.getContract(contractName, chainId);
 }
 
 /**
@@ -113,7 +113,7 @@ export function getContractAddress(
   contractName: ContractName,
   chainId?: number
 ): `0x${string}` {
-  return configManager.getContractConfig(contractName, chainId).address;
+  return configManager.getContract(contractName, chainId).address;
 }
 
 /**
@@ -124,11 +124,11 @@ export function getAllContractAddresses(chainId?: number): ContractAddresses {
 }
 
 
-export function getAllContractConfigs(chainId?: number): ContractConfigs {
-  return configManager.getAllContractConfigs(chainId);
+export function getAllContracts(chainId?: number): ContractConfigs {
+  return configManager.getAllContracts(chainId);
 }
 
 // Get contract configuration by address
-export function getContractConfigByAddress(address: `0x${string}`): ContractConfig {
-  return configManager.getContractConfigByAddress(address);
+export function getContractByAddress(address: `0x${string}`): ContractConfig {
+  return configManager.getContractByAddress(address);
 }

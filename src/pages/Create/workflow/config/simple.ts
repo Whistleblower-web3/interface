@@ -54,16 +54,15 @@ export class WorkflowOrchestrator {
 }
 
 export const FIELD_IMPACT_MAP: Record<AllInputFieldNames, StepNameType[]> = {
-  title: ['createNFTImage', 'uploadNFTImage', 'metadataNFT', 'metadataBox', 'mint', 'uploadResultData'],
+  title: ['metadataBox', 'mint', 'uploadResultData'],
   description: ['metadataBox', 'mint', 'uploadResultData'],
-  type_of_crime: ['createNFTImage', 'uploadNFTImage', 'metadataNFT', 'metadataBox', 'mint', 'uploadResultData'],
+  type_of_crime: ['metadataBox', 'mint', 'uploadResultData'],
   label: ['metadataBox', 'mint', 'uploadResultData'],
-  country: ['metadataNFT','metadataBox',  'mint', 'uploadResultData'],
-  state: ['metadataNFT', 'metadataBox', 'mint', 'uploadResultData'],
-  event_date: ['metadataNFT', 'metadataBox', 'mint', 'uploadResultData'],
-  nft_owner: ['mint', 'uploadResultData'],
+  country: ['metadataBox', 'mint', 'uploadResultData'],
+  state: ['metadataBox', 'mint', 'uploadResultData'],
+  event_date: ['metadataBox', 'mint', 'uploadResultData'],
   price: ['mint', 'uploadResultData'],
   mint_method: ['compressFiles', 'uploadFiles', 'encryptData', 'metadataBox', 'mint', 'uploadResultData'],
-  box_image_list: ['uploadBoxImage', 'createNFTImage', 'uploadNFTImage', 'metadataNFT', 'metadataBox', 'mint', 'uploadResultData'],
+  box_image_list: ['uploadBoxImage', 'metadataBox', 'mint', 'uploadResultData'],
   file_list: ['compressFiles', 'uploadFiles', 'encryptData', 'metadataBox', 'mint', 'uploadResultData'],
 };

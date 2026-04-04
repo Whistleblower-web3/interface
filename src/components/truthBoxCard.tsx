@@ -3,7 +3,7 @@
 import React from 'react';
 import { cn } from '@/lib/utils';
 import PriceLabel from './base/priceLabel';
-import ImageSwiper from './imageSwiper';
+import ImageSwiperCache from './imageSwiperCache';
 import StatusLabel from './base/statusLabel';
 import { getBoxCardData } from '@/utils/getBoxCardData';
 import { formatPrice } from '@/utils/formatPrice';
@@ -31,7 +31,7 @@ interface TruthBoxCardProps {
     enableIpfsUrl?: boolean;
     onClick?: () => void;
     className?: string;
-    onCompleted?: () => void; 
+    onCompleted?: () => void;
 }
 
 const TruthBoxCard: React.FC<TruthBoxCardProps> = ({
@@ -39,7 +39,7 @@ const TruthBoxCard: React.FC<TruthBoxCardProps> = ({
     enableIpfsUrl = true,
     onClick,
     className,
-    onCompleted, 
+    onCompleted,
 }) => {
 
     const cardData = getBoxCardData(data);
@@ -57,9 +57,9 @@ const TruthBoxCard: React.FC<TruthBoxCardProps> = ({
         <div
             className={cn(
                 "flex flex-col items-center w-full bg-card",
-                "md:max-w-[350px]",     
+                "md:max-w-[350px]",
                 "mt-3 sm:mt-4 md:mt-5",
-                "border border-border/50",
+                "border border-border/30",
                 "rounded-xl md:rounded-2xl shadow-lg",
                 "hover:outline-2 hover:outline-primary",
                 onClick && "cursor-pointer",
@@ -72,12 +72,12 @@ const TruthBoxCard: React.FC<TruthBoxCardProps> = ({
                 "w-full overflow-hidden",
                 // "rounded-t-xl md:rounded-t-2xl"
             )}>
-                <ImageSwiper
+                <ImageSwiperCache
                     images={[cardData.box_image, cardData.nft_image]}
                     enableIpfsUrl={enableIpfsUrl}
                     altPrefix={`truthbox-${cardData.boxId}`}
                     className="w-full"
-                    onImageLoad={handleImageLoad} 
+                    onImageLoad={handleImageLoad}
                     notifyOnFirstImageOnly={true}
                 />
             </div>
@@ -108,12 +108,12 @@ const TruthBoxCard: React.FC<TruthBoxCardProps> = ({
                     "min-h-[20px] sm:min-h-[22px] md:min-h-[24px]"
                 )}>
                     <p
-                        className="text-neutral-300 text-sm line-clamp-1 max-w-[140px] sm:max-w-[160px] md:max-w-[180px]"
+                        className="text-neutral-400 text-sm line-clamp-1 max-w-[140px] sm:max-w-[160px] md:max-w-[180px]"
                     >
                         {cardData.country} {cardData.state}
                     </p>
                     <p
-                        className="text-neutral-300 text-sm line-clamp-1"
+                        className="text-neutral-400 text-sm line-clamp-1"
                     >
                         {cardData.event_date}
                     </p>

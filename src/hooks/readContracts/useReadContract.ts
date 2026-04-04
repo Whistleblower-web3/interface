@@ -4,7 +4,7 @@ import { useQueryClient } from '@tanstack/react-query';
 // import { getPublicClient } from '@wagmi/core';
 import { useWalletContext } from '@dapp/contexts/web3Context/useAccount/WalletContext';
 // import { config } from '@dapp/context/useAccount/wagmi';
-import { getContractConfig, ContractName } from '@dapp/config/contractsConfig';
+import { getContract, ContractName } from "@dapp/config/contractsConfig";
 import { useRef, useCallback } from 'react';
 
 
@@ -14,10 +14,10 @@ export function useReadContract() {
     // const chainId = useChainId();
     // const publicClient = usePublicClient();
     const publicClientRef = useRef(publicClient);
-    
+
     // Keep ref synchronized with the latest value
     publicClientRef.current = publicClient;
-    
+
     const readContract = useCallback(async <TContractName extends ContractName>(params: {
         contractName: TContractName;
         functionName: string;
@@ -26,18 +26,18 @@ export function useReadContract() {
     }) => {
         // Use optional chaining, if publicClient does not exist, try to get from core
         let client = publicClientRef.current || publicClient;
-        
+
         // Wait for initialization (up to 3 seconds, usually very fast)
         if (!client) {
             const maxWait = 3000;
             const start = Date.now();
-            
+
             while (!client && Date.now() - start < maxWait) {
                 await new Promise(resolve => setTimeout(resolve, 50));
                 client = publicClientRef.current || publicClient;
             }
         }
-        
+
         if (!client) {
             throw new Error(
                 'Public client not available. ' +
@@ -45,7 +45,7 @@ export function useReadContract() {
             );
         }
 
-        const config_contract = getContractConfig(params.contractName, chainId);
+        const config_contract = getContract(params.contractName, chainId);
         const queryKey = [
             'contract',
             params.contractName,

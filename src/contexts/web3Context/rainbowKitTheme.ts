@@ -9,7 +9,7 @@ export const wikitruthTheme: Theme = {
     modalOverlay: 'blur(8px)',
   },
   colors: {
-    accentColor: '#8b5cf6', // Purple theme color
+    accentColor: '#88cf04ff', // Purple theme color
     accentColorForeground: 'white',
     actionButtonBorder: 'rgba(255, 255, 255, 0.1)',
     actionButtonBorderMobile: 'rgba(255, 255, 255, 0.1)',
@@ -19,8 +19,8 @@ export const wikitruthTheme: Theme = {
     connectButtonBackground: '#1a1a1a',
     connectButtonBackgroundError: '#ff4444',
     connectButtonInnerBackground: 'linear-gradient(0deg, rgba(255, 255, 255, 0.05), rgba(255, 255, 255, 0.05))',
-    connectButtonText: '#ffffff',
-    connectButtonTextError: '#ffffff',
+    connectButtonText: '#ffffffff',
+    connectButtonTextError: '#dba1a1ff',
     connectionIndicator: '#10b981',
     error: '#ff4444',
     generalBorder: 'rgba(255, 255, 255, 0.1)',
@@ -35,7 +35,7 @@ export const wikitruthTheme: Theme = {
     profileAction: 'rgba(255, 255, 255, 0.1)',
     profileActionHover: 'rgba(255, 255, 255, 0.15)',
     profileForeground: 'rgba(255, 255, 255, 0.05)',
-    selectedOptionBorder: '#8b5cf6',
+    selectedOptionBorder: '#58c411ff',
     standby: 'rgba(255, 255, 255, 0.4)',
     downloadBottomCardBackground: '#1a1a1a',
     downloadTopCardBackground: '#2a2a2a',
@@ -51,7 +51,7 @@ export const wikitruthTheme: Theme = {
     connectButton: '0 2px 8px rgba(0, 0, 0, 0.3)',
     dialog: '0 8px 24px rgba(0, 0, 0, 0.5)',
     profileDetailsAction: '0 2px 4px rgba(0, 0, 0, 0.2)',
-    selectedOption: '0 0 0 2px #8b5cf6',
+    selectedOption: '0 0 0 2px #3b7718ff',
     selectedWallet: '0 2px 8px rgba(0, 0, 0, 0.3)',
     walletLogo: '0 2px 8px rgba(0, 0, 0, 0.3)',
   },

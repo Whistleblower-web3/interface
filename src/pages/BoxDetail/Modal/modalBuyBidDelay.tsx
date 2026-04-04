@@ -11,7 +11,7 @@ import React, { useEffect, useCallback, useMemo } from 'react';
 import { Modal, Button, Space, Alert, Steps } from 'antd';
 import { formatUnits, parseUnits } from 'viem';
 import { useBuyBidSteps } from '../hooks/useBuyBidSteps';
-import { useTokenMetadata } from '@dapp/config/contractsConfig';
+import { useTokenByAddress } from "@dapp/config/tokenConfig";
 import { parseAmountToBigInt } from '@/utils/parseAmountToBigInt';
 import TextP from '@/components/base/text_p';
 
@@ -33,7 +33,7 @@ const ModalBuyBidPay: React.FC<ModalBuyBidPayProps> = ({
     amount,
     functionName,
 }) => {
-    const tokenMetadata = useTokenMetadata(tokenAddress);
+    const tokenMetadata = useTokenByAddress(tokenAddress);
 
     const {
         steps,
@@ -83,10 +83,10 @@ const ModalBuyBidPay: React.FC<ModalBuyBidPayProps> = ({
             closable={status !== 'pending'}
             maskClosable={status !== 'pending'}
             footer={[
-                <Button 
-                key="close" 
-                onClick={handleClose} 
-                disabled={status === 'pending'}>
+                <Button
+                    key="close"
+                    onClick={handleClose}
+                    disabled={status === 'pending'}>
                     {isSuccessed ? 'Complete' : 'Cancel'}
                 </Button>,
             ]}

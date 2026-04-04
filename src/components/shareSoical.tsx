@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { FaTwitter, FaFacebook, FaTelegram, FaDownload, FaShareAlt } from 'react-icons/fa';
 import { toPng, toBlob } from 'html-to-image';
-import SharePoster from '@/components/SharePoster'
+import SharePoster from '@/components/sharePoster'
 import { BoxUnifiedType } from '@/services/supabase/types/types';
 import { MetadataBoxType } from '@/types/typesDapp/metadata/metadataBox';
 import { PROJECT_NAME } from '@/project';
@@ -20,23 +20,23 @@ const platforms = [
     {
         name: 'Twitter',
         icon: <FaTwitter className="w-5 h-5 md:w-6 md:h-6" />,
-        getUrl: (title: string, url: string, ) =>
+        getUrl: (title: string, url: string,) =>
             `https://twitter.com/intent/tweet?url=${encodeURIComponent(url)}&text=${encodeURIComponent(title)}`,
-        color: 'hover:bg-primary/10 text-primary'
+        color: 'text-primary'
     },
     {
         name: 'Facebook',
         icon: <FaFacebook className="w-5 h-5 md:w-6 md:h-6" />,
         getUrl: (_title: string, url: string,) =>
             `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(url)}`,
-        color: 'hover:bg-primary/10 text-primary'
+        color: 'text-primary'
     },
     {
         name: 'Telegram',
         icon: <FaTelegram className="w-5 h-5 md:w-6 md:h-6" />,
         getUrl: (title: string, url: string,) =>
             `https://t.me/share/url?url=${encodeURIComponent(url)}&text=${encodeURIComponent(title)}`,
-        color: 'hover:bg-primary/10 text-primary'
+        color: 'text-primary'
     }
 ];
 
@@ -59,10 +59,10 @@ export const ShareSocial: React.FC<ShareSocialProps> = ({
             const isMobile = window.innerWidth < 768;
             const elementId = isMobile ? 'share-poster-capture-mobile' : 'share-poster-capture-pc';
             const element = document.getElementById(elementId);
-            
+
             if (!element) throw new Error("Poster element not found");
             if (type === 'download') {
-                const dataUrl = await toPng(element, { 
+                const dataUrl = await toPng(element, {
                     backgroundColor: '#0a0a0a',
                     pixelRatio: 2 // Get a higher quality image
                 });
@@ -91,7 +91,7 @@ export const ShareSocial: React.FC<ShareSocialProps> = ({
             setIsGenerating(false);
         }
     };
-    
+
     return (
         <div className={`flex w-full flex-row gap-3 md:gap-4 justify-center items-center ${className}`}>
             {platforms.map((platform) => (
@@ -116,7 +116,7 @@ export const ShareSocial: React.FC<ShareSocialProps> = ({
                 disabled={isGenerating}
                 aria-label="Download Poster"
                 title="Download Poster"
-                className={`shadow-sm transition-colors duration-150 hover:bg-primary/10 text-primary hover:scale-105 ${isGenerating ? 'opacity-50 cursor-not-allowed' : ''}`}
+                className={`shadow-sm transition-colors duration-150 text-primary hover:scale-105 ${isGenerating ? 'opacity-50 cursor-not-allowed' : ''}`}
             >
                 <div className='w-5 h-5 md:w-7 md:h-7 flex items-center justify-center text-muted-foreground hover:text-primary'>
                     {isGenerating ? <div className="w-4 h-4 border-2 border-primary border-t-transparent rounded-full animate-spin"></div> : <FaDownload className="w-5 h-5 md:w-6 md:h-6" />}
@@ -129,7 +129,7 @@ export const ShareSocial: React.FC<ShareSocialProps> = ({
                     disabled={isGenerating}
                     aria-label="Share Poster"
                     title="Share with App"
-                    className={`shadow-sm transition-colors duration-150 hover:bg-primary/10 text-primary hover:scale-105 ${isGenerating ? 'opacity-50 cursor-not-allowed' : ''}`}
+                    className={`shadow-sm transition-colors duration-150 text-primary hover:scale-105 ${isGenerating ? 'opacity-50 cursor-not-allowed' : ''}`}
                 >
                     <div className='w-5 h-5 md:w-7 md:h-7 flex items-center justify-center text-muted-foreground hover:text-primary'>
                         <FaShareAlt className="w-5 h-5 md:w-6 md:h-6" />

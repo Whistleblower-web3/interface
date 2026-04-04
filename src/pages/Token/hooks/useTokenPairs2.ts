@@ -1,23 +1,23 @@
 import { useMemo } from 'react';
-import { useSupportedTokens } from '@dapp/config/contractsConfig';
-import { TokenInfo, TokenPair } from '../types';
+import { useSupportedTokens } from '@dapp/config/tokenConfig';
+import { type TokenInfo, type TokenPair } from '../types';
 
 export const useTokenPairs2 = () => {
     const supportedTokens = useSupportedTokens();
-    
+
     // Filter out ERC20 and Secret type tokens
     const erc20Tokens = supportedTokens.filter(token => token.types === 'ERC20');
-    const supportedSecretTokens = supportedTokens.filter(token => token.types === 'Secret');
+    const supportedSecretTokens = supportedTokens.filter(token => token.types === 'Privacy');
 
     const tokenPairs: TokenPair[] = useMemo(() => {
         const pairs: TokenPair[] = [];
 
-        supportedSecretTokens.forEach(secretToken => {
-            // Special handling: wROSE.S needs to generate two pairs
-            // 1. wROSE.S -> Native ROSE (isNativeROSE = true, for withdraw)
-            // 2. wROSE.S -> wROSE ERC20 (isNativeROSE = false, for unwrap)
-            if (secretToken.symbol === 'wROSE.S') {
-                // Pair 1: wROSE.S -> Native ROSE
+        supportedSecretTokens.forEach(privacyToken => {
+            // Special handling: wROSE.Privacy needs to generate two pairs
+            // 1. wROSE.Privacy -> Native ROSE (isNativeROSE = true, for withdraw)
+            // 2. wROSE.Privacy -> wROSE ERC20 (isNativeROSE = false, for unwrap)
+            if (privacyToken.symbol === 'wROSE.Privacy') {
+                // Pair 1: wROSE.Privacy -> Native ROSE
                 const nativeROSEPair: TokenPair = {
                     erc20: {
                         address: '0x0000000000000000000000000000000000000000' as `0x${string}`,
@@ -26,18 +26,18 @@ export const useTokenPairs2 = () => {
                         decimals: 18,
                         balance: '0',
                     },
-                    secret: {
-                        address: secretToken.address,
-                        symbol: secretToken.symbol,
-                        name: secretToken.name,
-                        decimals: secretToken.decimals || 18,
+                    erc20Privacy: {
+                        address: privacyToken.address,
+                        symbol: privacyToken.symbol,
+                        name: privacyToken.name,
+                        decimals: privacyToken.decimals || 18,
                         balance: '0',
                     },
                     isNativeROSE: true,
                 };
                 pairs.push(nativeROSEPair);
 
-                // Pair 2: wROSE.S -> wROSE ERC20
+                // Pair 2: wROSE.Privacy -> wROSE ERC20
                 const wROSEToken = erc20Tokens.find(
                     erc20Token => erc20Token.symbol === 'wROSE'
                 );
@@ -50,11 +50,11 @@ export const useTokenPairs2 = () => {
                             decimals: wROSEToken.decimals || 18,
                             balance: '0',
                         },
-                        secret: {
-                            address: secretToken.address,
-                            symbol: secretToken.symbol,
-                            name: secretToken.name,
-                            decimals: secretToken.decimals || 18,
+                        erc20Privacy: {
+                            address: privacyToken.address,
+                            symbol: privacyToken.symbol,
+                            name: privacyToken.name,
+                            decimals: privacyToken.decimals || 18,
                             balance: '0',
                         },
                         isNativeROSE: false,
@@ -64,7 +64,7 @@ export const useTokenPairs2 = () => {
             } else {
                 // Other Secret token: find the corresponding ERC20 token through mappingAddress
                 const erc20Token = erc20Tokens.find(
-                    erc20Token => erc20Token.address.toLowerCase() === secretToken.mappingAddress?.toLowerCase()
+                    erc20Token => erc20Token.address.toLowerCase() === privacyToken.mappingAddress?.toLowerCase()
                 );
 
                 if (erc20Token) {
@@ -76,11 +76,11 @@ export const useTokenPairs2 = () => {
                             decimals: erc20Token.decimals || 18,
                             balance: '0',
                         },
-                        secret: {
-                            address: secretToken.address,
-                            symbol: secretToken.symbol,
-                            name: secretToken.name,
-                            decimals: secretToken.decimals || 18,
+                        erc20Privacy: {
+                            address: privacyToken.address,
+                            symbol: privacyToken.symbol,
+                            name: privacyToken.name,
+                            decimals: privacyToken.decimals || 18,
                             balance: '0',
                         },
                         isNativeROSE: false,

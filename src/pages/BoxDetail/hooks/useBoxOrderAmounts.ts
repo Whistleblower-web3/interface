@@ -1,8 +1,8 @@
 
 import { useMemo } from 'react';
 import { useQuery } from '@tanstack/react-query';
-import { query_OrderAmountsData, type BoxUserOrderAmountData } from '@dapp/services/supabase/fundsBox';
-import { CHAIN_CONFIG } from '@dapp/config/contractsConfig';
+import { query_OrderAmountsData, type BoxUserOrderAmountData } from '@/services/supabase/boxUserOrderAmounts';
+import { CHAIN_CONFIG } from '@dapp/config/chainConfig';
 import { BoxRoleType } from '@/types/typesDapp/roles';
 
 export const useBoxOrderAmounts = (
@@ -30,14 +30,14 @@ export const useBoxOrderAmounts = (
                 boxId,
                 userId,
             );
-            
+
             if (result.error) {
                 throw result.error;
             }
 
             return result;
         },
-        staleTime: 5 * 60 * 1000, 
+        staleTime: 5 * 60 * 1000,
         enabled: shouldQuery, // Only when all conditions are met to query
     });
 

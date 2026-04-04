@@ -1,7 +1,7 @@
 
 import { useQueryClient } from '@tanstack/react-query';
 import { useWalletContext } from '@dapp/contexts/web3Context/useAccount/WalletContext';
-import { getContractConfig, ContractName } from '@dapp/config/contractsConfig';
+import { getToken, TokenName } from "@dapp/config/tokenConfig";
 import { useRef, useCallback } from 'react';
 
 
@@ -9,11 +9,11 @@ export function useReadContractERC20() {
     const queryClient = useQueryClient();
     const { publicClient, chainId } = useWalletContext();
     const publicClientRef = useRef(publicClient);
-    
+
     // Keep ref synchronized with the latest value
     publicClientRef.current = publicClient;
-    
-    const readContractERC20 = useCallback(async(
+
+    const readContractERC20 = useCallback(async (
         type: 'erc20' | 'secret',
         tokenAddress: `0x${string}`,
         functionName: string,
@@ -22,18 +22,18 @@ export function useReadContractERC20() {
     ) => {
         // Use optional chaining, if publicClient does not exist, try to get from core
         let client = publicClientRef.current || publicClient;
-        
+
         // Wait for initialization (up to 3 seconds, usually very fast)
         if (!client) {
             const maxWait = 3000;
             const start = Date.now();
-            
+
             while (!client && Date.now() - start < maxWait) {
                 await new Promise(resolve => setTimeout(resolve, 50));
                 client = publicClientRef.current || publicClient;
             }
         }
-        
+
         if (!client) {
             throw new Error(
                 'Public client not available. ' +
@@ -41,9 +41,9 @@ export function useReadContractERC20() {
             );
         }
 
-        let contractName = type === 'erc20' ? ContractName.OFFICIAL_TOKEN : ContractName.ERC20_SECRET;
+        let contractName = type === 'erc20' ? TokenName.OFFICIAL_TOKEN : TokenName.OFFICIAL_TOKEN_PRIVACY;
 
-        const config_contract = getContractConfig(contractName, chainId);
+        const config_contract = getToken(contractName, chainId);
 
         let queryKey: any[] = [];
         let readContractParams: any = {};

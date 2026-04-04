@@ -1,8 +1,8 @@
 ﻿"use client"
 import { Modal, InputNumber, message, Typography, Divider } from 'antd';
-import { parseUnits,} from 'viem';
+import { parseUnits, } from 'viem';
 import { useState, useEffect, useMemo } from 'react';
-import { ACCEPTED_TOKENS } from '@dapp/config/contractsConfig';
+import { ACCEPTED_TOKENS } from '@dapp/config/tokenConfig';
 import { useBoxDetailStore } from '../store/boxDetailStore';
 import TokenSelector from '../components/tokenSelector';
 import { CommonSelectOption } from '@/components/base/CommonSelect';

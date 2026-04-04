@@ -2,7 +2,7 @@
 // import { NftDetailType } from '@dapp/type/contractDate';
 import { useState, useEffect } from 'react';
 import { Button } from 'antd';
-import { useAllContractConfigs } from '@dapp/config/contractsConfig';
+import { useAllContracts } from '@dapp/config/contractsConfig';
 import { useWriteCustormV2 } from '@/hooks/useWriteCustormV2';
 import { useBoxDetailContext } from '../contexts/BoxDetailContext';
 // import { useUpdateNft_array } from '@dapp/hooks/useUpdateNft_array';
@@ -15,10 +15,10 @@ type ActiveButton = 'AddBlackList' | 'Unblacklist' | null;
 
 const AdminFunction = () => {
     const { boxId } = useBoxDetailContext();
-    const allConfigs = useAllContractConfigs();
+    const allContracts = useAllContracts();
     const { writeCustormV2, error, isPending, isSuccessed } = useWriteCustormV2(boxId);
     const [activeButton, setActiveButton] = useState<ActiveButton>(null);
-    
+
 
     useEffect(() => {
         if (isSuccessed) {
@@ -31,7 +31,8 @@ const AdminFunction = () => {
     const handleAddBlackList = async () => {
         setActiveButton('AddBlackList');
         await writeCustormV2({
-            contract: allConfigs.TruthBox,
+            contractAddress: allContracts.TruthBox.address,
+            abi: allContracts.TruthBox.abi,
             functionName: 'addBlackTokenId',
             args: [boxId],
         });

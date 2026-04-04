@@ -1,0 +1,587 @@
+[
+  {
+    "inputs": [],
+    "stateMutability": "nonpayable",
+    "type": "constructor"
+  },
+  {
+    "inputs": [],
+    "name": "AddressAlreadyExists",
+    "type": "error"
+  },
+  {
+    "inputs": [],
+    "name": "AmountIsZero",
+    "type": "error"
+  },
+  {
+    "inputs": [],
+    "name": "ApprovalFailed",
+    "type": "error"
+  },
+  {
+    "inputs": [],
+    "name": "AuctionOver",
+    "type": "error"
+  },
+  {
+    "inputs": [],
+    "name": "AvailableBuyer",
+    "type": "error"
+  },
+  {
+    "inputs": [],
+    "name": "BoxNotExists",
+    "type": "error"
+  },
+  {
+    "inputs": [],
+    "name": "DeadlineIsOver",
+    "type": "error"
+  },
+  {
+    "inputs": [],
+    "name": "DeadlineNotOver",
+    "type": "error"
+  },
+  {
+    "inputs": [],
+    "name": "EmptyBoxInfoCID",
+    "type": "error"
+  },
+  {
+    "inputs": [],
+    "name": "EmptyKey",
+    "type": "error"
+  },
+  {
+    "inputs": [],
+    "name": "EmptyList",
+    "type": "error"
+  },
+  {
+    "inputs": [],
+    "name": "EmptyPrice",
+    "type": "error"
+  },
+  {
+    "inputs": [],
+    "name": "EmptyTokenCID",
+    "type": "error"
+  },
+  {
+    "inputs": [],
+    "name": "EmptyUserId",
+    "type": "error"
+  },
+  {
+    "inputs": [],
+    "name": "InBlacklist",
+    "type": "error"
+  },
+  {
+    "inputs": [],
+    "name": "InvalidAddress",
+    "type": "error"
+  },
+  {
+    "inputs": [],
+    "name": "InvalidCaller",
+    "type": "error"
+  },
+  {
+    "inputs": [],
+    "name": "InvalidContractAddress",
+    "type": "error"
+  },
+  {
+    "inputs": [],
+    "name": "InvalidDeadline",
+    "type": "error"
+  },
+  {
+    "inputs": [],
+    "name": "InvalidERC20Interface",
+    "type": "error"
+  },
+  {
+    "inputs": [],
+    "name": "InvalidImplementation",
+    "type": "error"
+  },
+  {
+    "inputs": [],
+    "name": "InvalidIndex",
+    "type": "error"
+  },
+  {
+    "inputs": [],
+    "name": "InvalidPeriod",
+    "type": "error"
+  },
+  {
+    "inputs": [],
+    "name": "InvalidRate",
+    "type": "error"
+  },
+  {
+    "inputs": [],
+    "name": "InvalidSeconds",
+    "type": "error"
+  },
+  {
+    "inputs": [],
+    "name": "InvalidStatus",
+    "type": "error"
+  },
+  {
+    "inputs": [],
+    "name": "IsSettlementToken",
+    "type": "error"
+  },
+  {
+    "inputs": [],
+    "name": "NotAdmin",
+    "type": "error"
+  },
+  {
+    "inputs": [],
+    "name": "NotAdminOrDAO",
+    "type": "error"
+  },
+  {
+    "inputs": [],
+    "name": "NotBuyer",
+    "type": "error"
+  },
+  {
+    "inputs": [],
+    "name": "NotDAO",
+    "type": "error"
+  },
+  {
+    "inputs": [],
+    "name": "NotInBlacklist",
+    "type": "error"
+  },
+  {
+    "inputs": [],
+    "name": "NotInSecrecy",
+    "type": "error"
+  },
+  {
+    "inputs": [],
+    "name": "NotInWindowPeriod",
+    "type": "error"
+  },
+  {
+    "inputs": [],
+    "name": "NotMinter",
+    "type": "error"
+  },
+  {
+    "inputs": [],
+    "name": "NotProjectCaller",
+    "type": "error"
+  },
+  {
+    "inputs": [],
+    "name": "PublicTimeNotEnd",
+    "type": "error"
+  },
+  {
+    "inputs": [],
+    "name": "RefundPermitTrue",
+    "type": "error"
+  },
+  {
+    "inputs": [],
+    "name": "RemoveError",
+    "type": "error"
+  },
+  {
+    "inputs": [],
+    "name": "TokenAlreadyExists",
+    "type": "error"
+  },
+  {
+    "inputs": [],
+    "name": "TokenIsActive",
+    "type": "error"
+  },
+  {
+    "inputs": [],
+    "name": "TokenIsNotActive",
+    "type": "error"
+  },
+  {
+    "inputs": [],
+    "name": "TokenNotExists",
+    "type": "error"
+  },
+  {
+    "inputs": [],
+    "name": "TokenNotSupported",
+    "type": "error"
+  },
+  {
+    "inputs": [],
+    "name": "WithdrawError",
+    "type": "error"
+  },
+  {
+    "inputs": [],
+    "name": "ZeroAddress",
+    "type": "error"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "reservedAddress_",
+        "type": "address"
+      }
+    ],
+    "name": "addReservedAddress",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "token_",
+        "type": "address"
+      }
+    ],
+    "name": "addToken",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "admin",
+    "outputs": [
+      {
+        "internalType": "address",
+        "name": "",
+        "type": "address"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "dao",
+    "outputs": [
+      {
+        "internalType": "address",
+        "name": "",
+        "type": "address"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "daoFundManager",
+    "outputs": [
+      {
+        "internalType": "address",
+        "name": "",
+        "type": "address"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "exchange",
+    "outputs": [
+      {
+        "internalType": "address",
+        "name": "",
+        "type": "address"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "forwarder",
+    "outputs": [
+      {
+        "internalType": "address",
+        "name": "",
+        "type": "address"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "fundManager",
+    "outputs": [
+      {
+        "internalType": "address",
+        "name": "",
+        "type": "address"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "index_",
+        "type": "uint256"
+      }
+    ],
+    "name": "getAddressFromIndex",
+    "outputs": [
+      {
+        "internalType": "address",
+        "name": "",
+        "type": "address"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "getTokenList",
+    "outputs": [
+      {
+        "internalType": "address[]",
+        "name": "",
+        "type": "address[]"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "governance",
+    "outputs": [
+      {
+        "internalType": "address",
+        "name": "",
+        "type": "address"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "contract_",
+        "type": "address"
+      }
+    ],
+    "name": "isProjectContract",
+    "outputs": [
+      {
+        "internalType": "bool",
+        "name": "",
+        "type": "bool"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "token_",
+        "type": "address"
+      }
+    ],
+    "name": "isTokenSupported",
+    "outputs": [
+      {
+        "internalType": "bool",
+        "name": "",
+        "type": "bool"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "index_",
+        "type": "uint256"
+      }
+    ],
+    "name": "removeReservedAddress",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "token_",
+        "type": "address"
+      }
+    ],
+    "name": "removeToken",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "reservedList",
+    "outputs": [
+      {
+        "internalType": "address[]",
+        "name": "",
+        "type": "address[]"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address[]",
+        "name": "list_",
+        "type": "address[]"
+      }
+    ],
+    "name": "setAddressList",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "newAdmin_",
+        "type": "address"
+      }
+    ],
+    "name": "setAdmin",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "setAllAddress",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "token_",
+        "type": "address"
+      }
+    ],
+    "name": "setSettlementToken",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address[]",
+        "name": "list_",
+        "type": "address[]"
+      }
+    ],
+    "name": "setSwapContracts",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "settlementToken",
+    "outputs": [
+      {
+        "internalType": "address",
+        "name": "",
+        "type": "address"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "siweAuth",
+    "outputs": [
+      {
+        "internalType": "address",
+        "name": "",
+        "type": "address"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "swapContracts",
+    "outputs": [
+      {
+        "internalType": "address[]",
+        "name": "",
+        "type": "address[]"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "truthBox",
+    "outputs": [
+      {
+        "internalType": "address",
+        "name": "",
+        "type": "address"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "userManager",
+    "outputs": [
+      {
+        "internalType": "address",
+        "name": "",
+        "type": "address"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  }
+]

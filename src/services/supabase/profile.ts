@@ -1,7 +1,7 @@
 import type { PostgrestError } from '@supabase/supabase-js';
 import { supabase, Database } from './config/supabase.config';
 import type { FilterState } from '@Profile/types/profile.types';
-import { CHAIN_CONFIG } from '@dapp/config/contractsConfig';
+import { CHAIN_CONFIG } from '@dapp/config/chainConfig';
 
 type QueryError = PostgrestError | Error | null;
 type BoxRow = Database['public']['Tables']['boxes']['Row'];
@@ -102,11 +102,11 @@ export async function queryUserBoxes(
                     .eq('network', CHAIN_CONFIG.network)
                     .eq('layer', CHAIN_CONFIG.layer)
                     .eq('bidder_id', userId);
-                
+
                 if (bidError) {
                     return { data: null, error: bidError };
                 }
-                
+
                 const boxIds = bidBoxes?.map((b: { box_id: string }) => b.box_id) || [];
                 if (boxIds.length === 0) {
                     return { data: [], error: null };

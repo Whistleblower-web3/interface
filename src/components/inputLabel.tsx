@@ -46,26 +46,26 @@ const InputLabel: React.FC<InputLabelProps> = ({
         const rawValue = e.target.value;
         const newValue = rawValue.replace(/[^A-Za-z\s\u00C0-\u024F\u0370-\u03FF\u0400-\u04FF\u4E00-\u9FFF,;，；]+/g, ' ');
         setInputValue(newValue);
-        
+
         // Real-time check duplicates (only when inputting, not blocking input)
         if (newValue.trim()) {
             const currentLabels = newValue
                 .split(/[,;，；]+/)
                 .map(label => label.trim())
                 .filter(label => label.length > 0);
-            
+
             if (currentLabels.length > 1) {
-                const duplicates = currentLabels.filter((label, index) => 
+                const duplicates = currentLabels.filter((label, index) =>
                     currentLabels.findIndex(l => l.toLowerCase() === label.toLowerCase()) !== index
                 );
-                
+
                 if (duplicates.length > 0) {
                     setError(`Duplicate in input: ${[...new Set(duplicates)].join(', ')}`);
                     return;
                 }
             }
         }
-        
+
         setError('');
     };
 
@@ -97,7 +97,7 @@ const InputLabel: React.FC<InputLabelProps> = ({
 
         // Create lowercase mapping for current labels, for fast lookup
         const existingLabelsLower = value.map(label => label.toLowerCase());
-        
+
         // Validate labels
         const validLabels: string[] = [];
         const errors: string[] = [];
@@ -106,7 +106,7 @@ const InputLabel: React.FC<InputLabelProps> = ({
 
         for (const label of newLabels) {
             const labelLower = label.toLowerCase();
-            
+
             // Check label length
             if (label.length > maxLabelLength) {
                 errors.push(`"${label}" exceeds ${maxLabelLength} characters`);
@@ -123,7 +123,7 @@ const InputLabel: React.FC<InputLabelProps> = ({
             // Check if there are duplicates with existing labels (case-insensitive)
             if (existingLabelsLower.includes(labelLower)) {
                 // Find the original label (keep original case)
-                const originalLabel = value.find(existingLabel => 
+                const originalLabel = value.find(existingLabel =>
                     existingLabel.toLowerCase() === labelLower
                 );
                 duplicateLabels.push(originalLabel || label);
@@ -147,7 +147,7 @@ const InputLabel: React.FC<InputLabelProps> = ({
         // Intelligent error提示
         if (errors.length > 0 || duplicateLabels.length > 0) {
             let errorMessage = '';
-            
+
             if (duplicateLabels.length > 0) {
                 const uniqueDuplicates = [...new Set(duplicateLabels)];
                 if (uniqueDuplicates.length === 1) {
@@ -156,13 +156,13 @@ const InputLabel: React.FC<InputLabelProps> = ({
                     errorMessage = `Duplicates found: ${uniqueDuplicates.slice(0, 3).join(', ')}${uniqueDuplicates.length > 3 ? '...' : ''}`;
                 }
             }
-            
+
             if (errors.length > 0) {
-                errorMessage = errorMessage 
-                    ? `${errorMessage} | ${errors[0]}` 
+                errorMessage = errorMessage
+                    ? `${errorMessage} | ${errors[0]}`
                     : errors[0];
             }
-            
+
             setError(errorMessage);
         } else {
             setError(''); // Clear error
@@ -187,7 +187,7 @@ const InputLabel: React.FC<InputLabelProps> = ({
             e.preventDefault();
             addLabels(inputValue);
         } else if (e.key === 'Backspace' && inputValue === '' && value.length > 0) {
-                // If the input box is empty and the backspace key is pressed, delete the last label
+            // If the input box is empty and the backspace key is pressed, delete the last label
             e.preventDefault();
             const newLabels = [...value];
             newLabels.pop();
@@ -208,7 +208,7 @@ const InputLabel: React.FC<InputLabelProps> = ({
         <div className={cn("w-full space-y-3", className)}>
             {/* Title */}
             <div className="flex items-center gap-2">
-                <span className="font-mono text-sm">Labels:</span>
+                <span className=" text-sm">Labels:</span>
                 <span className="text-xs text-muted-foreground">
                     ({value.length}/{maxLabels})
                 </span>
@@ -265,7 +265,7 @@ const InputLabel: React.FC<InputLabelProps> = ({
                 </div>
             )}
 
-            
+
         </div>
     );
 };

@@ -3,14 +3,15 @@ import {
     useWaitForTransactionReceipt,
     useWriteContract
 } from 'wagmi';
-import { ContractConfig } from '@dapp/config/contractsConfig';
+import { Abi } from 'viem';
 import { useButtonInteractionStore } from '@dapp/store/buttonInteractionStore';
 import { FunctionNameType } from '@dapp/types/typesDapp/contracts';
 import { useWalletContext } from '@dapp/contexts/web3Context/useAccount/WalletContext';
 import { useAccountStore } from '@dapp/store/accountStore';
 
 interface WriteContractConfig {
-    contract: ContractConfig,
+    contractAddress: `0x${string}`;
+    abi: Abi;
     functionName: string;
     args: any[],
 }
@@ -28,7 +29,7 @@ interface WriteContractResult {
     reset: () => void;
 }
 
-export const useWriteCustormV2 = (boxIds?: string| string[]): WriteContractResult => {
+export const useWriteCustormV2 = (boxIds?: string | string[]): WriteContractResult => {
 
     const {
         writeContractAsync,
@@ -44,12 +45,12 @@ export const useWriteCustormV2 = (boxIds?: string| string[]): WriteContractResul
     const { isSuccess: isSuccessed } = useWaitForTransactionReceipt({
         hash,
     });
-    
+
     const { address } = useWalletContext();
     const [functionName, setFunctionName] = useState<FunctionNameType | null>(null);
-    
+
     // use buttonInteractionStore to manage button interaction state
-    const { setFunctionWriting} = useButtonInteractionStore();
+    const { setFunctionWriting } = useButtonInteractionStore();
     const addBoxInteraction = useAccountStore(state => state.addBoxInteraction);
 
     const writeCustormV2 = async (
@@ -58,11 +59,11 @@ export const useWriteCustormV2 = (boxIds?: string| string[]): WriteContractResul
         const functionName = config.functionName as FunctionNameType;
         setFunctionName(functionName);
         setFunctionWriting(functionName);
-        
+
         try {
             const result = await writeContractAsync({
-                address: config.contract.address,
-                abi: config.contract.abi,
+                address: config.contractAddress,
+                abi: config.abi,
                 functionName: config.functionName,
                 args: config.args,
             });
@@ -84,7 +85,7 @@ export const useWriteCustormV2 = (boxIds?: string| string[]): WriteContractResul
             } else {
                 addBoxInteraction(boxIds, functionName, hash);
             }
-        } else if (isError){
+        } else if (isError) {
             reset();
             setFunctionWriting(null);
         }

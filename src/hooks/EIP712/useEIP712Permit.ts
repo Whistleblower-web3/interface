@@ -1,13 +1,13 @@
 import { useState, useCallback } from 'react';
-import { useEIP712_ERC20secret,} from '@dapp/hooks/EIP712';
-import { 
-    SignPermitParams , 
-    EIP712Permit, 
-    PermitType 
+import { useEIP712_ERC20secret, } from '@dapp/hooks/EIP712';
+import {
+    SignPermitParams,
+    EIP712Permit,
+    PermitType
 } from '@dapp/hooks/EIP712/types_ERC20secret';
 import { useSimpleSecretStore } from '@dapp/store/simpleSecretStore';
 import { useWalletContext } from '@dapp/contexts/web3Context/useAccount/WalletContext';
-import { TokenMetadata, useSupportedTokens } from '@dapp/config/contractsConfig';
+import { TokenMetadata, useSupportedTokens } from '@dapp/config/tokenConfig';
 
 /**
  * This is for the current frontend
@@ -43,7 +43,7 @@ export const useEIP712Permit = (): UseCheckEIP712PermitResult => {
 
     const getEip712Permit = useSimpleSecretStore((state) => state.getEip712Permit);
     const setEip712Permit = useSimpleSecretStore((state) => state.setEip712Permit);
-    
+
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState<Error | null>(null);
 
@@ -56,16 +56,16 @@ export const useEIP712Permit = (): UseCheckEIP712PermitResult => {
         if (!permit.deadline) {
             return true; // If there is no expiration time, it is considered expired
         }
-        
+
         const now = Math.floor(Date.now() / 1000); // Current timestamp (seconds)
         const expired = now >= permit.deadline;
-        
+
         if (expired) {
             if (import.meta.env.DEV) {
                 console.log(`[EIP712] Permit expired. Deadline: ${permit.deadline}, Now: ${now}`);
             }
         }
-        
+
         return expired;
     }, []);
 
@@ -96,7 +96,7 @@ export const useEIP712Permit = (): UseCheckEIP712PermitResult => {
             contractAddress = options?.contractAddress || '';
         } else {
             contractAddress = params.contractAddress;
-            
+
         }
 
         // Get token metadata
@@ -115,7 +115,7 @@ export const useEIP712Permit = (): UseCheckEIP712PermitResult => {
         let label: PermitType;
         let spender: string;
         let amount: bigint | string;
-        
+
         // let domainName: string | undefined;
         let domainVersion: string | undefined;
         let customDeadline: number | undefined;
@@ -126,12 +126,12 @@ export const useEIP712Permit = (): UseCheckEIP712PermitResult => {
             label = params.label;
             spender = params.spender;
             // Convert to bigint or string
-            amount = typeof params.amount === 'bigint' 
-                ? params.amount 
-                : typeof params.amount === 'string' 
-                    ? params.amount 
+            amount = typeof params.amount === 'bigint'
+                ? params.amount
+                : typeof params.amount === 'string'
+                    ? params.amount
                     : BigInt(params.amount);
-            
+
             // contractAddress = options?.contractAddress || '';
             // domainName = options?.domainName;
             domainVersion = options?.domainVersion;
@@ -139,12 +139,12 @@ export const useEIP712Permit = (): UseCheckEIP712PermitResult => {
         } else {
             // Case 2: The incoming parameter is SignPermitParams
             const signParams = params;
-            
+
             label = signParams.label;
             spender = signParams.spender;
             // Convert number to bigint
-            amount = typeof signParams.amount === 'number' 
-                ? BigInt(signParams.amount) 
+            amount = typeof signParams.amount === 'number'
+                ? BigInt(signParams.amount)
                 : signParams.amount;
             // contractAddress = signParams.contractAddress;
             // domainName = signParams.domainName || options?.domainName;
@@ -171,7 +171,7 @@ export const useEIP712Permit = (): UseCheckEIP712PermitResult => {
             customDeadline
         };
     }, [isExpired]);
-    
+
     /**
      * Generate new EIP712 signature and save to store
      */
@@ -184,7 +184,7 @@ export const useEIP712Permit = (): UseCheckEIP712PermitResult => {
             if (!enrichedParams) {
                 throw new Error('Failed to parse permit params');
             }
-        
+
             // Generate new EIP712 signature
             const newPermit = await signPermit(enrichedParams);
 
@@ -197,8 +197,8 @@ export const useEIP712Permit = (): UseCheckEIP712PermitResult => {
 
             return newPermit;
         } catch (signError) {
-            const error = signError instanceof Error 
-                ? signError 
+            const error = signError instanceof Error
+                ? signError
                 : new Error('Failed to generate EIP712 signature');
             console.error('[EIP712] Failed to generate permit:', error);
             setError(error);
@@ -211,16 +211,16 @@ export const useEIP712Permit = (): UseCheckEIP712PermitResult => {
         spender: string,
         contractAddress: string,
     ): EIP712Permit | null => {
-            const existingPermit = getEip712Permit(label, spender, contractAddress);
-            if (
-                existingPermit && 
-                !isExpired(existingPermit) && 
-                existingPermit.label=== label && 
-                existingPermit.spender=== spender
-            ) {
-                return existingPermit;
-            } 
-            return null;
+        const existingPermit = getEip712Permit(label, spender, contractAddress);
+        if (
+            existingPermit &&
+            !isExpired(existingPermit) &&
+            existingPermit.label === label &&
+            existingPermit.spender === spender
+        ) {
+            return existingPermit;
+        }
+        return null;
     }, [getEip712Permit, isExpired]);
 
     /**
@@ -259,8 +259,8 @@ export const useEIP712Permit = (): UseCheckEIP712PermitResult => {
             return newPermit;
 
         } catch (err) {
-            const error = err instanceof Error 
-                ? err 
+            const error = err instanceof Error
+                ? err
                 : new Error('Failed to get valid permit');
             console.error('[useEIP712Permit] Error:', error);
             setError(error);

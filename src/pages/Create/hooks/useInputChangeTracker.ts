@@ -1,4 +1,4 @@
-﻿/**
+/**
  * Input Change Tracker Hook
  *
  * Purpose: Track changes in user input and mark corresponding change states.
@@ -75,7 +75,7 @@ export const useInputChangeTracker = () => {
       return;
     }
 
-    const changedFields = BOX_INFO_FIELDS.filter((field) => !isFieldEqual(current[field], initial[field]));
+    const changedFields = BOX_INFO_FIELDS.filter((field) => !isFieldEqual(current[field as keyof BoxInfoSnapshot], initial[field as keyof BoxInfoSnapshot]));
 
     updateChangedFields((draft) => {
       BOX_INFO_FIELDS.forEach((field) => draft.delete(field));
@@ -89,7 +89,6 @@ export const useInputChangeTracker = () => {
     nftStore.boxInfoForm.country,
     nftStore.boxInfoForm.state,
     nftStore.boxInfoForm.event_date,
-    nftStore.boxInfoForm.nft_owner,
     nftStore.boxInfoForm.price,
     nftStore.boxInfoForm.mint_method,
   ]);

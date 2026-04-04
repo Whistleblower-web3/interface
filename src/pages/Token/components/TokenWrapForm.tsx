@@ -41,7 +41,7 @@ const TokenWrapForm: React.FC<TokenWrapFormProps> = ({
     }, [selectedPair]);
 
     const handleWrapClick = useCallback(() => {
-        if (!wrapAmount || !selectedPair || !selectedPair.secret?.address) return;
+        if (!wrapAmount || !selectedPair || !selectedPair.erc20Privacy?.address) return;
         setModalOpen(true);
     }, [wrapAmount, selectedPair]);
 
@@ -61,7 +61,7 @@ const TokenWrapForm: React.FC<TokenWrapFormProps> = ({
                     >
                         {tokenPairs.map((pair, index) => (
                             <Option key={index} value={index}>
-                                {pair.erc20.symbol} - {pair.secret?.symbol || `${pair.erc20.symbol}.S`}
+                                {pair.erc20.symbol} - {pair.erc20Privacy?.symbol || `${pair.erc20.symbol}.Privacy`}
                             </Option>
                         ))}
                     </Select>
@@ -75,7 +75,7 @@ const TokenWrapForm: React.FC<TokenWrapFormProps> = ({
                         disabled={isLoading || !selectedPair}
                         style={{ flex: 1 }}
                     />
-                    
+
                 </Space.Compact>
                 <Space.Compact style={{ width: '100%' }}>
                     <Button
@@ -92,11 +92,11 @@ const TokenWrapForm: React.FC<TokenWrapFormProps> = ({
                             !wrapAmount ||
                             isLoading ||
                             !selectedPair ||
-                            !selectedPair.secret?.address
+                            !selectedPair.erc20Privacy?.address
                         }
                         block
                     >
-                        Wrap to {selectedPair?.secret?.symbol || 'Secret Token'}
+                        Wrap to {selectedPair?.erc20Privacy?.symbol || 'Secret Token'}
                     </Button>
                 </Space.Compact>
                 {selectedPair?.erc20 && (

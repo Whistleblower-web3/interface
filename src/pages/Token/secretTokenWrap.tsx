@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useCallback, useMemo } from 'react';
 import { Card, Space, Typography, Select, Tabs, Row, Col, Alert } from 'antd';
-import { useAllContractConfigs, ContractName } from '@dapp/config/contractsConfig';
+import { useToken, useSupportedTokens, TokenName } from '@/config/tokenConfig';
 import { useTokenPageContext } from './context/TokenPageContext';
 import TokenWrapForm from './components/TokenWrapForm';
 import TokenDepositForm from './components/TokenDepositForm';
@@ -10,7 +10,7 @@ const { Text } = Typography;
 const { Option } = Select;
 
 const SecretTokenWrap: React.FC = () => {
-    const allContracts = useAllContractConfigs();
+    const supportedTokens = useSupportedTokens();
     const [activeTab, setActiveTab] = useState<string>('wrap');
 
     const {
@@ -31,39 +31,29 @@ const SecretTokenWrap: React.FC = () => {
         }
     }, [selectedPair]);
 
-    const secretContract = useMemo(() => {
-        if (!selectedPair) return null;
+    const privacyContract = useMemo(() => {
+        if (!selectedPair || !selectedPair.erc20Privacy?.address) return null;
 
+        // Find the token metadata in the supported tokens list
+        const foundToken = supportedTokens.find(
+            (t) => t.address.toLowerCase() === selectedPair.erc20Privacy!.address.toLowerCase()
+        );
+
+        if (foundToken) return foundToken;
+
+        // Fallback for wROSE if not found by address
         if (selectedPair.isNativeROSE) {
-            if (selectedPair.secret?.address) {
-                const contractByAddress = Object.values(allContracts).find(
-                    (c) => c && c.address && c.address.toLowerCase() === selectedPair.secret?.address!.toLowerCase()
-                );
-                if (contractByAddress) {
-                    return contractByAddress;
-                }
-            }
-
-            return allContracts[ContractName.WROSE_SECRET] || null;
-        } else {
-            if (selectedPair.secret?.address) {
-                const contractByAddress = Object.values(allContracts).find(
-                    (c) => c && c.address && c.address.toLowerCase() === selectedPair.secret?.address!.toLowerCase()
-                );
-                if (contractByAddress) {
-                    return contractByAddress;
-                }
-            }
-
-            return allContracts.OfficialTokenSecret || null;
+            return supportedTokens.find(t => t.tokenName === TokenName.WROSE_PRIVACY) || null;
         }
-    }, [selectedPair, allContracts]);
+
+        return null;
+    }, [selectedPair, supportedTokens]);
 
     const handleDeposit = useCallback(
         async (amount: string) => {
-            if (!selectedPair || !selectedPair.secret?.address) return;
+            if (!selectedPair || !selectedPair.erc20Privacy?.address) return;
             try {
-                await deposit(selectedPair.secret?.address, amount, selectedPair.erc20.decimals);
+                await deposit(selectedPair.erc20Privacy?.address, amount, selectedPair.erc20.decimals);
             } catch (error) {
                 console.error('Deposit error:', error);
             }
@@ -116,7 +106,7 @@ const SecretTokenWrap: React.FC = () => {
         <Card style={{ marginTop: '24px' }}>
             <Space direction="vertical" size="large" style={{ width: '100%' }}>
                 <Col>
-                    <Row>
+                    <Row align="middle">
                         <Text strong style={{ marginRight: '8px' }}>Select Token Pair: </Text>
                         <Select
                             value={selectedPairIndex}
@@ -126,8 +116,7 @@ const SecretTokenWrap: React.FC = () => {
                         >
                             {tokenPairs.map((pair, index) => (
                                 <Option key={index} value={index}>
-                                    {pair.erc20.symbol}{pair.isNativeROSE && ' (Native ROSE)'} - {pair.secret?.symbol || `${pair.erc20.symbol}.S`}
-                                    
+                                    {pair.erc20.symbol}{pair.isNativeROSE && ' (Native ROSE)'} - {pair.erc20Privacy?.symbol || `${pair.erc20.symbol}.S`}
                                 </Option>
                             ))}
                         </Select>
@@ -135,16 +124,16 @@ const SecretTokenWrap: React.FC = () => {
                     <Space style={{ marginTop: '12px' }} direction="vertical" size="small">
                         <Text strong>
                             {selectedPair.erc20.name} ({selectedPair.erc20.symbol})
-                            {selectedPair.secret && ` -> ${selectedPair.secret.name} (${selectedPair.secret.symbol})`}
+                            {selectedPair.erc20Privacy && ` -> ${selectedPair.erc20Privacy.name} (${selectedPair.erc20Privacy.symbol})`}
                         </Text>
                         {selectedPair.erc20?.address && (
                             <Text type="secondary" copyable>
                                 ERC20: {selectedPair.erc20?.address}
                             </Text>
                         )}
-                        {selectedPair.secret?.address && (
+                        {selectedPair.erc20Privacy?.address && (
                             <Text type="secondary" copyable>
-                                Secret: {selectedPair.secret?.address}
+                                Secret: {selectedPair.erc20Privacy?.address}
                             </Text>
                         )}
                     </Space>
@@ -152,7 +141,7 @@ const SecretTokenWrap: React.FC = () => {
 
                 <Tabs activeKey={activeTab} onChange={setActiveTab} items={tabItems} />
 
-                {selectedPair && !secretContract && (
+                {selectedPair && !privacyContract && (
                     <Alert
                         type="warning"
                         message="Secret contract configuration not found for this token pair. Please check contract configuration."

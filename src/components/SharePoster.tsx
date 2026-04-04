@@ -6,7 +6,7 @@ import { QRCodeSVG } from "qrcode.react";
 import { BoxUnifiedType } from "@/services/supabase/types/types";
 import { MetadataBoxType } from "@/types/typesDapp/metadata/metadataBox";
 import { useIpfsImage } from "@/hooks/useIpfsImage";
-import Logo from "@/components/base/logo";
+import Logo from "@/components/brand";
 
 interface SharePosterProps {
     box: BoxUnifiedType;
@@ -188,7 +188,7 @@ const SharePoster: React.FC<SharePosterProps> = ({
                         </div>
                     </div>
 
-                    <div className="mt-auto opacity-40 text-[12px] font-mono tracking-widest uppercase">
+                    <div className="mt-auto opacity-40 text-[12px]  tracking-widest uppercase">
                         Authentic Data verified by Wiki Truth Protocol
                     </div>
                 </div>

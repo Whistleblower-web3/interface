@@ -14,7 +14,6 @@ export type FormFieldName =
     'country' |
     'state' |
     'event_date' |
-    'nft_owner' |
     'price' |
     'mint_method';
 
@@ -31,7 +30,6 @@ export const BOX_INFO_FIELDS: FormFieldName[] = [
     'country',
     'state',
     'event_date',
-    'nft_owner',
     'price',
     'mint_method',
 ];
@@ -47,7 +45,6 @@ export interface BoxInfoFormType {
     label: string[];
     // ---
     mint_method: MintMethodType,
-    nft_owner: string,
     price: string,
 }
 
@@ -60,6 +57,5 @@ export const initialBoxInfoForm: BoxInfoFormType = {
     event_date: '',
     type_of_crime: '',
     mint_method: 'create',
-    nft_owner: '',
     price: '',
 }

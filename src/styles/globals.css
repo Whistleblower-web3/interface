@@ -16,56 +16,15 @@
 }
 
 
-/* React Flow edge style forced override */
-.react-flow__edge-path {
-  stroke: #6d6d6d !important;
-  stroke-width: 2 !important;
-  fill: none !important;
-  opacity: 0.6 !important;
-}
-
-.react-flow__arrowhead {
-  fill: #6d6d6d !important;
-  opacity: 0.6 !important;
-}
-
-.react-flow__edge {
-  pointer-events: none !important;
-}
-
-.react-flow__edges {
-  z-index: 1 !important;
-}
-
-/* Ensure SVG elements are visible */
-.react-flow__renderer {
-  z-index: 1 !important;
-}
-
-.react-flow__edge-path,
-.react-flow__connection-path {
-  stroke: #6d6d6d !important;
-  stroke-width: 2 !important;
-  fill: none !important;
-  opacity: 0.6 !important;
-}
-
-/* Hide React Flow Attribution */
-.react-flow__attribution {
-  display: none !important;
-  visibility: hidden !important;
-  opacity: 0 !important;
-}
-
 :root {
   --radius: 0.5rem;
-  --background: rgb(0, 0, 0); /* oklch(0.141 0.005 285.823) */
-  --foreground: rgb(250, 250, 250); /* oklch(0.985 0 0) */
+  --background: rgb(8, 8, 8); /* oklch(0.141 0.005 285.823) */
+  --foreground: rgb(255, 255, 255); /* oklch(0.985 0 0) */
   --card: rgb(19, 19, 19); /* oklch(0.21 0.006 285.885) */
   --card-foreground: rgb(250, 250, 250); /* oklch(0.985 0 0) */
   --popover: rgb(54, 54, 54); /* oklch(0.21 0.006 285.885) */
   --popover-foreground: rgb(250, 250, 250); /* oklch(0.985 0 0) */
-  --primary: rgb(198,169,252); /* oklch(0.696 0.17 162.48) - Green */
+  --primary: #88cf04ff;; /* oklch(0.696 0.17 162.48) - Green */
   --primary-foreground: rgb(31, 31, 31); /* oklch(0.393 0.095 152.535) */
   --secondary: rgb(105, 105, 105); /* oklch(0.274 0.006 286.033) */
   --secondary-foreground: rgb(250, 250, 250); /* oklch(0.985 0 0) */
@@ -76,7 +35,7 @@
   --destructive: rgb(239, 68, 68); /* oklch(0.704 0.191 22.216) */
   --border: rgba(255, 255, 255, 0.4); /* oklch(1 0 0 / 40%) */
   --input: rgba(255, 255, 255, 0.15); /* oklch(1 0 0 / 15%) */
-  --ring: rgb(198,169,252); /* oklch(0.527 0.154 150.069) */
+  --ring: #88cf04ff;; /* oklch(0.527 0.154 150.069) */
   --chart-1: rgb(99, 102, 241); /* oklch(0.488 0.243 264.376) */
   --chart-2: rgb(34, 197, 94); /* oklch(0.696 0.17 162.48) */
   --chart-3: rgb(251, 191, 36); /* oklch(0.769 0.188 70.08) */
@@ -84,31 +43,22 @@
   --chart-5: rgb(239, 68, 68); /* oklch(0.645 0.246 16.439) */
   --sidebar: rgb(54, 54, 54); /* oklch(0.21 0.006 285.885) */
   --sidebar-foreground: rgb(250, 250, 250); /* oklch(0.985 0 0) */
-  --sidebar-primary: rgb(198,169,252); /* oklch(0.696 0.17 162.48) */
+  --sidebar-primary: #88cf04ff;; /* oklch(0.696 0.17 162.48) */
   --sidebar-primary-foreground: rgb(20, 83, 45); /* oklch(0.393 0.095 152.535) */
   --sidebar-accent: rgb(70, 70, 70); /* oklch(0.274 0.006 286.033) */
   --sidebar-accent-foreground: rgb(250, 250, 250); /* oklch(0.985 0 0) */
   --sidebar-border: rgba(255, 255, 255, 0.1); /* oklch(1 0 0 / 10%) */
-  --sidebar-ring: rgb(198,169,252); /* oklch(0.527 0.154 150.069) */
+  --sidebar-ring: #88cf04ff;; /* oklch(0.527 0.154 150.069) */
 
   /* Disabled background color */
   --disabled: #232327;
   --disabledText: #3b3b3d;
 
-  --Storing: #4db325;
-  --OnSale: #b0b306;
-  --CanSale: #e28b19;
-  --Paid: #c7480d;
-  --Refunding: #bd0fb4;
-  --Delaying: #5e0fdd;
-  --Published: #3d63e0;
-  --Blacklisted: #4f5055;
-
   --error: #be3639;
   --attention: #ff4d4f;
   --success: #5eee16;
   --warning: #faad14;
-  --info: #129675;
+  --info: #8f5b17;
 }
 
 @theme inline {
@@ -152,8 +102,6 @@
   --color-disabledText: var(--disabledText);
 
   --font-brand: 'Wallpoet', cursive;
-
-  --color-theme: var(--primary);
   
   --color-error: var(--error);
   --color-success: var(--success);
@@ -161,14 +109,6 @@
   --color-info: var(--info);
   --color-attention: var(--attention);
 
-  --color-Storing: var(--Storing);
-  --color-OnSale: var(--OnSale);
-  --color-CanSale: var(--CanSale);
-  --color-Paid: var(--Paid);
-  --color-Refunding: var(--Refunding);
-  --color-Delaying: var(--Delaying);
-  --color-Blacklisted: var(--Blacklisted);
-  --color-Published: var(--Published);
 }
 
 
@@ -181,63 +121,6 @@
     @apply bg-background text-foreground;
   }
 } 
-
-p, span, div, text {
-  font-family: var(--font-mono);
-  /*letter-spacing: -0.05em;  /* Reduce letter spacing */
-  word-spacing: -0.2em;
-}
-
-/* Restore base styles */
-html {
-  width: 100%;
-  height: 100%;
-  margin: 0;
-  padding: 0;
-}
-
-body {
-  width: 100%;
-  height: 100%;
-  min-height: 100vh;
-  color: var(--foreground);
-  background: var(--background);
-  font-size: 1rem;
-  line-height: 1.7;
-  letter-spacing: 0.01em;
-  margin: 0;
-  padding: 0;
-}
-
-button,
-.btn {
-  /* font-family: var(--font-geist-sans), Arial, Helvetica, sans-serif; */
-  font-weight: 600;
-  border-radius: 0.75rem;
-  padding: 0.5rem 1.5rem;
-  transition: background 0.2s, color 0.2s, box-shadow 0.2s;
-}
-
-/* Small screen devices */
-@media (min-width: 480px) {
-  
-}
-
-/* Mobile responsive */
-@media (min-width: 768px) {
-
-}
-
-/* Tablet responsive */
-@media (min-width: 1024px) {
-
-}
-
-@media (min-width: 1440px) {
-
-}
-
-
 
 /* StatusStepFlow horizontal scroll style optimization */
 .status-step-flow-container {

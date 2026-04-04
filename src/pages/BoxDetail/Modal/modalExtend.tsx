@@ -8,7 +8,7 @@ import {
     useState,
     useEffect,
 } from 'react';
-import { useAllContractConfigs } from '@dapp/config/contractsConfig';
+import { useAllContracts } from '@dapp/config/contractsConfig';
 import { useWriteCustormV2 } from '@/hooks/useWriteCustormV2';
 import { useBoxDetailStore } from '../store/boxDetailStore';
 // import { useWalletContext } from '@/dapp/context/useAccount/WalletContext';
@@ -21,13 +21,13 @@ interface Props {
     onClose: () => void;
 }
 
-const ModalExtend: React.FC<Props> = ({ onClose}) => {
+const ModalExtend: React.FC<Props> = ({ onClose }) => {
     const { boxId, box } = useBoxDetailContext();
     // const { address } = useWalletContext();
     const updateModalStatus = useBoxDetailStore(state => state.updateModalStatus);
     // const { roles } = useBoxDetailStore(state => state.userState);
     const { writeCustormV2, error, isLoading, isSuccessed } = useWriteCustormV2(boxId);
-    const allConfigs = useAllContractConfigs();
+    const allContracts = useAllContracts();
     const [isAble, setIsAble] = useState<boolean>(false)
     const [okText, setOkText] = useState<string>('Submit')
     const [days, setDays] = useState<string>('')
@@ -65,7 +65,8 @@ const ModalExtend: React.FC<Props> = ({ onClose}) => {
         if (days && Number(days) > 0) {
             const timestamp = Number(days) * 24 * 60 * 60;
             await writeCustormV2({
-                contract: allConfigs.TruthBox,
+                contractAddress: allContracts.TruthBox.address,
+                abi: allContracts.TruthBox.abi,
                 functionName: 'extendDeadline',
                 args: [boxId, timestamp], // 
             });
@@ -120,7 +121,7 @@ const ModalExtend: React.FC<Props> = ({ onClose}) => {
                 </div>
             </div>
             <hr className='my-2' />
-        
+
         </Modal >
 
     );

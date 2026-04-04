@@ -1,5 +1,5 @@
-﻿import { useEffect, useMemo, useState, useRef } from 'react';
-import { useAllContractConfigs } from '@dapp/config/contractsConfig';
+import { useEffect, useMemo, useState, useRef } from 'react';
+import { useAllContracts } from '@dapp/config/contractsConfig';
 import { useBoxDetailContext } from '../contexts/BoxDetailContext';
 import { useBoxDetailStore } from '../store/boxDetailStore';
 import { useButtonInteractionStore } from '@dapp/store/buttonInteractionStore';
@@ -9,19 +9,19 @@ import type { BoxActionConfig, BoxActionController, BoxActionContext, BoxActionW
 import type { FunctionNameType } from '@dapp/types/typesDapp/contracts';
 
 export const useBoxActionController = (config: BoxActionConfig): BoxActionController => {
-  const allConfigs = useAllContractConfigs();
+  const allContracts = useAllContracts();
   const { box, boxId } = useBoxDetailContext();
   const roles = useBoxDetailStore((state) => state.userState.roles);
-  const { functionWriting} = useButtonInteractionStore();
-  const { writeCustormV2, error, isLoading , isSuccessed} = useWriteCustormV2(boxId);
+  const { functionWriting } = useButtonInteractionStore();
+  const { writeCustormV2, error, isLoading, isSuccessed } = useWriteCustormV2(boxId);
   const isActiveByHook = config.activeKey ? useButtonActive(config.activeKey) : true;
 
-  const ctx: BoxActionContext = useMemo(() => ({ box, boxId, roles}), [box, boxId, roles]);
+  const ctx: BoxActionContext = useMemo(() => ({ box, boxId, roles }), [box, boxId, roles]);
 
   const buildWrite = useMemo(() => {
     return (customArgs?: any): BoxActionWriteParams | null => {
       if (config.buildWrite) {
-        return config.buildWrite(ctx, allConfigs, customArgs);
+        return config.buildWrite(ctx, allContracts, customArgs);
       }
 
       // If no contract, functionName, getArgs is provided, it means this operation is not executed in the button write
@@ -34,12 +34,12 @@ export const useBoxActionController = (config: BoxActionConfig): BoxActionContro
       }
 
       return {
-        contract: config.contract(allConfigs),
+        contract: config.contract(allContracts),
         functionName: config.functionName,
-        args: config.getArgs(ctx, allConfigs),
+        args: config.getArgs(ctx, allContracts),
       };
     };
-  }, [config, ctx, allConfigs, box]);
+  }, [config, ctx, allContracts, box]);
 
   const defaultWrite = useMemo(() => buildWrite(undefined), [buildWrite]);
 
@@ -73,7 +73,7 @@ export const useBoxActionController = (config: BoxActionConfig): BoxActionContro
       options?.onClick?.();
       return;
     }
-    
+
     if (!writeParams) {
       return;
     }
@@ -81,7 +81,8 @@ export const useBoxActionController = (config: BoxActionConfig): BoxActionContro
     options?.onClick?.();
 
     await writeCustormV2({
-      contract: writeParams.contract,
+      contractAddress: writeParams.contract.address,
+      abi: writeParams.contract.abi,
       functionName: writeParams.functionName,
       args: writeParams.args,
     });

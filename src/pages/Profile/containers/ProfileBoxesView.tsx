@@ -48,7 +48,7 @@ const ProfileBoxesView: React.FC<ProfileBoxesViewProps> = ({ address, userId, cl
     const { orderAmountsMap } = useBatchOrderAmounts(
         boxIds,
         safeUserId,
-        filters.selectedTab === 'bought' || filters.selectedTab === 'bade'
+        filters.selectedTab
     );
 
     const navigate = useNavigate();

@@ -1,4 +1,4 @@
-﻿import { WorkflowStep, WorkflowPayload } from '../core/types';
+import { WorkflowStep, WorkflowPayload } from '../core/types';
 import { MetadataBoxOutput } from '../../types/stepType';
 import { metadataService } from '@/services/metadata/metadataService';
 import { objToJson } from '@/services/createJsonFile/objToJson';
@@ -16,10 +16,6 @@ export function createMetadataBoxStep(): WorkflowStep<WorkflowPayload, MetadataB
       const outputs = input.all_step_outputs;
       if (!outputs.box_image_cid) {
         console.error('Create Metadata: box_image_cid is missing');
-        return false;
-      }
-      if (!outputs.nft_image_cid) {
-        console.error('Create Metadata: nft_image_cid is missing');
         return false;
       }
       if (!outputs.file_cid_list || outputs.file_cid_list.length === 0) {

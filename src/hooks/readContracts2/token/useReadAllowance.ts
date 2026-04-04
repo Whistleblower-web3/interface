@@ -3,9 +3,9 @@ import { PermitType } from '@dapp/hooks/EIP712';
 import { useEIP712Permit } from '@dapp/hooks/EIP712/useEIP712Permit';
 import {
     useERC20,
-    useERC20Secret,
+    useERC20Privacy,
 } from '../../readContracts/index';
-import { useSupportedTokens, TokenMetadata } from '@dapp/config/contractsConfig';
+import { useSupportedTokens, TokenMetadata } from '@dapp/config/tokenConfig';
 
 export interface ReadAllowanceResult {
     isEnough: boolean;
@@ -40,7 +40,7 @@ export const useReadAllowance = () => {
     const [isEnough, setIsEnough] = useState<boolean>(false);
 
     const { allowance } = useERC20();
-    const { allowanceWithPermit } = useERC20Secret();
+    const { allowanceWithPermit } = useERC20Privacy();
 
     const { getValidPermit } = useEIP712Permit();
     const supportedTokens = useSupportedTokens();
@@ -66,7 +66,7 @@ export const useReadAllowance = () => {
 
             if (tokenMetadata.types === 'ERC20') {
                 currentAllowance = await allowance(tokenAddress, owner, spender, force);
-            } else if (tokenMetadata.types === 'Secret') {
+            } else if (tokenMetadata.types === 'Privacy') {
                 const validPermit = await getValidPermit({
                     spender,
                     amount: BigInt(0),

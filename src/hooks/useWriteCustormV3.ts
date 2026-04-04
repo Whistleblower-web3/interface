@@ -38,18 +38,18 @@ export const useWriteCustormV3 = (): WriteContractResult => {
         isPending,         // is loading, waiting for wallet to pack
         isError,           // is error, boolean value
         isSuccess,         // success send transaction
-        status,            // isPending、isError、isSuccess 对应
+        status,            // isPending、isError、isSuccess 
         reset             // reset state function
     } = useWriteContract();
 
-    const { isSuccess: isSuccessed } = useWaitForTransactionReceipt({
+    const { isSuccess: isSuccessed, isError: isReceiptError, error: receiptError } = useWaitForTransactionReceipt({
         hash,
     });
-    
+
     const { address } = useWalletContext();
     const [functionName, setFunctionName] = useState<FunctionNameType_FundManager | null>(null);
     const [tokenAddress, setTokenAddress] = useState<string | null>(null);
-    
+
     const addWithdrawInteraction = useAccountStore(state => state.addWithdrawInteraction);
 
     const writeCustormV3 = async (
@@ -59,7 +59,7 @@ export const useWriteCustormV3 = (): WriteContractResult => {
         setFunctionName(functionName);
         // TODO
         setTokenAddress(config.tokenAddress);
-        
+
         try {
             const result = await writeContractAsync({
                 address: config.contract.address,
@@ -78,20 +78,21 @@ export const useWriteCustormV3 = (): WriteContractResult => {
     useEffect(() => {
         if (isSuccessed && functionName && address && tokenAddress) {
             addWithdrawInteraction(functionName, tokenAddress, hash);
-        } else if (isError){
-            reset();
+        } else if (isError) {
+            // DO NOT auto reset here, or the error message vanishes in UI
+            // reset();
         }
     }, [isSuccessed, functionName, address, tokenAddress, hash, addWithdrawInteraction, isError, reset]);
 
     return {
         writeCustormV3,
         hash,
-        error,
+        error: error || receiptError,
         isPending,
-        isLoading: status !== 'idle' && status !== "error" && !isSuccessed,
+        isLoading: status !== 'idle' && status !== "error" && !isSuccessed && !isReceiptError,
         isSuccess,
         status,
-        isError,
+        isError: isError || isReceiptError,
         reset,
         isSuccessed,
     };

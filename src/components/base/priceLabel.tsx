@@ -88,7 +88,6 @@ const PriceLabel: React.FC<PriceLabelProps> = ({
             className={cn(
                 'inline-flex items-end',
                 responsive ? 'gap-2' : 'gap-1',
-                'font-mono'
             )}
         >
             {contentElements.map((element, index) => (

@@ -1,13 +1,12 @@
-﻿"use client"
+"use client"
 
 import { useMemo } from 'react';
 import { formatUnits } from 'viem';
-import { useSupportedTokens } from '@dapp/config/contractsConfig';
-import { useBoxOrderAmounts } from './useBoxOrderAmounts';
+import { useSupportedTokens } from '@dapp/config/tokenConfig';
 import { ClaimableFund, ClaimMethodType, FundType, TokenData } from '../types/cardProfile.types';
 import type { BoxData } from '../types/profile.types';
 import { useProfileStore } from '../store/profileStore';
-import { type BoxUserOrderAmountData } from '@dapp/services/supabase/fundsBox';
+import { type BoxUserOrderAmountData } from '@/services/supabase/boxUserOrderAmounts';
 
 export interface UseFundsParams {
     box: BoxData;
@@ -62,17 +61,8 @@ export const useFunds = ({ box, userId, prefetchedOrderAmounts }: UseFundsParams
         return supportedTokens.find((token) => token.address.toLowerCase() === box.accepted_token?.toLowerCase());
     }, [box.accepted_token, supportedTokens]);
 
-    // Use prefetched data if available, otherwise fetch it
-    const { orderAmountsData: fetchedOrderAmounts, isLoading: isFetching } = useBoxOrderAmounts(
-        box,
-        userId ?? '',
-        selectedTab,
-        // Disable fetching if we already have prefetched data
-        !!prefetchedOrderAmounts
-    );
-
-    const orderAmountsData = prefetchedOrderAmounts ?? fetchedOrderAmounts;
-    const isLoading = prefetchedOrderAmounts ? false : isFetching;
+    const orderAmountsData = prefetchedOrderAmounts ?? undefined;
+    const isLoading = false;
 
     const result = useMemo(() => {
         const acceptedAddress = box.accepted_token ?? acceptedTokenMeta?.address;
@@ -103,17 +93,28 @@ export const useFunds = ({ box, userId, prefetchedOrderAmounts }: UseFundsParams
             }
         }
 
+        const isBoughtTab = selectedTab === 'bought';
+        const isBadeTab = selectedTab === 'bade';
+
         const isRefundEligible = Boolean(
-            userId &&
-            box.refund_permit &&
-            box.buyer_id &&
-            String(box.buyer_id) === String(userId)
+            isBoughtTab || (
+                userId &&
+                box.refund_permit &&
+                box.buyer_id &&
+                String(box.buyer_id).toLowerCase() === String(userId).toLowerCase()
+            )
         );
 
-        const isOrderEligible = hasOrderAmounts || Boolean(
-            userId &&
-            (!box.buyer_id || String(box.buyer_id) !== String(userId)) &&
-            box.bidders?.some((bidder) => String(bidder) === String(userId))
+        const isOrderEligible = Boolean(
+            isBadeTab || (
+                (!isRefundEligible) && (
+                    hasOrderAmounts || (
+                        userId &&
+                        (!box.buyer_id || String(box.buyer_id).toLowerCase() !== String(userId).toLowerCase()) &&
+                        box.bidders?.some((bidder) => String(bidder).toLowerCase() === String(userId).toLowerCase())
+                    )
+                )
+            )
         );
 
         const hasAccess = isRefundEligible || isOrderEligible;

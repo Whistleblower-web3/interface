@@ -8,7 +8,7 @@ import { boxActionConfigs } from '@BoxDetail/actions/configs';
 import { useBoxDetailContext } from '@BoxDetail/contexts/BoxDetailContext';
 import ModalBuyBidPay from '@/pages/BoxDetail/Modal/modalBuyBidDelay';
 import TextP from '@/components/base/text_p';
-import { getTokenMetadataBySymbol } from '@dapp/config/contractsConfig';
+import { getTokenBySymbol } from "@dapp/config/tokenConfig";
 import BoxActionButton from '@BoxDetail/components/boxActionButton';
 
 interface Props {
@@ -39,7 +39,7 @@ const DelayButton: React.FC<Props> = ({ onClick, className }) => {
   // const disabled = controller.isDisabled || !tokenAddress;
 
   return (
-      <BoxActionButton controller={controller} className={className} onClick={handleDelay}>
+    <BoxActionButton controller={controller} className={className} onClick={handleDelay}>
 
       <div className={cn('flex flex-col items-start')}>
         <TextP>
@@ -55,7 +55,7 @@ const DelayButton: React.FC<Props> = ({ onClick, className }) => {
         open={open}
         onClose={() => setOpen(false)}
         boxId={box?.id?.toString() || ''}
-        tokenAddress={getTokenMetadataBySymbol('WTRC.S').address}
+        tokenAddress={getTokenBySymbol('WTRC.Privacy').address}
         amount={amount}
         functionName="delay"
       />

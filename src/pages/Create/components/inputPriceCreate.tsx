@@ -1,6 +1,6 @@
 import React from 'react';
 import { usePriceInput } from '../hooks/Input/usePriceInput';
-import { useSupportedTokens } from '@dapp/config/contractsConfig';
+import { useSupportedTokens } from '@dapp/config/tokenConfig';
 import { cn } from '@/lib/utils';
 import { InputNumber } from 'antd';
 import { useCreateForm } from '../context/CreateFormContext';
@@ -12,12 +12,12 @@ interface InputPriceCreateProps {
 }
 
 
-export const InputPriceCreate: React.FC<InputPriceCreateProps> = ({className}) => {
+export const InputPriceCreate: React.FC<InputPriceCreateProps> = ({ className }) => {
     const { inputValue, handlePriceChange, handleBlur, error } = usePriceInput();
     const supportedTokens = useSupportedTokens();
     const form = useCreateForm();
     const mintMethod = form.watch('mint_method');
-    
+
     // Check if price is required
     const isRequired = mintMethod === 'create';
 
@@ -36,7 +36,7 @@ export const InputPriceCreate: React.FC<InputPriceCreateProps> = ({className}) =
     return (
         <div className={cn("flex w-full lg:max-w-lg space-y-2", className)}>
             <div className="flex flex-col w-full gap-2">
-                    <TextTitle>Price:</TextTitle>
+                <TextTitle>Price:</TextTitle>
                 <div className="flex flex-col w-full gap-2">
                     <InputNumber
                         onChange={(value) => {
@@ -48,8 +48,8 @@ export const InputPriceCreate: React.FC<InputPriceCreateProps> = ({className}) =
                         min={0.001}
                         precision={3}
                         placeholder={
-                            isRequired 
-                                ? "Please enter the price (min: 0.001)" 
+                            isRequired
+                                ? "Please enter the price (min: 0.001)"
                                 : "Optional - Leave empty for free"
                         }
                         suffix={<p className="ml-2 text-muted-foreground">{supportedTokens[0].symbol}</p>}

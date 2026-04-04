@@ -9,7 +9,7 @@ import { useUnWrapSteps } from '../hooks/useUnWrapSteps';
 const { Text, } = Typography;
 
 export interface TokenUnwrapFormProps {
-    selectedPair: TokenPair; 
+    selectedPair: TokenPair;
     onUnwrap: (tokenAddress: `0x${string}`, amount: string) => void;
     isLoading: boolean;
 }
@@ -23,18 +23,18 @@ const TokenUnwrapForm: React.FC<TokenUnwrapFormProps> = ({
     onUnwrap,
     isLoading,
 }) => {
-    const { 
-        handleEIP712Permit, 
-        currentStep, 
-        isLoading: isReadBalanceLoading, 
-        balance, 
+    const {
+        handleEIP712Permit,
+        currentStep,
+        isLoading: isReadBalanceLoading,
+        balance,
         error: signError,
     } = useUnWrapSteps(selectedPair);
 
     // useEffect(() => {
     //     console.log('TokenUnwrapForm - balance:', balance, 'type:', typeof balance, 'currentStep:', currentStep, 'isReadBalanceLoading:', isReadBalanceLoading);
     //     if (balance && balance > BigInt(0)) {
-    //         const decimals = selectedPair?.secret?.decimals || selectedPair?.erc20?.decimals || 18;
+    //         const decimals = selectedPair?.erc20Privacy?.decimals || selectedPair?.erc20?.decimals || 18;
     //         console.log('TokenUnwrapForm - formatted balance:', formatBalance(formatUnits(balance, decimals)));
     //     }
     // }, [balance, currentStep, isReadBalanceLoading, selectedPair]);
@@ -44,7 +44,7 @@ const TokenUnwrapForm: React.FC<TokenUnwrapFormProps> = ({
     // When switching token pair, reset input amount
     useEffect(() => {
         setUnwrapAmount('');
-    }, [selectedPair?.secret?.address]);
+    }, [selectedPair?.erc20Privacy?.address]);
 
     const handleAmountInput = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
         const value = e.target.value;
@@ -57,15 +57,15 @@ const TokenUnwrapForm: React.FC<TokenUnwrapFormProps> = ({
 
     const handleUnwrapAll = useCallback(() => {
         if (balance && balance > BigInt(0)) {
-            const decimals = selectedPair?.secret?.decimals || selectedPair?.erc20?.decimals || 18;
+            const decimals = selectedPair?.erc20Privacy?.decimals || selectedPair?.erc20?.decimals || 18;
             const formatted = formatBalance(formatUnits(balance, decimals));
             setUnwrapAmount(formatted);
-        } 
+        }
     }, [balance, selectedPair]);
 
     const handleUnwrap = useCallback(() => {
-        if (!unwrapAmount || !selectedPair || !selectedPair.secret?.address) return;
-        onUnwrap(selectedPair.secret?.address, unwrapAmount);
+        if (!unwrapAmount || !selectedPair || !selectedPair.erc20Privacy?.address) return;
+        onUnwrap(selectedPair.erc20Privacy?.address, unwrapAmount);
     }, [unwrapAmount, selectedPair, onUnwrap]);
 
     // If current step is EIP712Permit, display signature UI
@@ -77,12 +77,12 @@ const TokenUnwrapForm: React.FC<TokenUnwrapFormProps> = ({
                     showIcon
                     message="EIP-712 Signature Required"
                     description={
-                        <Space direction="vertical" size="middle" style={{marginTop: 8 }}>
+                        <Space direction="vertical" size="middle" style={{ marginTop: 8 }}>
                             <div>
                                 <Text strong>Type: View Permission</Text>
                                 <div>
                                     <Text type="secondary" style={{ fontSize: 13 }}>
-                                        Contract: {selectedPair?.secret?.address ? formatAddress(selectedPair.secret?.address) : 'N/A'}
+                                        Contract: {selectedPair?.erc20Privacy?.address ? formatAddress(selectedPair.erc20Privacy?.address) : 'N/A'}
                                     </Text>
                                 </div>
                             </div>
@@ -102,7 +102,7 @@ const TokenUnwrapForm: React.FC<TokenUnwrapFormProps> = ({
                                 block
                                 onClick={handleEIP712Permit}
                                 loading={isReadBalanceLoading}
-                                disabled={!selectedPair?.secret?.address || !selectedPair?.erc20.address}
+                                disabled={!selectedPair?.erc20Privacy?.address || !selectedPair?.erc20.address}
                             >
                                 Sign EIP-712 Permit
                             </Button>
@@ -139,7 +139,7 @@ const TokenUnwrapForm: React.FC<TokenUnwrapFormProps> = ({
                         message="No balance"
                         description={
                             <Text type="secondary">
-                                You don't have any {selectedPair?.secret?.symbol || 'Secret Token'} balance to unwrap.
+                                You don't have any {selectedPair?.erc20Privacy?.symbol || 'Secret Token'} balance to unwrap.
                             </Text>
                         }
                     />
@@ -154,7 +154,7 @@ const TokenUnwrapForm: React.FC<TokenUnwrapFormProps> = ({
                     <Input
                         placeholder="Amount"
                         value={unwrapAmount}
-                        suffix={selectedPair?.secret?.symbol || ''}
+                        suffix={selectedPair?.erc20Privacy?.symbol || ''}
                         onChange={handleAmountInput}
                         disabled={isLoading || !selectedPair}
                         style={{ flex: 1 }}
@@ -171,7 +171,7 @@ const TokenUnwrapForm: React.FC<TokenUnwrapFormProps> = ({
                         type="primary"
                         onClick={handleUnwrap}
                         loading={isLoading}
-                        disabled={!unwrapAmount || isLoading || !selectedPair || !selectedPair.secret?.address}
+                        disabled={!unwrapAmount || isLoading || !selectedPair || !selectedPair.erc20Privacy?.address}
                         block
                     >
                         Unwrap to {selectedPair?.erc20.symbol}
@@ -179,9 +179,9 @@ const TokenUnwrapForm: React.FC<TokenUnwrapFormProps> = ({
                 </Space.Compact>
                 {balance && balance > BigInt(0) && (
                     <Text type="secondary">
-                        Balance: {selectedPair?.secret 
-                            ? formatBalance(formatUnits(balance, selectedPair.secret.decimals)) + ' ' + selectedPair.secret.symbol
-                            : formatBalance(formatUnits(balance, selectedPair?.erc20?.decimals || 18)) + ' ' + (selectedPair?.secret?.symbol || 'Secret Token')
+                        Balance: {selectedPair?.erc20Privacy
+                            ? formatBalance(formatUnits(balance, selectedPair.erc20Privacy.decimals)) + ' ' + selectedPair.erc20Privacy.symbol
+                            : formatBalance(formatUnits(balance, selectedPair?.erc20?.decimals || 18)) + ' ' + (selectedPair?.erc20Privacy?.symbol || 'Secret Token')
                         }
                     </Text>
                 )}

@@ -33,10 +33,7 @@ export class WorkflowContextImpl implements WorkflowContext {
             uploadFiles: 'uploadFile',
             encryptData: 'encryptData',
             uploadBoxImage: 'uploadBoxImage',
-            createNFTImage: 'createNFTImage',
-            uploadNFTImage: 'uploadNFTImage',
             metadataBox: 'metadataBox',
-            metadataNFT: 'metadataNFT',
             mint: 'mint',
             uploadResultData: 'uploadResultData'
         };
@@ -175,7 +172,7 @@ export class WorkflowContextImpl implements WorkflowContext {
 export function createWorkflowContext(
     completedSteps?: StepNameType[]
     // skippableSteps?: Set<StepNameType>, 
-    
+
 ): WorkflowContext {
     const context = new WorkflowContextImpl(
         useCreateWorkflowStore,

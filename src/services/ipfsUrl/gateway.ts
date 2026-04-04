@@ -18,13 +18,13 @@ export const network = 'https://';
 export const end = '.ipfs.w3s.link/'; // Not used, this is the fleek gateway,
 // Initialize gateway list
 const gateways: Gateway[] = [
-    // {
-    //     url: `${network}{cid}${end}`,
-    //     isHealthy: true,
-    //     lastCheck: 0,
-    //     responseTime: 0,
-    //     failureCount: 0,
-    // },
+    {
+        url: `https://tomato-adjacent-woodpecker-26.mypinata.cloud/ipfs/{cid}`,
+        isHealthy: true,
+        lastCheck: 0,
+        responseTime: 0,
+        failureCount: 0,
+    },
     {
         url: 'https://ipfs.io/ipfs/{cid}',
         isHealthy: true,

@@ -9,7 +9,7 @@ import { useUnWrapSteps } from '../hooks/useUnWrapSteps';
 const { Text, Paragraph } = Typography;
 
 export interface TokenWithdrawFormProps {
-    selectedPair: TokenPair; 
+    selectedPair: TokenPair;
     onWithdraw: (tokenAddress: `0x${string}`, amount: string) => void;
     isLoading: boolean;
 }
@@ -23,17 +23,17 @@ const TokenWithdrawForm: React.FC<TokenWithdrawFormProps> = ({
     onWithdraw,
     isLoading,
 }) => {
-    const { 
-        handleEIP712Permit, 
-        currentStep, 
-        isLoading: isReadBalanceLoading, 
-        balance, 
+    const {
+        handleEIP712Permit,
+        currentStep,
+        isLoading: isReadBalanceLoading,
+        balance,
         error: signError,
     } = useUnWrapSteps(selectedPair);
 
     // useEffect(() => {
     //     if (balance && balance > BigInt(0)) {
-    //         const decimals = selectedPair?.secret?.decimals || selectedPair?.erc20?.decimals || 18;
+    //         const decimals = selectedPair?.erc20Privacy?.decimals || selectedPair?.erc20?.decimals || 18;
     //         console.log('TokenUnwrapForm - formatted balance:', formatBalance(formatUnits(balance, decimals)));
     //     }
     // }, [balance, currentStep, isReadBalanceLoading, selectedPair]);
@@ -43,7 +43,7 @@ const TokenWithdrawForm: React.FC<TokenWithdrawFormProps> = ({
     // When switching token pair, reset input amount
     useEffect(() => {
         setWithdrawAmount('');
-    }, [selectedPair?.secret?.address]);
+    }, [selectedPair?.erc20Privacy?.address]);
 
     const handleAmountInput = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
         const value = e.target.value;
@@ -56,15 +56,15 @@ const TokenWithdrawForm: React.FC<TokenWithdrawFormProps> = ({
 
     const handleWithdrawAll = useCallback(() => {
         if (balance && balance > BigInt(0)) {
-            const decimals = selectedPair?.secret?.decimals || selectedPair?.erc20?.decimals || 18;
+            const decimals = selectedPair?.erc20Privacy?.decimals || selectedPair?.erc20?.decimals || 18;
             const formatted = formatBalance(formatUnits(balance, decimals));
             setWithdrawAmount(formatted);
-        } 
+        }
     }, [balance, selectedPair]);
 
     const handleWithdraw = useCallback(() => {
-        if (!withdrawAmount || !selectedPair || !selectedPair.secret?.address) return;
-        onWithdraw(selectedPair.secret.address, withdrawAmount);
+        if (!withdrawAmount || !selectedPair || !selectedPair.erc20Privacy?.address) return;
+        onWithdraw(selectedPair.erc20Privacy.address, withdrawAmount);
     }, [withdrawAmount, selectedPair, onWithdraw]);
 
     // If current step is EIP712Permit, display signature UI
@@ -81,7 +81,7 @@ const TokenWithdrawForm: React.FC<TokenWithdrawFormProps> = ({
                                 <Text strong>Type: View Permission</Text>
                                 <div>
                                     <Text type="secondary" style={{ fontSize: 13 }}>
-                                        Contract: {selectedPair?.secret?.address ? formatAddress(selectedPair.secret.address) : 'N/A'}
+                                        Contract: {selectedPair?.erc20Privacy?.address ? formatAddress(selectedPair.erc20Privacy.address) : 'N/A'}
                                     </Text>
                                 </div>
                             </div>
@@ -101,7 +101,7 @@ const TokenWithdrawForm: React.FC<TokenWithdrawFormProps> = ({
                                 block
                                 onClick={handleEIP712Permit}
                                 loading={isReadBalanceLoading}
-                                disabled={!selectedPair?.secret?.address}
+                                disabled={!selectedPair?.erc20Privacy?.address}
                             >
                                 Sign EIP-712 Permit
                             </Button>
@@ -138,7 +138,7 @@ const TokenWithdrawForm: React.FC<TokenWithdrawFormProps> = ({
                         message="No balance"
                         description={
                             <Text type="secondary">
-                                You don't have any {selectedPair?.secret?.symbol || 'Secret Token'} balance to withdraw.
+                                You don't have any {selectedPair?.erc20Privacy?.symbol || 'Secret Token'} balance to withdraw.
                             </Text>
                         }
                     />
@@ -153,7 +153,7 @@ const TokenWithdrawForm: React.FC<TokenWithdrawFormProps> = ({
                     <Input
                         placeholder="Amount"
                         value={withdrawAmount}
-                        suffix={selectedPair?.secret?.symbol || ''}
+                        suffix={selectedPair?.erc20Privacy?.symbol || ''}
                         onChange={handleAmountInput}
                         disabled={isLoading || !selectedPair}
                         style={{ flex: 1 }}
@@ -170,7 +170,7 @@ const TokenWithdrawForm: React.FC<TokenWithdrawFormProps> = ({
                         type="primary"
                         onClick={handleWithdraw}
                         loading={isLoading}
-                        disabled={!withdrawAmount || isLoading || !selectedPair || !selectedPair.secret?.address}
+                        disabled={!withdrawAmount || isLoading || !selectedPair || !selectedPair.erc20Privacy?.address}
                         block
                     >
                         Withdraw to Native ROSE
@@ -178,9 +178,9 @@ const TokenWithdrawForm: React.FC<TokenWithdrawFormProps> = ({
                 </Space.Compact>
                 {balance && balance > BigInt(0) && (
                     <Text type="secondary">
-                        Balance: {selectedPair?.secret 
-                            ? formatBalance(formatUnits(balance, selectedPair.secret.decimals)) + ' ' + selectedPair.secret.symbol
-                            : formatBalance(formatUnits(balance, selectedPair?.erc20?.decimals || 18)) + ' ' + (selectedPair?.secret?.symbol || 'Secret Token')
+                        Balance: {selectedPair?.erc20Privacy
+                            ? formatBalance(formatUnits(balance, selectedPair.erc20Privacy.decimals)) + ' ' + selectedPair.erc20Privacy.symbol
+                            : formatBalance(formatUnits(balance, selectedPair?.erc20?.decimals || 18)) + ' ' + (selectedPair?.erc20Privacy?.symbol || 'Secret Token')
                         }
                     </Text>
                 )}

@@ -44,27 +44,16 @@ export interface ChainConfig {
  * Contract name enumeration
  */
 export enum ContractName {
-  // Token contracts
-  OFFICIAL_TOKEN = 'OfficialToken',
-  OFFICIAL_TOKEN_SECRET = 'OfficialTokenSecret',
-  WROSE_SECRET = 'wROSE_Secret',
-  ERC20_SECRET = 'ERC20_Secret',
-  WROSE = 'wROSE',
-  // USDC_SECRET = 'ERC20Secret',
-  // WBTC_SECRET = 'WBTCSecret',
-  // WETH_SECRET = 'WETHSercet',
-
-
-  
   // Core contracts
-  TRUTH_NFT = 'TruthNFT',
+  FORWARDER = 'Forwarder',
   EXCHANGE = 'Exchange',
   FUND_MANAGER = 'FundManager',
   TRUTH_BOX = 'TruthBox',
   ADDRESS_MANAGER = 'AddressManager',
   SIWE_AUTH = 'SiweAuth',
-  USER_ID = 'UserId',
+  USER_MANAGER = 'UserManager',
 }
+
 
 /**
  * Contract address mapping type

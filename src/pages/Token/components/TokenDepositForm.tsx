@@ -3,8 +3,8 @@ import { Button, Input, Space, Typography, Alert } from 'antd';
 import { TokenPair } from '../types';
 
 /**
- * Component for Deposit operation form (Native ROSE -> wROSE.S)
- * Deposit operation form (Native ROSE -> wROSE.S)
+ * Component for Deposit operation form (Native ROSE -> wROSE.Privacy)
+ * Deposit operation form (Native ROSE -> wROSE.Privacy)
  */
 export interface TokenDepositFormProps {
     selectedPair: TokenPair; // Must be isNativeROSE = true
@@ -49,14 +49,14 @@ const TokenDepositForm: React.FC<TokenDepositFormProps> = ({
                 type="primary"
                 onClick={handleDeposit}
                 loading={isLoading}
-                disabled={!depositAmount || isLoading || !selectedPair || !selectedPair.secret?.address}
+                disabled={!depositAmount || isLoading || !selectedPair || !selectedPair.erc20Privacy?.address}
                 block
             >
-                Deposit {selectedPair.erc20.symbol} to {selectedPair?.secret?.symbol}
+                Deposit {selectedPair.erc20.symbol} to {selectedPair?.erc20Privacy?.symbol}
             </Button>
             <Alert
                 type="info"
-                message={`Deposit will convert ${selectedPair.erc20.symbol} to ${selectedPair?.secret?.symbol}`}
+                message={`Deposit will convert ${selectedPair.erc20.symbol} to ${selectedPair?.erc20Privacy?.symbol}`}
                 showIcon
             />
         </Space>

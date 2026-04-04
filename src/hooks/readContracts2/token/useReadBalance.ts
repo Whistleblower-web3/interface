@@ -1,10 +1,10 @@
 import { useState } from 'react';
 import { PermitType } from '@dapp/hooks/EIP712';
 import { useEIP712Permit } from '@dapp/hooks/EIP712/useEIP712Permit';
-import { useSupportedTokens ,TokenMetadata} from '@dapp/config/contractsConfig';
-import { 
-    useERC20, 
-    useERC20Secret 
+import { useSupportedTokens, TokenMetadata } from '@dapp/config/tokenConfig';
+import {
+    useERC20,
+    useERC20Privacy
 } from '../../readContracts/index';
 
 // export interface ReadBalanceResult {
@@ -17,8 +17,8 @@ export const useReadBalance = () => {
     const [balance, setBalance] = useState<bigint>(BigInt(0));
     const [error, setError] = useState<Error | null>(null);
 
-    const { balanceOf} = useERC20();
-    const { balanceOfWithPermit } = useERC20Secret();
+    const { balanceOf } = useERC20();
+    const { balanceOfWithPermit } = useERC20Privacy();
 
     const { getValidPermit } = useEIP712Permit();
     const supportedTokens = useSupportedTokens();
@@ -54,7 +54,7 @@ export const useReadBalance = () => {
             if (tokenMetadata?.types === 'ERC20') {
                 balance = await balanceOf(tokenAddress, owner, force);
 
-            } else if (tokenMetadata?.types === 'Secret') {
+            } else if (tokenMetadata?.types === 'Privacy') {
                 const validPermit = await getValidPermit({
                     spender: owner,
                     amount: BigInt(0),

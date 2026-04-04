@@ -29,7 +29,7 @@ export const CreateFormProvider: React.FC<CreateFormProviderProps> = ({ children
     // Initialize form, use values from Zustand store as default
     const form = useForm<CreateFormData>({
         resolver: zodResolver(createFormSchema) as any, // Type assertion to avoid type conflict between Zod and RHF
-        mode: 'onBlur', // Strict mode: validate only on blur
+        mode: 'onChange', // Real-time validation
         reValidateMode: 'onChange', // Re-validate on change after blur
         defaultValues: {
             // BoxInfo Default Values
@@ -42,7 +42,6 @@ export const CreateFormProvider: React.FC<CreateFormProviderProps> = ({ children
             event_date: boxInfoForm.event_date || '',
 
             // NFT Default Values
-            nft_owner: boxInfoForm.nft_owner || '',
             price: boxInfoForm.price || '',
             mint_method: boxInfoForm.mint_method || 'create',
 
@@ -78,10 +77,7 @@ export const CreateFormProvider: React.FC<CreateFormProviderProps> = ({ children
                 updateBoxInfoForm('event_date', formData.event_date || '');
             }
 
-            // Sync NFT Fields
-            if (formData.nft_owner !== undefined) {
-                updateBoxInfoForm('nft_owner', formData.nft_owner || '');
-            }
+
             
             if (formData.price !== undefined) {
                 updateBoxInfoForm('price', formData.price || '');
@@ -148,4 +144,3 @@ export const getFieldError = (
 
     return touched && error ? String(error.message) : undefined;
 };
-

@@ -10,10 +10,7 @@ import {
   UploadFilesOutput,
   EncryptDataOutput,
   UploadBoxImageOutput,
-  CreateNFTImageOutput,
-  UploadNFTImageOutput,
   MetadataBoxOutput,
-  MetadataNFTOutput,
   MintOutput,
   UploadResultDataOutput,
   AllStepOutputs,
@@ -29,7 +26,7 @@ interface NFTCreateState {
     box_image_list: UploadFile[];
   };
   boxInfoForm: BoxInfoFormType;
-  isTestMode:boolean; // Whether in test mode
+  isTestMode: boolean; // Whether in test mode
   // ---------input change tracking-------
   changedFields: AllInputFieldNames[];
   baselineVersion: number;
@@ -50,10 +47,7 @@ interface NFTCreateActions {
   updateUploadFilesOutput: (uploadFilesOutput: UploadFilesOutput) => void;
   updateEncryptDataOutput: (encryptDataOutput: EncryptDataOutput) => void;
   updateUploadBoxImageOutput: (uploadBoxImageOutput: UploadBoxImageOutput) => void;
-  updateCreateNFTImageOutput: (createNFTImageOutput: CreateNFTImageOutput) => void;
-  updateUploadNFTImageOutput: (uploadNFTImageOutput: UploadNFTImageOutput) => void;
   updateMetadataBoxOutput: (metadataBoxOutput: MetadataBoxOutput) => void;
-  updateMetadataNFTOutput: (metadataNFTOutput: MetadataNFTOutput) => void;
   updateMintOutput: (mintOutput: MintOutput) => void;
   updateUploadResultDataOutput: (uploadResultDataOutput: UploadResultDataOutput) => void;
 
@@ -70,7 +64,7 @@ type NFTCreateStore = NFTCreateState & NFTCreateActions;
 const initialState: NFTCreateState = {
   fileData: {
     file_list: [],
-    box_image_list: [], 
+    box_image_list: [],
   },
   boxInfoForm: initialBoxInfoForm,
   isTestMode: false,
@@ -128,25 +122,10 @@ export const useNFTCreateStore = create<NFTCreateStore>()(
           all_step_outputs: { ...state.all_step_outputs, ...uploadBoxImageOutput }
         }), false, 'updateUploadBoxImageOutput'),
 
-      updateCreateNFTImageOutput: (createNFTImageOutput: CreateNFTImageOutput) =>
-        set((state) => ({
-          all_step_outputs: { ...state.all_step_outputs, ...createNFTImageOutput }
-        }), false, 'updateCreateNFTImageOutput'),
-
-      updateUploadNFTImageOutput: (uploadNFTImageOutput: UploadNFTImageOutput) =>
-        set((state) => ({
-          all_step_outputs: { ...state.all_step_outputs, ...uploadNFTImageOutput }
-        }), false, 'updateUploadNFTImageOutput'),
-
       updateMetadataBoxOutput: (metadataBoxOutput: MetadataBoxOutput) =>
         set((state) => ({
           all_step_outputs: { ...state.all_step_outputs, ...metadataBoxOutput }
         }), false, 'updateMetadataBoxOutput'),
-
-      updateMetadataNFTOutput: (metadataNFTOutput: MetadataNFTOutput) =>
-        set((state) => ({
-          all_step_outputs: { ...state.all_step_outputs, ...metadataNFTOutput }
-        }), false, 'updateMetadataNFTOutput'),
 
       updateMintOutput: (mintOutput: MintOutput) =>
         set((state) => ({

@@ -2,11 +2,12 @@ import {
     useWaitForTransactionReceipt,
     useWriteContract
 } from 'wagmi';
+import { Abi } from 'viem';
 import { useEffect } from 'react';
-import { ContractConfig } from '@dapp/config/contractsConfig';
 
 interface WriteContractConfig {
-    contract: ContractConfig,
+    contractAddress: `0x${string}`;
+    abi: Abi;
     functionName: string;
     args: any[];
 }
@@ -26,7 +27,7 @@ interface WriteContractResult {
 
 export const useWriteCustorm = (): WriteContractResult => {
     const {
-        writeContractAsync,  
+        writeContractAsync,
         data: hash,         // 
         error,             // 
         isPending,         // Whether the transaction is pending, waiting for wallet confirmation
@@ -43,8 +44,8 @@ export const useWriteCustorm = (): WriteContractResult => {
     const writeCustorm = async (config: WriteContractConfig) => {
         try {
             const result = await writeContractAsync({
-                address: config.contract.address,
-                abi: config.contract.abi,
+                address: config.contractAddress,
+                abi: config.abi,
                 functionName: config.functionName,
                 args: config.args,
             });

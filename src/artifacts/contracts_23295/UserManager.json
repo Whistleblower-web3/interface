@@ -1,0 +1,358 @@
+[
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "addrManager_",
+        "type": "address"
+      },
+      {
+        "internalType": "bytes",
+        "name": "pers_",
+        "type": "bytes"
+      }
+    ],
+    "stateMutability": "nonpayable",
+    "type": "constructor"
+  },
+  {
+    "inputs": [],
+    "name": "AmountIsZero",
+    "type": "error"
+  },
+  {
+    "inputs": [],
+    "name": "ApprovalFailed",
+    "type": "error"
+  },
+  {
+    "inputs": [],
+    "name": "AuctionOver",
+    "type": "error"
+  },
+  {
+    "inputs": [],
+    "name": "AvailableBuyer",
+    "type": "error"
+  },
+  {
+    "inputs": [],
+    "name": "BoxNotExists",
+    "type": "error"
+  },
+  {
+    "inputs": [],
+    "name": "DeadlineIsOver",
+    "type": "error"
+  },
+  {
+    "inputs": [],
+    "name": "DeadlineNotOver",
+    "type": "error"
+  },
+  {
+    "inputs": [],
+    "name": "EmptyBoxInfoCID",
+    "type": "error"
+  },
+  {
+    "inputs": [],
+    "name": "EmptyIdentitySalt",
+    "type": "error"
+  },
+  {
+    "inputs": [],
+    "name": "EmptyKey",
+    "type": "error"
+  },
+  {
+    "inputs": [],
+    "name": "EmptyList",
+    "type": "error"
+  },
+  {
+    "inputs": [],
+    "name": "EmptyPrice",
+    "type": "error"
+  },
+  {
+    "inputs": [],
+    "name": "EmptyTokenCID",
+    "type": "error"
+  },
+  {
+    "inputs": [],
+    "name": "EmptyUserId",
+    "type": "error"
+  },
+  {
+    "inputs": [],
+    "name": "InBlacklist",
+    "type": "error"
+  },
+  {
+    "inputs": [],
+    "name": "InvalidCaller",
+    "type": "error"
+  },
+  {
+    "inputs": [],
+    "name": "InvalidContractAddress",
+    "type": "error"
+  },
+  {
+    "inputs": [],
+    "name": "InvalidDeadline",
+    "type": "error"
+  },
+  {
+    "inputs": [],
+    "name": "InvalidERC20Interface",
+    "type": "error"
+  },
+  {
+    "inputs": [],
+    "name": "InvalidImplementation",
+    "type": "error"
+  },
+  {
+    "inputs": [],
+    "name": "InvalidPeriod",
+    "type": "error"
+  },
+  {
+    "inputs": [],
+    "name": "InvalidRate",
+    "type": "error"
+  },
+  {
+    "inputs": [],
+    "name": "InvalidSeconds",
+    "type": "error"
+  },
+  {
+    "inputs": [],
+    "name": "InvalidStatus",
+    "type": "error"
+  },
+  {
+    "inputs": [],
+    "name": "InvalidToken",
+    "type": "error"
+  },
+  {
+    "inputs": [],
+    "name": "NotAdmin",
+    "type": "error"
+  },
+  {
+    "inputs": [],
+    "name": "NotAdminOrDAO",
+    "type": "error"
+  },
+  {
+    "inputs": [],
+    "name": "NotBuyer",
+    "type": "error"
+  },
+  {
+    "inputs": [],
+    "name": "NotDAO",
+    "type": "error"
+  },
+  {
+    "inputs": [],
+    "name": "NotInBlacklist",
+    "type": "error"
+  },
+  {
+    "inputs": [],
+    "name": "NotInSecrecy",
+    "type": "error"
+  },
+  {
+    "inputs": [],
+    "name": "NotInWindowPeriod",
+    "type": "error"
+  },
+  {
+    "inputs": [],
+    "name": "NotMinter",
+    "type": "error"
+  },
+  {
+    "inputs": [],
+    "name": "NotProjectCaller",
+    "type": "error"
+  },
+  {
+    "inputs": [],
+    "name": "PublicTimeNotEnd",
+    "type": "error"
+  },
+  {
+    "inputs": [],
+    "name": "RefundPermitTrue",
+    "type": "error"
+  },
+  {
+    "inputs": [],
+    "name": "TokenAlreadyExists",
+    "type": "error"
+  },
+  {
+    "inputs": [],
+    "name": "TokenNotExists",
+    "type": "error"
+  },
+  {
+    "inputs": [],
+    "name": "TokenNotSupported",
+    "type": "error"
+  },
+  {
+    "inputs": [],
+    "name": "WithdrawError",
+    "type": "error"
+  },
+  {
+    "inputs": [],
+    "name": "ZeroAddress",
+    "type": "error"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": false,
+        "internalType": "address",
+        "name": "user",
+        "type": "address"
+      },
+      {
+        "indexed": false,
+        "internalType": "bool",
+        "name": "status",
+        "type": "bool"
+      }
+    ],
+    "name": "Blacklisted",
+    "type": "event"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "user_",
+        "type": "address"
+      }
+    ],
+    "name": "addBlacklist",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "user_",
+        "type": "address"
+      }
+    ],
+    "name": "getUserId",
+    "outputs": [
+      {
+        "internalType": "bytes32",
+        "name": "",
+        "type": "bytes32"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "user_",
+        "type": "address"
+      }
+    ],
+    "name": "isBlacklisted",
+    "outputs": [
+      {
+        "internalType": "bool",
+        "name": "",
+        "type": "bool"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "bytes",
+        "name": "siweToken_",
+        "type": "bytes"
+      }
+    ],
+    "name": "myUserId",
+    "outputs": [
+      {
+        "internalType": "bytes32",
+        "name": "",
+        "type": "bytes32"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "user_",
+        "type": "address"
+      }
+    ],
+    "name": "removeBlacklist",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "setAddress",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "addrManager_",
+        "type": "address"
+      }
+    ],
+    "name": "setAddressManager",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "admin_",
+        "type": "address"
+      }
+    ],
+    "name": "setAdmin",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  }
+]

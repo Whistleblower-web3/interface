@@ -1,4 +1,4 @@
-﻿import { WorkflowStep, WorkflowPayload } from '../core/types';
+import { WorkflowStep, WorkflowPayload } from '../core/types';
 import { EncryptDataOutput } from '../../types/stepType';
 import { CryptionService } from '@dapp/services/cryption';
 
@@ -37,6 +37,7 @@ export function createEncryptDataStep(): WorkflowStep<WorkflowPayload, EncryptDa
       });
 
       if (input.boxInfo.mint_method === 'createAndPublish') {
+        const now = new Date();
         const empty: EncryptDataOutput = {
           encryption_slices_metadata_cid: {
             encryption_data: '',
@@ -50,6 +51,10 @@ export function createEncryptDataStep(): WorkflowStep<WorkflowPayload, EncryptDa
           key_pair: {
             private_key_minter: '',
             public_key_minter: '',
+          },
+          current_time: {
+            create_date: now.toISOString(),
+            timestamp: now.getTime(),
           },
         };
         context.updateStore(stores => {
@@ -102,6 +107,10 @@ export function createEncryptDataStep(): WorkflowStep<WorkflowPayload, EncryptDa
         key_pair: {
           private_key_minter: keyPair.privateKey_bytes,
           public_key_minter: keyPair.publicKey_bytes,
+        },
+        current_time: {
+          create_date: new Date().toISOString(),
+          timestamp: Date.now(),
         },
       };
 

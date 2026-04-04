@@ -1,8 +1,11 @@
 import { MetadataBoxType } from "@dapp/types/typesDapp/metadata/metadataBox";
 import { BoxBasicDataType, BoxUserDataType } from "@dapp/types/typesDapp/contracts/truthBox";
 // import { BoxData } from '@dapp/pages/Profile/types/profile.types';
-import image from "@assets/nft/nft-light-1.jpg"
-import image2 from "@assets/nft/nft-light-2.jpg"
+// import image from "@assets/nft/nft-light-1.jpg"
+// import image2 from "@assets/nft/nft-light-2.jpg"
+
+const image = '/nft/nft-light-1.jpg';
+const image2 = '/nft/nft-light-2.jpg';
 
 export interface TestBoxType extends MetadataBoxType, BoxBasicDataType, BoxUserDataType {
 

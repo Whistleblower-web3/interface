@@ -5,6 +5,7 @@ import { Dropdown, Space, Typography, MenuProps, Button } from 'antd';
 import { UserOutlined, LogoutOutlined, ProfileOutlined } from '@ant-design/icons';
 import { useNavigate } from 'react-router-dom';
 import { useAccount } from 'wagmi';
+import { twMerge } from 'tailwind-merge';
 import { ConnectButton } from '@dapp/contexts/web3Context/connectButton';
 import { useSiweAuth } from '@dapp/hooks/SiweAuth';
 import { useGetMyUserId } from '@dapp/hooks/readContracts2/useGetMyUserId';
@@ -179,7 +180,7 @@ const LoginDropdown: React.FC<LoginDropdownProps> = ({
     // If the wallet is not connected, display ConnectButtonComponent
     if (!isConnected) {
         return (
-            <div className={className}>
+            <div className={twMerge("flex-shrink-0 whitespace-nowrap", className)}>
                 <ConnectButton />
             </div>
         );
@@ -189,7 +190,7 @@ const LoginDropdown: React.FC<LoginDropdownProps> = ({
     // ConnectButtonComponent handles wallet functionality (opens AccountModal)
     // Dropdown menu provides SIWE and Profile related functionality
     return (
-        <div ref={dropdownRef} className={className} style={{ display: 'inline-flex', alignItems: 'center', gap: 8, position: 'relative' }}>
+        <div ref={dropdownRef} className={twMerge("flex-shrink-0 whitespace-nowrap", className)} style={{ display: 'inline-flex', alignItems: 'center', gap: 8, position: 'relative' }}>
             <ConnectButton showBalance={false} accountStatus="address"/>
             {needsSiweLogin ? (
                 <Button

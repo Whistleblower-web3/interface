@@ -21,18 +21,19 @@ const getWithdrawLabel = (type: string | null) => {
 };
 
 const ProfileWithdrawPanel: React.FC<ProfileWithdrawPanelProps> = () => {
-    const { withdraw, isLoading, isSuccessed, error } = useWithdraw();
+    const { withdraw, isLoading, isSuccessed, error, reset } = useWithdraw();
     const { withdrawData, canClaim, totalAmount , resetWithdrawData} = useWithdrawStore();
 
     // Reset withdraw data when withdrawal succeeds (delay a bit for UI feedback)
     useEffect(() => {
         if (isSuccessed) {
             const timer = setTimeout(() => {
+                reset();
                 resetWithdrawData();
             }, 2000);
             return () => clearTimeout(timer);
         }
-    }, [isSuccessed, resetWithdrawData]);
+    }, [isSuccessed, resetWithdrawData, reset]);
 
     const hasSelection = canClaim();
     const method = withdrawData.selectedClaimMethod as SupportedMethod | null;
@@ -49,10 +50,12 @@ const ProfileWithdrawPanel: React.FC<ProfileWithdrawPanelProps> = () => {
         : 'Please select the funds to withdraw';
 
     const handleWithdraw = () => {
+        reset();
         withdraw().catch((err) => console.error('withdraw failed', err));
     };
 
     const handleCancel = () => {
+        reset();
         resetWithdrawData();
     };
 

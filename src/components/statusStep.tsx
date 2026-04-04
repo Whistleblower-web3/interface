@@ -3,8 +3,8 @@
 import React, { useEffect } from 'react';
 import { cn } from '@/lib/utils';
 import StatusStepFlow from './base/statusStepFlow';
-import { BoxStatus,} from '@dapp/types/typesDapp/contracts/truthBox';
-import { ArrowLeft, ArrowRight } from 'lucide-react';
+import { BoxStatus, } from '@dapp/types/typesDapp/contracts/truthBox';
+// import { ArrowLeft, ArrowRight } from 'lucide-react';
 
 interface StatusStepProps {
     status: BoxStatus;
@@ -17,7 +17,7 @@ interface StatusStepProps {
     enableHorizontalScroll?: boolean;
 }
 
-const StatusStep: React.FC<StatusStepProps> = ({ 
+const StatusStep: React.FC<StatusStepProps> = ({
     status,
     listedMode,
     className,
@@ -92,7 +92,7 @@ const StatusStep: React.FC<StatusStepProps> = ({
 
 
     return (
-        <div 
+        <div
             className={cn(
                 "bg-background relative",
                 className
@@ -100,22 +100,20 @@ const StatusStep: React.FC<StatusStepProps> = ({
             style={{ width: '100%', position: 'relative' }}
         >
             {/* Arrow indicator - fixed outside container */}
-            {enableHorizontalScroll && showIndicator && (
+            {/* {enableHorizontalScroll && showIndicator && (
                 <>
-                    {/* Left arrow indicator */}
                     <div className="absolute left-0 top-0 w-8 h-full bg-gradient-to-r from-background via-background/80 to-transparent z-10 flex items-center justify-start pl-1 pointer-events-none">
                         <ArrowLeft className="w-4 h-4 text-muted-foreground/60 animate-pulse" />
                     </div>
                     
-                    {/* Right arrow indicator */}
                     <div className="absolute right-0 top-0 w-8 h-full bg-gradient-to-l from-background via-background/80 to-transparent z-10 flex items-center justify-end pr-1 pointer-events-none">
                         <ArrowRight className="w-4 h-4 text-muted-foreground/60 animate-pulse" />
                     </div>
                 </>
-            )}
-            
+            )} */}
+
             {/* Inner scroll container */}
-            <div 
+            <div
                 className={cn(
                     enableHorizontalScroll && "status-step-flow-container" // Apply scroll bar style
                 )}

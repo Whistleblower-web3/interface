@@ -4,17 +4,17 @@ import { BoxRoleType } from '@/types/typesDapp/roles';
 import { useBoxDetailStore } from '../store/boxDetailStore';
 import { useBoxDetailContext } from '../contexts/BoxDetailContext';
 import { useAccountStore } from '@dapp/store/accountStore';
-import { CHAIN_ID } from '@dapp/config/contractsConfig';
+import { CHAIN_ID } from '@dapp/config/chainConfig';
 import { useSiweAuth } from '@dapp/hooks/SiweAuth';
 import { Address_Admin } from '@/constants';
 
 export const useLisenerRoles = () => {
     const { box, biddersIds } = useBoxDetailContext();
-    const { address, isConnected,chainId} = useWalletContext() || {};
+    const { address, isConnected, chainId } = useWalletContext() || {};
     const { isValidateSession } = useSiweAuth();
 
-    const { 
-        updateUserState, 
+    const {
+        updateUserState,
     } = useBoxDetailStore();
 
     // Use selector to listen for current account's userId changes
@@ -23,7 +23,7 @@ export const useLisenerRoles = () => {
         if (!targetChainId || !address) {
             return '';
         }
-        
+
         const chainAccounts = state.accounts[targetChainId];
         if (!chainAccounts) {
             return '';
@@ -80,7 +80,7 @@ export const useLisenerRoles = () => {
                 };
                 if (userIdStr === completerId) roles.push('Completer');
             }
-            
+
             if (roles.length === 0) roles.push('Other');
 
             return roles;

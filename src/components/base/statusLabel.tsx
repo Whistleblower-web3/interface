@@ -57,7 +57,7 @@ export default function StatusLabel({
         <div
             className={cn(
                 'inline-flex items-center justify-center',
-                'font-mono font-medium whitespace-nowrap',
+                'font-medium whitespace-nowrap',
                 'rounded-md border',
                 getStatusColorClass(),
                 getSizeClass(),

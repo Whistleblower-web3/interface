@@ -1,15 +1,15 @@
 import { useMemo } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { formatUnits } from 'viem';
-import { CHAIN_CONFIG } from '@dapp/config/contractsConfig';
-import { useSupportedTokens } from '@dapp/config/contractsConfig';
-import type { TokenMetadata } from '@dapp/config/contractsConfig';
+import { CHAIN_CONFIG } from '@dapp/config/chainConfig';
+import { useSupportedTokens } from '@dapp/config/tokenConfig';
+import type { TokenMetadata } from '@dapp/config/tokenConfig';
 import {
     query_UserRewardsData,
     query_UserWithdrawsData,
     type UserRewardData,
     type UserWithdrawData,
-} from '@dapp/services/supabase/userData';
+} from '@/services/supabase/userFundsQuery';
 
 type RewardCategory = 'Minter' | 'Helper';
 export type RewardWithdrawMethod = 'withdrawMinterRewards' | 'withdrawHelperRewards';

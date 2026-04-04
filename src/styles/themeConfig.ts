@@ -20,16 +20,16 @@ export interface CustomThemeConfig {
 }
 
 // Default purple theme configuration
-export const purpleTheme: CustomThemeConfig = {
-  name: 'purple',
-  displayName: 'Purple Theme',
+export const defaultTheme: CustomThemeConfig = {
+  name: 'default',
+  displayName: 'Default Theme',
   token: {
-    colorPrimary: "#c6a9fc",
-    colorInfo: "#c6a9fc",
-    colorPrimaryHover: '#bb9ee1',
+    colorPrimary: "#88cf04ff",
+    colorInfo: "#d39613ff",
+    colorPrimaryHover: '#90db04ff',
     colorSuccess: '#c0fc29',
     colorError: '#f53a3d',
-    colorLink: '#17bc93',
+    colorLink: '#6fbc17ff',
     wireframe: false,
     borderRadius: 8
   },
@@ -38,26 +38,10 @@ export const purpleTheme: CustomThemeConfig = {
   ]
 };
 
-// Default theme configuration
-export const defaultTheme: CustomThemeConfig = {
-  name: 'default',
-  displayName: 'Default Theme',
-  token: {
-    colorPrimary: '#1677ff',
-    colorInfo: '#1677ff',
-    colorSuccess: '#52c41a',
-    colorError: '#ff4d4f',
-    colorLink: '#1677ff',
-    wireframe: false,
-    borderRadius: 6
-  },
-  algorithm: []
-};
 
 // List of all available themes
 export const availableThemes: CustomThemeConfig[] = [
   defaultTheme,
-  purpleTheme
 ];
 
 // Get theme configuration by theme name

@@ -3,11 +3,6 @@ import { useCreateForm } from '../context/CreateFormContext';
 /**
  * Data Validation Hook (Refactored)
  * Uses React Hook Form for validation
- * 
- * Key Improvements:
- * - Remove manual field checks
- * - Use RHF's trigger() method to trigger all field validations
- * - Remove someInputIsEmpty state
  */
 export const useCheckData = () => {
   const form = useCreateForm();

@@ -1,0 +1,758 @@
+[
+  {
+    "inputs": [
+      {
+        "internalType": "string",
+        "name": "name",
+        "type": "string"
+      },
+      {
+        "internalType": "address",
+        "name": "addrManager_",
+        "type": "address"
+      }
+    ],
+    "stateMutability": "nonpayable",
+    "type": "constructor"
+  },
+  {
+    "inputs": [],
+    "name": "AmountIsZero",
+    "type": "error"
+  },
+  {
+    "inputs": [],
+    "name": "ApprovalFailed",
+    "type": "error"
+  },
+  {
+    "inputs": [],
+    "name": "AuctionOver",
+    "type": "error"
+  },
+  {
+    "inputs": [],
+    "name": "AvailableBuyer",
+    "type": "error"
+  },
+  {
+    "inputs": [],
+    "name": "BoxNotExists",
+    "type": "error"
+  },
+  {
+    "inputs": [],
+    "name": "ContractPaused",
+    "type": "error"
+  },
+  {
+    "inputs": [],
+    "name": "DeadlineIsOver",
+    "type": "error"
+  },
+  {
+    "inputs": [],
+    "name": "DeadlineNotOver",
+    "type": "error"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint48",
+        "name": "deadline",
+        "type": "uint48"
+      }
+    ],
+    "name": "ERC2771ForwarderExpiredRequest",
+    "type": "error"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "signer",
+        "type": "address"
+      },
+      {
+        "internalType": "address",
+        "name": "from",
+        "type": "address"
+      }
+    ],
+    "name": "ERC2771ForwarderInvalidSigner",
+    "type": "error"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "requestedValue",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "msgValue",
+        "type": "uint256"
+      }
+    ],
+    "name": "ERC2771ForwarderMismatchedValue",
+    "type": "error"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "target",
+        "type": "address"
+      },
+      {
+        "internalType": "address",
+        "name": "forwarder",
+        "type": "address"
+      }
+    ],
+    "name": "ERC2771UntrustfulTarget",
+    "type": "error"
+  },
+  {
+    "inputs": [],
+    "name": "EmptyBoxInfoCID",
+    "type": "error"
+  },
+  {
+    "inputs": [],
+    "name": "EmptyKey",
+    "type": "error"
+  },
+  {
+    "inputs": [],
+    "name": "EmptyList",
+    "type": "error"
+  },
+  {
+    "inputs": [],
+    "name": "EmptyPrice",
+    "type": "error"
+  },
+  {
+    "inputs": [],
+    "name": "EmptyTokenCID",
+    "type": "error"
+  },
+  {
+    "inputs": [],
+    "name": "EmptyUserId",
+    "type": "error"
+  },
+  {
+    "inputs": [],
+    "name": "EnforcedPause",
+    "type": "error"
+  },
+  {
+    "inputs": [],
+    "name": "ExpectedPause",
+    "type": "error"
+  },
+  {
+    "inputs": [],
+    "name": "FailedCall",
+    "type": "error"
+  },
+  {
+    "inputs": [],
+    "name": "GasLimitExceeded",
+    "type": "error"
+  },
+  {
+    "inputs": [],
+    "name": "InBlacklist",
+    "type": "error"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "balance",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "needed",
+        "type": "uint256"
+      }
+    ],
+    "name": "InsufficientBalance",
+    "type": "error"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "account",
+        "type": "address"
+      },
+      {
+        "internalType": "uint256",
+        "name": "currentNonce",
+        "type": "uint256"
+      }
+    ],
+    "name": "InvalidAccountNonce",
+    "type": "error"
+  },
+  {
+    "inputs": [],
+    "name": "InvalidCaller",
+    "type": "error"
+  },
+  {
+    "inputs": [],
+    "name": "InvalidContractAddress",
+    "type": "error"
+  },
+  {
+    "inputs": [],
+    "name": "InvalidDeadline",
+    "type": "error"
+  },
+  {
+    "inputs": [],
+    "name": "InvalidERC20Interface",
+    "type": "error"
+  },
+  {
+    "inputs": [],
+    "name": "InvalidImplementation",
+    "type": "error"
+  },
+  {
+    "inputs": [],
+    "name": "InvalidPeriod",
+    "type": "error"
+  },
+  {
+    "inputs": [],
+    "name": "InvalidRate",
+    "type": "error"
+  },
+  {
+    "inputs": [],
+    "name": "InvalidSeconds",
+    "type": "error"
+  },
+  {
+    "inputs": [],
+    "name": "InvalidShortString",
+    "type": "error"
+  },
+  {
+    "inputs": [],
+    "name": "InvalidStatus",
+    "type": "error"
+  },
+  {
+    "inputs": [],
+    "name": "NotAdmin",
+    "type": "error"
+  },
+  {
+    "inputs": [],
+    "name": "NotAdminOrDAO",
+    "type": "error"
+  },
+  {
+    "inputs": [],
+    "name": "NotBuyer",
+    "type": "error"
+  },
+  {
+    "inputs": [],
+    "name": "NotDAO",
+    "type": "error"
+  },
+  {
+    "inputs": [],
+    "name": "NotInBlacklist",
+    "type": "error"
+  },
+  {
+    "inputs": [],
+    "name": "NotInSecrecy",
+    "type": "error"
+  },
+  {
+    "inputs": [],
+    "name": "NotInWindowPeriod",
+    "type": "error"
+  },
+  {
+    "inputs": [],
+    "name": "NotMinter",
+    "type": "error"
+  },
+  {
+    "inputs": [],
+    "name": "NotProjectCaller",
+    "type": "error"
+  },
+  {
+    "inputs": [],
+    "name": "NotWhitelistedTarget",
+    "type": "error"
+  },
+  {
+    "inputs": [],
+    "name": "PublicTimeNotEnd",
+    "type": "error"
+  },
+  {
+    "inputs": [],
+    "name": "RefundPermitTrue",
+    "type": "error"
+  },
+  {
+    "inputs": [],
+    "name": "RelayerIsBlacklisted",
+    "type": "error"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "string",
+        "name": "str",
+        "type": "string"
+      }
+    ],
+    "name": "StringTooLong",
+    "type": "error"
+  },
+  {
+    "inputs": [],
+    "name": "TokenAlreadyExists",
+    "type": "error"
+  },
+  {
+    "inputs": [],
+    "name": "TokenNotExists",
+    "type": "error"
+  },
+  {
+    "inputs": [],
+    "name": "TokenNotSupported",
+    "type": "error"
+  },
+  {
+    "inputs": [],
+    "name": "WithdrawError",
+    "type": "error"
+  },
+  {
+    "inputs": [],
+    "name": "ZeroAddress",
+    "type": "error"
+  },
+  {
+    "anonymous": false,
+    "inputs": [],
+    "name": "EIP712DomainChanged",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": true,
+        "internalType": "address",
+        "name": "signer",
+        "type": "address"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "nonce",
+        "type": "uint256"
+      },
+      {
+        "indexed": false,
+        "internalType": "bool",
+        "name": "success",
+        "type": "bool"
+      }
+    ],
+    "name": "ExecutedForwardRequest",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": false,
+        "internalType": "address",
+        "name": "account",
+        "type": "address"
+      }
+    ],
+    "name": "Paused",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": false,
+        "internalType": "address",
+        "name": "account",
+        "type": "address"
+      }
+    ],
+    "name": "Unpaused",
+    "type": "event"
+  },
+  {
+    "inputs": [],
+    "name": "eip712Domain",
+    "outputs": [
+      {
+        "internalType": "bytes1",
+        "name": "fields",
+        "type": "bytes1"
+      },
+      {
+        "internalType": "string",
+        "name": "name",
+        "type": "string"
+      },
+      {
+        "internalType": "string",
+        "name": "version",
+        "type": "string"
+      },
+      {
+        "internalType": "uint256",
+        "name": "chainId",
+        "type": "uint256"
+      },
+      {
+        "internalType": "address",
+        "name": "verifyingContract",
+        "type": "address"
+      },
+      {
+        "internalType": "bytes32",
+        "name": "salt",
+        "type": "bytes32"
+      },
+      {
+        "internalType": "uint256[]",
+        "name": "extensions",
+        "type": "uint256[]"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "components": [
+          {
+            "internalType": "address",
+            "name": "from",
+            "type": "address"
+          },
+          {
+            "internalType": "address",
+            "name": "to",
+            "type": "address"
+          },
+          {
+            "internalType": "uint256",
+            "name": "value",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "gas",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint48",
+            "name": "deadline",
+            "type": "uint48"
+          },
+          {
+            "internalType": "bytes",
+            "name": "data",
+            "type": "bytes"
+          },
+          {
+            "internalType": "bytes",
+            "name": "signature",
+            "type": "bytes"
+          }
+        ],
+        "internalType": "struct ERC2771Forwarder.ForwardRequestData",
+        "name": "request",
+        "type": "tuple"
+      }
+    ],
+    "name": "execute",
+    "outputs": [],
+    "stateMutability": "payable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "components": [
+          {
+            "internalType": "address",
+            "name": "from",
+            "type": "address"
+          },
+          {
+            "internalType": "address",
+            "name": "to",
+            "type": "address"
+          },
+          {
+            "internalType": "uint256",
+            "name": "value",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "gas",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint48",
+            "name": "deadline",
+            "type": "uint48"
+          },
+          {
+            "internalType": "bytes",
+            "name": "data",
+            "type": "bytes"
+          },
+          {
+            "internalType": "bytes",
+            "name": "signature",
+            "type": "bytes"
+          }
+        ],
+        "internalType": "struct ERC2771Forwarder.ForwardRequestData[]",
+        "name": "requests",
+        "type": "tuple[]"
+      },
+      {
+        "internalType": "address payable",
+        "name": "refundReceiver",
+        "type": "address"
+      }
+    ],
+    "name": "executeBatch",
+    "outputs": [],
+    "stateMutability": "payable",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "getMaxGasLimit",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "target_",
+        "type": "address"
+      }
+    ],
+    "name": "isTargetWhitelisted",
+    "outputs": [
+      {
+        "internalType": "bool",
+        "name": "",
+        "type": "bool"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "owner",
+        "type": "address"
+      }
+    ],
+    "name": "nonces",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "pause",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "paused",
+    "outputs": [
+      {
+        "internalType": "bool",
+        "name": "",
+        "type": "bool"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "setAddress",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "addrManager_",
+        "type": "address"
+      }
+    ],
+    "name": "setAddressManager",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "admin_",
+        "type": "address"
+      }
+    ],
+    "name": "setAdmin",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "maxGasLimit_",
+        "type": "uint256"
+      }
+    ],
+    "name": "setMaxGasLimit",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "target_",
+        "type": "address"
+      },
+      {
+        "internalType": "bool",
+        "name": "status_",
+        "type": "bool"
+      }
+    ],
+    "name": "setTargetStatus",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "unpause",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "components": [
+          {
+            "internalType": "address",
+            "name": "from",
+            "type": "address"
+          },
+          {
+            "internalType": "address",
+            "name": "to",
+            "type": "address"
+          },
+          {
+            "internalType": "uint256",
+            "name": "value",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "gas",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint48",
+            "name": "deadline",
+            "type": "uint48"
+          },
+          {
+            "internalType": "bytes",
+            "name": "data",
+            "type": "bytes"
+          },
+          {
+            "internalType": "bytes",
+            "name": "signature",
+            "type": "bytes"
+          }
+        ],
+        "internalType": "struct ERC2771Forwarder.ForwardRequestData",
+        "name": "request",
+        "type": "tuple"
+      }
+    ],
+    "name": "verify",
+    "outputs": [
+      {
+        "internalType": "bool",
+        "name": "",
+        "type": "bool"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  }
+]
