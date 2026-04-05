@@ -1,10 +1,11 @@
 import { useEffect, useState } from 'react';
 import {
     useWaitForTransactionReceipt,
-    useWriteContract
+    useWriteContract,
+    useConfig
 } from 'wagmi';
+import { waitForTransactionReceipt } from 'wagmi/actions';
 import { ContractConfig } from '@dapp/config/contractsConfig';
-// import { useButtonInteractionStore } from '@dapp/store/buttonInteractionStore';
 import { FunctionNameType_FundManager } from '@dapp/types/typesDapp/contracts';
 import { useWalletContext } from '@dapp/contexts/web3Context/useAccount/WalletContext';
 import { useAccountStore } from '@dapp/store/accountStore';
@@ -30,19 +31,19 @@ interface WriteContractResult {
 }
 
 export const useWriteCustormV3 = (): WriteContractResult => {
-
+    const config = useConfig();
     const {
         writeContractAsync,
-        data: hash,         // 
-        error,             // 
-        isPending,         // is loading, waiting for wallet to pack
-        isError,           // is error, boolean value
-        isSuccess,         // success send transaction
-        status,            // isPending、isError、isSuccess 
-        reset             // reset state function
+        data: hash,
+        error,
+        isPending,
+        isError,
+        isSuccess,
+        status,
+        reset
     } = useWriteContract();
 
-    const { isSuccess: isSuccessed, isError: isReceiptError, error: receiptError } = useWaitForTransactionReceipt({
+    const { isSuccess: isSuccessed, isError: isReceiptError, error: receiptError, isLoading: isReceiptLoading } = useWaitForTransactionReceipt({
         hash,
     });
 
@@ -53,43 +54,48 @@ export const useWriteCustormV3 = (): WriteContractResult => {
     const addWithdrawInteraction = useAccountStore(state => state.addWithdrawInteraction);
 
     const writeCustormV3 = async (
-        config: WriteContractConfig
+        contractConfig: WriteContractConfig
     ) => {
-        const functionName = config.functionName as FunctionNameType_FundManager;
+        const functionName = contractConfig.functionName as FunctionNameType_FundManager;
         setFunctionName(functionName);
-        // TODO
-        setTokenAddress(config.tokenAddress);
+        setTokenAddress(contractConfig.tokenAddress);
 
         try {
-            const result = await writeContractAsync({
-                address: config.contract.address,
-                abi: config.contract.abi,
-                functionName: config.functionName,
-                args: config.args,
+            const txHash = await writeContractAsync({
+                address: contractConfig.contract.address,
+                abi: contractConfig.contract.abi,
+                functionName: contractConfig.functionName,
+                args: contractConfig.args,
             });
-            return result;
-        } catch (err) {
+
+            const receipt = await waitForTransactionReceipt(config, {
+                hash: txHash,
+                confirmations: 1,
+            });
+
+            if (receipt.status === 'reverted') {
+                throw new Error('Transaction reverted on-chain.');
+            }
+
+            return txHash;
+        } catch (err: any) {
             console.error('Contract write failed:', err);
             throw err;
-        } finally {
         }
     };
 
     useEffect(() => {
         if (isSuccessed && functionName && address && tokenAddress) {
             addWithdrawInteraction(functionName, tokenAddress, hash);
-        } else if (isError) {
-            // DO NOT auto reset here, or the error message vanishes in UI
-            // reset();
         }
-    }, [isSuccessed, functionName, address, tokenAddress, hash, addWithdrawInteraction, isError, reset]);
+    }, [isSuccessed, functionName, address, tokenAddress, hash, addWithdrawInteraction]);
 
     return {
         writeCustormV3,
         hash,
         error: error || receiptError,
         isPending,
-        isLoading: status !== 'idle' && status !== "error" && !isSuccessed && !isReceiptError,
+        isLoading: isPending || isReceiptLoading,
         isSuccess,
         status,
         isError: isError || isReceiptError,

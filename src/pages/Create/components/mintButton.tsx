@@ -1,8 +1,8 @@
-import React, { useMemo } from 'react';
+import React from 'react';
 import { Button } from 'antd';
 import { useWalletContext } from '@dapp/contexts/web3Context/useAccount/WalletContext';
 import { useCreateWorkflowStore } from '../store/useCreateWorkflowStore';
-import { useCreateForm } from '../context/CreateFormContext';
+import { useTanStackForm } from '../context/TanStackFormContext';
 import TextP from '@/components/base/text_p';
 
 interface MintButtonProps {
@@ -11,42 +11,43 @@ interface MintButtonProps {
 
 const MintButton: React.FC<MintButtonProps> = ({ onClick }) => {
   const { address } = useWalletContext();
-  const form = useCreateForm();
-  const { formState } = form;
-  const workflowStatus = useCreateWorkflowStore(state => state.workflowStatus);
+  const form = useTanStackForm();
   
-  const { errors, isValid } = formState;
-  const hasKnownErrors = Object.keys(errors).length > 0;
-
-  const isButtonDisabled = 
-    !isValid ||
-    !address || 
-    workflowStatus === 'processing';
-
-  const buttonText = useMemo(() => {
-    if (!address) return 'Connect Wallet';
-    if (workflowStatus === 'processing') return 'Creating...';
-    return 'Create';
-  }, [address, workflowStatus]);
+  const workflowStatus = useCreateWorkflowStore(state => state.workflowStatus);
 
   return (
     <div className="flex flex-col w-full items-center gap-2">
-      <Button 
-        size="large" 
-        type="primary"
-        onClick={onClick} 
-        loading={workflowStatus === 'processing'} 
-        disabled={isButtonDisabled}
-        className="w-full"
-      >
-        {buttonText}
-      </Button>
-      
-      {hasKnownErrors && (
-        <TextP size="sm" type="error">
-          {Object.keys(errors).length} field(s) need attention - Click to see all errors
-        </TextP>
-      )}
+      <form.Subscribe selector={(state) => [state.canSubmit, state.isSubmitting, state.isValidating]}>
+        {([canSubmit, isSubmitting, isValidating]) => {
+          const isProcessing = workflowStatus === 'processing' || isSubmitting;
+          const isButtonDisabled = !canSubmit || !address || isProcessing;
+
+          let buttonText = 'Create';
+          if (!address) buttonText = 'Connect Wallet';
+          else if (isProcessing) buttonText = 'Creating...';
+
+          return (
+            <>
+              <Button 
+                size="large" 
+                type="primary"
+                onClick={onClick} 
+                loading={isProcessing || isValidating} 
+                disabled={isButtonDisabled}
+                className="h-12 w-full text-lg font-bold"
+              >
+                {buttonText}
+              </Button>
+              
+              {!canSubmit && address && (
+                <TextP size="sm" type="error">
+                  Please complete all required fields correctly
+                </TextP>
+              )}
+            </>
+          );
+        }}
+      </form.Subscribe>
     </div>
   );
 };

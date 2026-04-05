@@ -1,170 +1,77 @@
-/**
- * Input Change Tracker Hook
- *
- * Purpose: Track changes in user input and mark corresponding change states.
- *
- * Design Principles:
- * 1. Only listen to input data changes
- * 2. Only update change flags (no cascading updates of other states)
- * 3. Use shallow dependencies to avoid unnecessary triggers
- * 4. Fine-grained field change tracking, supports initialization/reset
- */
-
-import { useEffect, useRef } from 'react';
-import { useNFTCreateStore } from '../store/useNFTCreateStore';
+import { useEffect } from 'react';
+import { useStore } from '@tanstack/react-form';
+import { useNFTCreateStore, WorkflowInputSnapshot } from '../store/useNFTCreateStore';
 import { AllInputFieldNames, BOX_INFO_FIELDS } from '../types/stateType';
+import { FormApi } from '@tanstack/react-form';
 
-type BoxInfoSnapshot = ReturnType<typeof cloneBoxInfo>;
+/**
+ * useInputChangeTracker
+ * 
+ * Real-time comparison between current form values and the baseline (locked at workflow start).
+ * Updates changedFields in the NFTCreateStore.
+ */
+export const useInputChangeTracker = (form: FormApi<any, any, any, any, any, any, any, any, any, any, any>) => {
+    const nftStore = useNFTCreateStore();
+    const values = useStore(form.store, (state) => state.values);
+    const baseline = nftStore.baselineInputs;
 
+    useEffect(() => {
+        // If no baseline exists, it means we haven't started any workflow yet (or it's fully finished).
+        // In this case, changedFields should be empty as there's nothing to "restart" or "skip".
+        if (!baseline || !baseline.boxInfoForm) {
+            if (nftStore.changedFields.length > 0) {
+                nftStore.setChangedFields([]);
+            }
+            return;
+        }
 
-export const useInputChangeTracker = () => {
-  const nftStore = useNFTCreateStore();
+        const changed: AllInputFieldNames[] = [];
 
-  const initialBoxInfoRef = useRef<BoxInfoSnapshot>(cloneBoxInfo(nftStore.boxInfoForm));
-  const initialFileListLengthRef = useRef(nftStore.fileData.file_list.length);
-  const initialImageListLengthRef = useRef(nftStore.fileData.box_image_list.length);
+        // 1. Check Box Info Fields
+        BOX_INFO_FIELDS.forEach((field) => {
+            const currentVal = (values as any)[field];
+            const baselineVal = (baseline.boxInfoForm as any)[field];
 
-  const boxInfoInitialisedRef = useRef(false);
-  const fileListInitialisedRef = useRef(false);
-  const imageListInitialisedRef = useRef(false);
+            if (!isEqual(currentVal, baselineVal)) {
+                changed.push(field);
+            }
+        });
 
-  const changedFieldsRef = useRef<Set<AllInputFieldNames>>(new Set());
+        // 2. Check File List
+        const currentFileListUid = (values.file_list || []).map((f: any) => f.uid || `${f.name}-${f.size}`).join(',');
+        if (currentFileListUid !== baseline.fileListUid) {
+            changed.push('file_list');
+        }
 
-  const updateChangedFields = (mutator: (draft: Set<AllInputFieldNames>) => void) => {
-    const next = new Set(changedFieldsRef.current);
-    mutator(next);
-    if (!areSetsEqual(next, changedFieldsRef.current)) {
-      changedFieldsRef.current = next;
-      nftStore.setChangedFields(Array.from(next));
-    }
-  };
+        // 3. Check Box Image
+        const currentBoxImageUid = (values.box_image_list || []).length > 0 
+            ? (values.box_image_list[0] as any).uid || `${values.box_image_list[0].name}-${values.box_image_list[0].size}` 
+            : '';
+        if (currentBoxImageUid !== baseline.boxImageUid) {
+            changed.push('box_image_list');
+        }
 
-  const commitBaseline = (options: { syncStore?: boolean } = {}) => {
-    const state = useNFTCreateStore.getState();
-    initialBoxInfoRef.current = cloneBoxInfo(state.boxInfoForm);
-    initialFileListLengthRef.current = state.fileData.file_list.length;
-    initialImageListLengthRef.current = state.fileData.box_image_list.length;
-    boxInfoInitialisedRef.current = true;
-    fileListInitialisedRef.current = true;
-    imageListInitialisedRef.current = true;
-    if (changedFieldsRef.current.size > 0) {
-      changedFieldsRef.current.clear();
-    }
-    if (options.syncStore !== false && state.changedFields.length > 0) {
-      state.setChangedFields([]);
-    }
-  };
-
-  const lastBaselineVersionRef = useRef(nftStore.baselineVersion);
-
-  useEffect(() => {
-    if (lastBaselineVersionRef.current !== nftStore.baselineVersion) {
-      lastBaselineVersionRef.current = nftStore.baselineVersion;
-      commitBaseline();
-    }
-  }, [nftStore.baselineVersion]);
-
-  // Listen to BoxInfo fields
-  useEffect(() => {
-    const current = nftStore.boxInfoForm;
-    const initial = initialBoxInfoRef.current;
-
-    if (!boxInfoInitialisedRef.current) {
-      boxInfoInitialisedRef.current = true;
-      initialBoxInfoRef.current = cloneBoxInfo(current);
-      return;
-    }
-
-    const changedFields = BOX_INFO_FIELDS.filter((field) => !isFieldEqual(current[field as keyof BoxInfoSnapshot], initial[field as keyof BoxInfoSnapshot]));
-
-    updateChangedFields((draft) => {
-      BOX_INFO_FIELDS.forEach((field) => draft.delete(field));
-      changedFields.forEach((field) => draft.add(field));
-    });
-  }, [
-    nftStore.boxInfoForm.title,
-    nftStore.boxInfoForm.description,
-    nftStore.boxInfoForm.type_of_crime,
-    nftStore.boxInfoForm.label,
-    nftStore.boxInfoForm.country,
-    nftStore.boxInfoForm.state,
-    nftStore.boxInfoForm.event_date,
-    nftStore.boxInfoForm.price,
-    nftStore.boxInfoForm.mint_method,
-  ]);
-
-  // Listen to file list
-  useEffect(() => {
-    const currentLength = nftStore.fileData.file_list.length;
-
-    if (!fileListInitialisedRef.current) {
-      fileListInitialisedRef.current = true;
-      initialFileListLengthRef.current = currentLength;
-      return;
-    }
-
-    updateChangedFields((draft) => {
-      if (currentLength !== initialFileListLengthRef.current) {
-        draft.add('file_list');
-      } else {
-        draft.delete('file_list');
-      }
-    });
-  }, [nftStore.fileData.file_list.length]);
-
-  // Listen to image list
-  useEffect(() => {
-    const currentLength = nftStore.fileData.box_image_list.length;
-
-    if (!imageListInitialisedRef.current) {
-      imageListInitialisedRef.current = true;
-      initialImageListLengthRef.current = currentLength;
-      return;
-    }
-
-    updateChangedFields((draft) => {
-      if (currentLength !== initialImageListLengthRef.current) {
-        draft.add('box_image_list');
-      } else {
-        draft.delete('box_image_list');
-      }
-    });
-  }, [nftStore.fileData.box_image_list.length]);
-
-  const resetTracking = () => {
-    commitBaseline();
-  };
-
-  return {
-    resetTracking,
-    commitBaseline,
-    changedFields: Array.from(changedFieldsRef.current),
-  };
+        // Update if different
+        const sortedChanged = [...changed].sort();
+        const sortedStoreChanged = [...nftStore.changedFields].sort();
+        
+        if (JSON.stringify(sortedChanged) !== JSON.stringify(sortedStoreChanged)) {
+            nftStore.setChangedFields(changed);
+        }
+    }, [values, baseline, nftStore.setChangedFields]);
 };
 
-function cloneBoxInfo(boxInfo: ReturnType<typeof useNFTCreateStore.getState>['boxInfoForm']) {
-  return {
-    ...boxInfo,
-    label: Array.isArray(boxInfo.label) ? [...boxInfo.label] : [],
-  };
-}
-
-// This function compares if two values are equal
-function isFieldEqual(current: any, initial: any) {
-  if (Array.isArray(current) && Array.isArray(initial)) {
-    if (current.length !== initial.length) return false;
-    for (let i = 0; i < current.length; i++) {
-      if (current[i] !== initial[i]) return false;
+/**
+ * Deep equality helper for arrays and primitives
+ */
+function isEqual(a: any, b: any): boolean {
+    if (a === b) return true;
+    if (Array.isArray(a) && Array.isArray(b)) {
+        if (a.length !== b.length) return false;
+        return a.every((val, index) => isEqual(val, b[index]));
     }
-    return true;
-  }
-  return current === initial;
-}
-
-function areSetsEqual(a: Set<AllInputFieldNames>, b: Set<AllInputFieldNames>) {
-  if (a.size !== b.size) return false;
-  for (const value of a) {
-    if (!b.has(value)) return false;
-  }
-  return true;
+    if (typeof a === 'object' && a !== null && typeof b === 'object' && b !== null) {
+      return JSON.stringify(a) === JSON.stringify(b);
+    }
+    return false;
 }

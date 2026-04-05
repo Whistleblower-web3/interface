@@ -5,11 +5,11 @@ import { z } from 'zod';
  * Define all field validation rules using Zod
  */
 
-// Title validation: 40-150 characters, first character cannot be a number
+// Title validation: 50-150 characters, first character cannot be a number
 export const titleSchema = z
     .string()
     .min(1, 'Please enter the title')
-    .min(40, 'The title must be at least 40 characters long')
+    .min(50, 'The title must be at least 50 characters long')
     .max(150, 'The title must not exceed 150 characters')
     .refine(
         (val) => val.length === 0 || isNaN(Number(val[0])),
@@ -33,27 +33,16 @@ export const typeOfCrimeSchema = z
         'The first character cannot be a number'
     );
 
-// Price validation: must be >= 0.001 (when required)
-export const priceSchema = z
-    .string()
-    .refine(
-        (val) => {
-            // Allow empty string (handled by conditional validation in createFormSchema)
-            if (!val || val === '') return true;
-
-            const num = Number(val);
-            return !isNaN(num) && num >= 0.001;
-        },
-        'Price must be greater than or equal to 0.001'
-    );
+// Price validation (Basic string, validation logic in superRefine)
+export const priceSchema = z.string();
 
 // Country validation
 export const countrySchema = z
     .string()
     .min(1, 'Please select a country');
 
-// State/Province validation (optional)
-export const stateSchema = z.string().optional();
+// State/Province validation
+export const stateSchema = z.string();
 
 // Event Date validation
 export const eventDateSchema = z
@@ -68,30 +57,22 @@ export const labelSchema = z
 
 // Image file validation
 export const boxImageListSchema = z
-    .any()
+    .array(z.any())
     .refine(
-        (files) => {
-            if (!files || !Array.isArray(files)) return false;
-            return files.length > 0;
-        },
+        (files) => files.length > 0,
         'Please upload an image'
     );
 
 // Attachment file validation (Required - at least 1 file)
 export const fileListSchema = z
-    .any()
+    .array(z.any())
     .refine(
-        (files) => {
-            if (!files || !Array.isArray(files)) return false;
-            return files.length > 0;
-        },
+        (files) => files.length > 0,
         'Please upload at least one evidence file'
     );
 
 // Mint Method validation
-export const mintMethodSchema = z
-    .enum(['create', 'createAndPublish'])
-    .default('create');
+export const mintMethodSchema = z.enum(['create', 'createAndPublish']);
 
 // Complete Form Validation Schema (with conditional validation)
 export const createFormSchema = z.object({
@@ -111,18 +92,27 @@ export const createFormSchema = z.object({
     // File related
     box_image_list: boxImageListSchema,
     file_list: fileListSchema,
-}).refine(
-    (data) => {
-        // Conditional validation: price is required when mintMethod is 'create'
+}).superRefine(
+    (data, ctx) => {
+        // Detailed conditional validation: price is required only when mintMethod is 'create'
         if (data.mint_method === 'create') {
-            return data.price && data.price.trim() !== '';
+            if (!data.price || data.price.trim() === '') {
+                ctx.addIssue({
+                    code: z.ZodIssueCode.custom,
+                    message: 'Price is required when mint method is "Storing"',
+                    path: ['price'],
+                });
+            } else {
+                const num = Number(data.price);
+                if (isNaN(num) || num < 0.001) {
+                    ctx.addIssue({
+                        code: z.ZodIssueCode.custom,
+                        message: 'Price must be greater than or equal to 0.001',
+                        path: ['price'],
+                    });
+                }
+            }
         }
-        // price is optional when mintMethod is 'createAndPublish'
-        return true;
-    },
-    {
-        message: 'Price is required when mint method is "Storing"',
-        path: ['price'], // Error message shown on price field
     }
 );
 

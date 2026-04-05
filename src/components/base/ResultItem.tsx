@@ -8,14 +8,14 @@ import {
     XCircle, 
     Loader2, 
     Circle, 
-    ChevronRight, 
-    AlertCircle 
+    FastForward,
 } from "lucide-react";
 
 export interface ResultItemProps {
     title: string;
     isLoading?: boolean;
     isComplete?: boolean;
+    isSkipped?: boolean;
     error?: string | null;
     onClick?: () => void;
     isClickable?: boolean;
@@ -27,12 +27,13 @@ export interface ResultItemProps {
 
 /**
  * Modernized result item component
- * Using shadcn/ui design system,符合项目整体风格
+ * Using shadcn/ui design system, conforms to the overall project style.
  */
 const ResultItem: React.FC<ResultItemProps> = ({
     title,
     isLoading = false,
     isComplete = false,
+    isSkipped = false,
     error = null,
     onClick,
     isClickable = false,
@@ -49,6 +50,8 @@ const ResultItem: React.FC<ResultItemProps> = ({
 
         if (isComplete) {
             return <CheckCircle className={cn(iconClasses, "text-primary")} />;
+        } else if (isSkipped) {
+            return <FastForward className={cn(iconClasses, "text-muted-foreground")} />;
         } else if (error) {
             return <XCircle className={cn(iconClasses, "text-destructive")} />;
         } else if (isLoading) {
@@ -62,6 +65,8 @@ const ResultItem: React.FC<ResultItemProps> = ({
     const getStatusText = () => {
         if (isComplete) {
             return "Success";
+        } else if (isSkipped) {
+            return "Skipped";
         } else if (error) {
             return "Error";
         } else if (isLoading) {
@@ -75,6 +80,8 @@ const ResultItem: React.FC<ResultItemProps> = ({
     const getStatusTextColor = () => {
         if (isComplete) {
             return "text-green-600";
+        } else if (isSkipped) {
+            return "text-muted-foreground";
         } else if (error) {
             return "text-destructive";
         } else if (isLoading) {
@@ -135,7 +142,8 @@ const ResultItem: React.FC<ResultItemProps> = ({
                         "focus-within:ring-2 focus-within:ring-ring focus-within:ring-offset-2"
                     ],
                     !isClickable && error && "border-destructive/50 bg-destructive/5",
-                    !isClickable && isComplete && "border-green-500/50 bg-green-500/5"
+                    !isClickable && isComplete && "border-green-500/50 bg-green-500/5",
+                    !isClickable && isSkipped && "border-muted/50 bg-muted/5"
                 )}
                 onClick={isClickable ? onClick : undefined}
             >
@@ -160,28 +168,17 @@ const ResultItem: React.FC<ResultItemProps> = ({
                             {getStatusText()}
                         </span>
                     </div>
-                    
-                    {isClickable && (
-                        <ChevronRight className="h-4 w-4 text-muted-foreground transition-colors hover:text-primary" />
-                    )}
                 </div>
             </div>
             
             {/* Error message */}
             {error && (
-                
                 <Alert 
                     message='Error' 
+                    description={error}
                     type="error" 
                     showIcon={true}
                 />
-                // <div className="flex items-start gap-3 p-3 bg-destructive/5 border border-destructive/20 rounded-md">
-                //     <AlertCircle className="h-4 w-4 text-destructive shrink-0 mt-0.5" />
-                //     <div className="flex-1 min-w-0">
-                //         <p className="text-sm font-medium text-destructive">Error Details</p>
-                //         <p className="text-xs text-destructive/80 mt-1 break-words overflow-wrap-anywhere">{error}</p>
-                //     </div>
-                // </div>
             )}
         </div>
     );

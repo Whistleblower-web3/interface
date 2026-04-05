@@ -10,8 +10,7 @@ export interface BoxInfoType {
     type_of_crime: string;
     label: string[];
     title: string;
-    nft_image: string;
-    box_image:string;
+    box_image: string;
     country: string;
     state: string;
     description: string;
@@ -25,7 +24,7 @@ export interface FileInfoType {
     file_list: string[]; // Store file CIDs of multiple chunks
 }
 
-export interface MetadataBoxType extends BoxInfoType, ProjectDataType, FileInfoType, EncryptionDataType {}
+export interface MetadataBoxType extends BoxInfoType, ProjectDataType, FileInfoType, EncryptionDataType { }
 
 export const initialMetadataBox: MetadataBoxType = {
     project: projectDataStore.project,
@@ -35,7 +34,6 @@ export const initialMetadataBox: MetadataBoxType = {
     type_of_crime: "",
     label: [],
     title: "",
-    nft_image: "ipfs://",
     box_image: "ipfs://",
     country: "",
     state: "",

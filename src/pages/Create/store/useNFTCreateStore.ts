@@ -6,55 +6,54 @@ import {
   AllInputFieldNames,
 } from '../types/stateType';
 import {
-  CompressFilesOutput,
-  UploadFilesOutput,
-  EncryptDataOutput,
-  UploadBoxImageOutput,
-  MetadataBoxOutput,
-  MintOutput,
-  UploadResultDataOutput,
   AllStepOutputs,
   createInitialAllStepOutputs,
 } from '../types/stepType';
 import type { UploadFile } from 'antd/es/upload/interface';
 
+/**
+ * Snapshot of inputs to determine if a workflow step needs re-running
+ */
+export interface WorkflowInputSnapshot {
+  boxInfoForm: BoxInfoFormType;
+  fileListUid: string;       // Condensed string of file UIDs + Size
+  boxImageUid: string;      // Condensed string of box image UID + Size
+}
+
 // NFT Creation Process State Type
 interface NFTCreateState {
-  // Input data-------
+  // Input data
   fileData: {
     file_list: UploadFile[];
     box_image_list: UploadFile[];
   };
   boxInfoForm: BoxInfoFormType;
-  isTestMode: boolean; // Whether in test mode
-  // ---------input change tracking-------
+  isTestMode: boolean;
+
+  // Generated Data
+  all_step_outputs: AllStepOutputs;
+
+  // Snapshots for optimization (Smart Skip)
+  baselineInputs: Partial<WorkflowInputSnapshot>;
   changedFields: AllInputFieldNames[];
   baselineVersion: number;
-
-  // ------ Workflow Generated Data --------
-  all_step_outputs: AllStepOutputs;
 }
 
 // Define State Modification Methods
 interface NFTCreateActions {
-  // File Management
-  updateFileList: (fileList: UploadFile[]) => void;
-  updateBoxImageList: (boxImageList: UploadFile[]) => void;
-  updateBoxInfoForm: (field: keyof BoxInfoFormType, value: any) => void;
-  setChangedFields: (fields: AllInputFieldNames[]) => void;
-  // Workflow Generated Data
-  updateCompressFilesOutput: (compressFilesOutput: CompressFilesOutput) => void;
-  updateUploadFilesOutput: (uploadFilesOutput: UploadFilesOutput) => void;
-  updateEncryptDataOutput: (encryptDataOutput: EncryptDataOutput) => void;
-  updateUploadBoxImageOutput: (uploadBoxImageOutput: UploadBoxImageOutput) => void;
-  updateMetadataBoxOutput: (metadataBoxOutput: MetadataBoxOutput) => void;
-  updateMintOutput: (mintOutput: MintOutput) => void;
-  updateUploadResultDataOutput: (uploadResultDataOutput: UploadResultDataOutput) => void;
+  // Batch update for file data
+  updateFileData: (data: Partial<NFTCreateState['fileData']>) => void;
+  // Batch update for box info form
+  setBoxInfoForm: (data: Partial<BoxInfoFormType>) => void;
 
+  // Workflow Generated Data Updates
+  updateStepOutput: (output: Partial<AllStepOutputs>) => void;
+  setBaselineInputs: (snapshot: Partial<WorkflowInputSnapshot>) => void;
+  setChangedFields: (fields: AllInputFieldNames[]) => void;
+  commitBaseline: () => void;
 
   // Reset
   resetAllCreateStore: () => void;
-  markBaseline: () => void;
 }
 
 // Combine State and Actions
@@ -67,11 +66,11 @@ const initialState: NFTCreateState = {
     box_image_list: [],
   },
   boxInfoForm: initialBoxInfoForm,
-  isTestMode: false,
-  // Changed fields list (fine-grained tracking)
+  isTestMode: import.meta.env.VITE_CREATE_TEST_MODE === 'true',
+  all_step_outputs: createInitialAllStepOutputs(),
+  baselineInputs: {},
   changedFields: [],
   baselineVersion: 0,
-  all_step_outputs: createInitialAllStepOutputs(),
 };
 
 // Create Store
@@ -79,82 +78,52 @@ export const useNFTCreateStore = create<NFTCreateStore>()(
   devtools(
     (set) => ({
       ...initialState,
-      // File Management Methods
-      updateFileList: (file_list) =>
-        set((state) => ({
-          fileData: { ...state.fileData, file_list }
-        }), false, 'updateFileList'),
 
-      updateBoxImageList: (box_image_list) =>
+      updateFileData: (info) =>
         set((state) => ({
-          fileData: { ...state.fileData, box_image_list }
-        }), false, 'updateBoxImageList'),
+          fileData: { ...state.fileData, ...info }
+        }), false, 'updateFileData'),
 
-      // BoxInfo Update Methods
-      updateBoxInfoForm: (field, value) =>
+      setBoxInfoForm: (info) =>
         set((state) => ({
-          boxInfoForm: { ...state.boxInfoForm, [field]: value }
-        }), false, 'updateBoxInfoForm'),
+          boxInfoForm: { ...state.boxInfoForm, ...info }
+        }), false, 'setBoxInfoForm'),
 
-      setChangedFields: (fields: AllInputFieldNames[]) =>
+      updateStepOutput: (output) =>
         set((state) => ({
-          ...state,
-          changedFields: fields,
+          all_step_outputs: { ...state.all_step_outputs, ...output }
+        }), false, 'updateStepOutput'),
+
+      setBaselineInputs: (snapshot) =>
+        set((state) => ({
+          baselineInputs: snapshot
+        }), false, 'setBaselineInputs'),
+
+      setChangedFields: (fields) =>
+        set((state) => ({
+          changedFields: fields
         }), false, 'setChangedFields'),
 
-      updateCompressFilesOutput: (compressFilesOutput: CompressFilesOutput) =>
-        set((state) => ({
-          all_step_outputs: { ...state.all_step_outputs, ...compressFilesOutput }
-        }), false, 'updateCompressFilesOutput'),
-
-      updateUploadFilesOutput: (uploadFilesOutput: UploadFilesOutput) =>
-        set((state) => ({
-          all_step_outputs: { ...state.all_step_outputs, ...uploadFilesOutput }
-        }), false, 'updateUploadFilesOutput'),
-
-      updateEncryptDataOutput: (encryptDataOutput: EncryptDataOutput) =>
-        set((state) => ({
-          all_step_outputs: { ...state.all_step_outputs, ...encryptDataOutput }
-        }), false, 'updateEncryptDataOutput'),
-
-      updateUploadBoxImageOutput: (uploadBoxImageOutput: UploadBoxImageOutput) =>
-        set((state) => ({
-          all_step_outputs: { ...state.all_step_outputs, ...uploadBoxImageOutput }
-        }), false, 'updateUploadBoxImageOutput'),
-
-      updateMetadataBoxOutput: (metadataBoxOutput: MetadataBoxOutput) =>
-        set((state) => ({
-          all_step_outputs: { ...state.all_step_outputs, ...metadataBoxOutput }
-        }), false, 'updateMetadataBoxOutput'),
-
-      updateMintOutput: (mintOutput: MintOutput) =>
-        set((state) => ({
-          all_step_outputs: { ...state.all_step_outputs, ...mintOutput }
-        }), false, 'updateMintOutput'),
-
-      updateUploadResultDataOutput: (uploadResultDataOutput: UploadResultDataOutput) =>
-        set((state) => ({
-          all_step_outputs: { ...state.all_step_outputs, ...uploadResultDataOutput }
-        }), false, 'updateUploadResultDataOutput'),
+      commitBaseline: () =>
+        set((state) => {
+          const currentSnapshot: WorkflowInputSnapshot = {
+            boxInfoForm: { ...state.boxInfoForm },
+            fileListUid: state.fileData.file_list.map(f => (f as any).uid || `${f.name}-${f.size}`).join(','),
+            boxImageUid: state.fileData.box_image_list.length > 0 ? (state.fileData.box_image_list[0] as any).uid || `${state.fileData.box_image_list[0].name}-${state.fileData.box_image_list[0].size}` : '',
+          };
+          return {
+            baselineInputs: currentSnapshot,
+            changedFields: [], // Reset change tracking after committing baseline
+            baselineVersion: state.baselineVersion + 1
+          };
+        }, false, 'commitBaseline'),
 
       resetAllCreateStore: () =>
-        set((state) => ({
-          fileData: {
-            file_list: [],
-            box_image_list: [],
-          },
-          boxInfoForm: initialBoxInfoForm,
-          changedFields: [],
-          baselineVersion: state.baselineVersion + 1,
-          all_step_outputs: createInitialAllStepOutputs(),
+        set(() => ({
+          ...initialState,
         }), false, 'resetAllCreateStore'),
 
-      markBaseline: () =>
-        set((state) => ({
-          baselineVersion: state.baselineVersion + 1,
-        }), false, 'markBaseline'),
-
     }),
-    { name: 'nft-create-store' }
+    { name: 'nft-create-store-v2' }
   )
-); 
+);

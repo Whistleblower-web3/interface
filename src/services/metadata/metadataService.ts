@@ -13,7 +13,7 @@ import {
   initialResultData,
   ResultDataType,
 } from '@dapp/types/typesDapp/metadata/resultData';
-import { CIDIsExitingType } from '@dapp/types/typesDapp/otherTypes';
+// import { CIDIsExitingType } from '@dapp/types/typesDapp/otherTypes';
 
 
 export const metadataService = {
@@ -91,7 +91,6 @@ export const metadataService = {
         create_date: allStepOutputs.current_time.create_date,
         timestamp: Number(allStepOutputs.current_time.timestamp), // Convert to number
         // Image Data
-        nft_image: `ipfs://${allStepOutputs.box_image_cid}`,
         box_image: `ipfs://${allStepOutputs.box_image_cid}`,
         // Mint Method
         mint_method: boxInfoForm.mint_method,
@@ -116,17 +115,13 @@ export const metadataService = {
 
   createResultData: (
     mint_method: MintMethodType,
-    file_cid_list: string[],
-    cid_list: CIDIsExitingType[],
+    cid_list: string[],
     is_success: boolean,
     timestamp: string,
   ) => {
     try {
       if (!timestamp) {
         throw (' timestamp is empty!');
-      }
-      if (file_cid_list.length === 0) {
-        throw (' file_cid_list is empty!');
       }
       if (cid_list.length === 0) {
         throw (' cid_list is empty!');
@@ -135,10 +130,10 @@ export const metadataService = {
       const resultData: ResultDataType = {
         ...initialResultData,
         mint_method: mint_method,
-        file_cid_list: file_cid_list,
+        // file_cid_list: file_cid_list,
         timestamp: timestamp,
         is_success: is_success,
-        cid_list: cid_list.map(cid => cid.cid),
+        cid_list: cid_list,
       };
       return resultData;
     } catch (error) {

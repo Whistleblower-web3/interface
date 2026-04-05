@@ -13,7 +13,6 @@
   </p>
 </div>
 
-
 # WikiTruth DApp
 
 cloudflare deploy site:[https://app.wikitruth.xyz]

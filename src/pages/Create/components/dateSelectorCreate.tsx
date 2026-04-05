@@ -1,51 +1,52 @@
 'use client'
-import React, { useCallback } from 'react';
-import { useCreateForm } from '../context/CreateFormContext';
-import { DateSelector, DateDataType } from '@/components/dateSelector';
+
+import React from 'react';
+import { useTanStackForm } from '../context/TanStackFormContext';
+import { DateSelector } from '@/components/dateSelector';
 import { cn } from '@/lib/utils';
 import TextP from '@/components/base/text_p';
 import TextTitle from '@/components/base/text_title';
+import { eventDateSchema } from '../validation/schemas';
 
 interface DateSelectorCreateProps {
     className?: string;
 }
 
-const DateSelectorCreate: React.FC<DateSelectorCreateProps> = ({
-    className
-}) => {
-    const form = useCreateForm();
-    const { formState } = form;
-    const eventDateValue = form.watch('event_date');
-    
-    // Get error status (only show after touched)
-    const error = formState.touchedFields.event_date 
-        ? formState.errors.event_date?.message 
-        : undefined;
+const DateSelectorCreate: React.FC<DateSelectorCreateProps> = ({ className }) => {
+    const form = useTanStackForm();
 
-    const handleDateChange = useCallback((date: DateDataType) => {
-        form.setValue('event_date', date.value, {
-            shouldValidate: true,
-            shouldDirty: true,
-            shouldTouch: true,
-        });
-    }, [form]);
+    const getErrorMessage = (errors: any[]) => {
+        return errors.map(err => typeof err === 'string' ? err : (err?.message || String(err))).join(', ');
+    };
 
     return (
-        <div className={cn("flex flex-col w-full lg:max-w-[300px] space-y-2", className)}>
-            <TextTitle>Event Date:</TextTitle>
-            <div className="w-full">
-                <DateSelector
-                    onSuccess={handleDateChange}
-                    value={eventDateValue || undefined}
-                />
-            </div>
-            
-            {error && (
-                <TextP size="sm" type="error">
-                    {error}
-                </TextP>
-            )}
-        </div>
+        <form.Field 
+            name="event_date"
+            validators={{
+                onChange: eventDateSchema,
+                onBlur: eventDateSchema,
+            }}
+        >
+            {(field) => {
+                const hasError = field.state.meta.isTouched && field.state.meta.errors.length > 0;
+                return (
+                    <div className={cn("flex flex-col w-full lg:max-w-[300px] space-y-2", className)}>
+                        <TextTitle>Event Date:</TextTitle>
+                        <div className="w-full">
+                            <DateSelector
+                                onSuccess={(date) => field.handleChange(date.value)}
+                                value={field.state.value || undefined}
+                            />
+                        </div>
+                        {hasError && (
+                            <TextP size="sm" type="error">
+                                {getErrorMessage(field.state.meta.errors)}
+                            </TextP>
+                        )}
+                    </div>
+                );
+            }}
+        </form.Field>
     );
 };
 

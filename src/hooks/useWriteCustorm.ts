@@ -1,7 +1,9 @@
 import {
     useWaitForTransactionReceipt,
-    useWriteContract
+    useWriteContract,
+    useConfig
 } from 'wagmi';
+import { waitForTransactionReceipt } from 'wagmi/actions';
 import { Abi } from 'viem';
 import { useEffect } from 'react';
 
@@ -26,6 +28,7 @@ interface WriteContractResult {
 }
 
 export const useWriteCustorm = (): WriteContractResult => {
+    const config = useConfig();
     const {
         writeContractAsync,
         data: hash,         // 
@@ -37,21 +40,36 @@ export const useWriteCustorm = (): WriteContractResult => {
         reset             // Function to reset the status
     } = useWriteContract();
 
-    const { isSuccess: isSuccessed } = useWaitForTransactionReceipt({
+    // Still use the hook for UI state updates if needed
+    const { isSuccess: isSuccessed, isLoading: isReceiptLoading } = useWaitForTransactionReceipt({
         hash,
     });
 
-    const writeCustorm = async (config: WriteContractConfig) => {
+    const writeCustorm = async (contractConfig: WriteContractConfig) => {
         try {
-            const result = await writeContractAsync({
-                address: config.contractAddress,
-                abi: config.abi,
-                functionName: config.functionName,
-                args: config.args,
+            // 1. Send the transaction and get the hash
+            const txHash = await writeContractAsync({
+                address: contractConfig.contractAddress,
+                abi: contractConfig.abi,
+                functionName: contractConfig.functionName,
+                args: contractConfig.args,
             });
-            return result;
-        } catch (err) {
-            console.error('Contract write failed:', err);
+
+            // 2. Wait for the transaction to be confirmed on-chain
+            const receipt = await waitForTransactionReceipt(config, {
+                hash: txHash,
+                confirmations: 1, // At least 1 block confirmation
+            });
+
+            // Check if the transaction reverted
+            if (receipt.status === 'reverted') {
+                throw new Error('Transaction reverted on-chain.');
+            }
+
+            console.log('Contract write successful and confirmed:', receipt.transactionHash);
+            return txHash;
+        } catch (err: any) {
+            console.error('Contract write failed or reverted:', err);
             throw err;
         }
     };
@@ -71,17 +89,7 @@ export const useWriteCustorm = (): WriteContractResult => {
         isError,
         status,
         isSuccessed,
-        isLoading: status !== 'idle' && status !== "error" && !isSuccessed,
+        isLoading: isPending || isReceiptLoading,
         reset,
     };
 };
-
-// const { write, hash, error, isPending } = useWriteCustorm();
-
-// const handleAction1 = async () => {
-//     await write({
-//         contract: Contract1,
-//         functionName: 'function1',
-//         args: [arg1, arg2]
-//     });
-// };

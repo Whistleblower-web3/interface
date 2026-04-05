@@ -1,7 +1,4 @@
 import {
-    // EncryptionSlicesMetadataCIDType,
-    // EncryptionFileCIDType,
-    // EncryptionPasswordType,
     EncryptionResultType,
 } from '@dapp/types/typesDapp/metadata/encryption';
 
@@ -46,7 +43,6 @@ export interface MetadataBoxOutput {
 
 export interface MintOutput {
     transaction_hash: string;
-    token_id?: string;
 }
 
 export interface UploadResultDataOutput {
@@ -91,6 +87,5 @@ export const createInitialAllStepOutputs = (): AllStepOutputs => ({
     metadata_box_file: null,
     metadata_box_cid: '',
     transaction_hash: '',
-    token_id: '',
     result_data_cid: '',
 });
