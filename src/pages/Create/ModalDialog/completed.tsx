@@ -84,7 +84,7 @@ const ModalDialogCompletedCreate: React.FC<ModalProps> = ({ onClose }) => {
                 <Space direction="vertical" size="middle" style={{ width: '100%' }}>
                     {/* Main Info Card */}
                     <div className='p-3 md:p-4 rounded-md md:rounded-lg bg-primary/5 border border-primary/10 space-y-3 md:space-y-4'>
-                        <div className='text-base md:text-lg text-white/80'>
+                        <div className='text-base md:text-lg text-white/80 line-clamp-3'>
                             {boxInfo.title}
                         </div>
 

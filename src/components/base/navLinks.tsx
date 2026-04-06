@@ -68,7 +68,7 @@ const NavLinks: React.FC<NavLinksProps> = ({ links, className }) => {
         to={link.href}
         onClick={onNavigate}
         className={twMerge(
-          'text-[13px] font-medium tracking-wider transition-all relative py-1',
+          'text-[13px] font-medium tracking-wider transition-all relative py-1 text-white/80',
           active ? 'text-primary' : ' hover:text-white',
           rowClass
         )}

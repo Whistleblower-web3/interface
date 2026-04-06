@@ -10,9 +10,9 @@ import { FormApi } from '@tanstack/react-form';
  * Real-time comparison between current form values and the baseline (locked at workflow start).
  * Updates changedFields in the NFTCreateStore.
  */
-export const useInputChangeTracker = (form: FormApi<any, any, any, any, any, any, any, any, any, any, any>) => {
+export const useInputChangeTracker = (form: any) => {
     const nftStore = useNFTCreateStore();
-    const values = useStore(form.store, (state) => state.values);
+    const values = useStore(form.store, (state: any) => state.values);
     const baseline = nftStore.baselineInputs;
 
     useEffect(() => {

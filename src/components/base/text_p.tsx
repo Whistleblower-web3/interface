@@ -1,11 +1,14 @@
 import { ReactNode, useMemo } from "react";
 import { cn } from "@/lib/utils";
 
+export type TextPSize = 'xs' | 'sm' | 'md' | 'lg';
+export type TextPType = 'default' | 'primary' | 'secondary' | 'error' | 'warning' | 'info' | 'success';
+
 interface Props {
     children: ReactNode;
     className?: string;
-    size?: 'xs' | 'sm' | 'md' | 'lg';
-    type?: 'default' | 'primary' | 'secondary' | 'error' | 'warning' | 'info' | 'success';
+    size?: TextPSize;
+    type?: TextPType;
 }
 
 export default function TextP({ children, className, size = 'sm', type = 'default' }: Props) {

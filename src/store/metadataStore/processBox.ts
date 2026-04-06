@@ -9,7 +9,7 @@ import { MetadataBoxType } from "@dapp/types/typesDapp/metadata/metadataBox";
  * @returns Processing result
  */
 export const processBox = async (
-    id: string, 
+    id: string,
     url: string,
 ): Promise<MetadataBoxType | null> => {
     const store = useMetadataStore.getState();
@@ -26,7 +26,7 @@ export const processBox = async (
         const metadataUrl = ipfsCidToUrl(url);
         const metadataResponse = await fetch(metadataUrl);
         const metadata = await metadataResponse.json();
-        
+
         if (!metadata) {
             console.error(`Error processing truthBox metadata:`, metadata);
             store.addErrorListMetadata(id);
@@ -48,7 +48,7 @@ export const processBox = async (
             type_of_crime: metadata.type_of_crime,
             label: metadata.label || [],
             title: metadata.title,
-            nft_image: nftImageUrl,
+            // nft_image: nftImageUrl,
             box_image: boxImageUrl,
             country: metadata.country,
             state: metadata.state,

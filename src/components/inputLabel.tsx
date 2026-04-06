@@ -9,6 +9,7 @@ import TextP from './base/text_p';
 export interface InputLabelProps {
     value: string[];
     onChange: (labels: string[]) => void;
+    onBlur?: () => void;
     maxLabels?: number;
     maxLabelLength?: number;
     placeholder?: string;
@@ -33,7 +34,8 @@ const InputLabel: React.FC<InputLabelProps> = ({
     maxLabelLength = 20,
     placeholder = "Enter labels separated by commas (e.g., fraud, corruption, insider trading)",
     className,
-    disabled = false
+    disabled = false,
+    onBlur
 }) => {
     const [inputValue, setInputValue] = useState<string>('');
     const [error, setError] = useState<string>('');
@@ -177,6 +179,9 @@ const InputLabel: React.FC<InputLabelProps> = ({
      */
     const handleBlur = () => {
         addLabels(inputValue);
+        if (onBlur) {
+            onBlur();
+        }
     };
 
     /**

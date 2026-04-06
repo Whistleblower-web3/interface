@@ -4,8 +4,11 @@ import { CreateFormData, createFormSchema } from '../validation/schemas';
 import { useNFTCreateStore } from '../store/useNFTCreateStore';
 import { useInputChangeTracker } from '../hooks/useInputChangeTracker';
 
-// Define a type for the form API.
-type CreateFormApi = FormApi<CreateFormData>;
+// Helper to infer the correct FormApi type without hardcoding all 11-12 generics
+function _useFormTypeHelper() {
+    return useForm({ defaultValues: {} as CreateFormData });
+}
+type CreateFormApi = ReturnType<typeof _useFormTypeHelper>;
 
 const TanStackFormContext = createContext<CreateFormApi | null>(null);
 

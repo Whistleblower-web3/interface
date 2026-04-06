@@ -114,7 +114,7 @@ export function useGetMyUserId(): string {
             // Call the contract to get the userId
             const fetchedUserId = await myUserId(session.token!);
 
-            if (fetchedUserId && fetchedUserId > 0) {
+            if (fetchedUserId) {
                 const userIdString = fetchedUserId.toString();
 
                 // Save to accountStore

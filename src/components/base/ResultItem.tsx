@@ -3,12 +3,13 @@
 import React from 'react';
 import { Alert } from 'antd';
 import { cn } from "@/lib/utils";
-import { 
-    CheckCircle, 
-    XCircle, 
-    Loader2, 
-    Circle, 
+import {
+    CheckCircle,
+    XCircle,
+    Loader2,
+    Circle,
     FastForward,
+    ChevronRight,
 } from "lucide-react";
 
 export interface ResultItemProps {
@@ -94,7 +95,7 @@ const ResultItem: React.FC<ResultItemProps> = ({
     // Compact style
     if (variant === 'compact') {
         return (
-            <div 
+            <div
                 className={cn(
                     "flex items-center gap-3 p-3 rounded-md transition-all duration-200",
                     "bg-card border border-border",
@@ -110,13 +111,13 @@ const ResultItem: React.FC<ResultItemProps> = ({
                 onClick={isClickable ? onClick : undefined}
             >
                 {renderStatusIcon()}
-                
+
                 <div className="flex-1 min-w-0">
                     <span className="text-sm font-medium text-foreground truncate">
                         {title}
                     </span>
                 </div>
-                
+
                 <div className="flex items-center gap-2">
                     <span className={cn("text-xs font-medium", getStatusTextColor())}>
                         {getStatusText()}
@@ -132,9 +133,9 @@ const ResultItem: React.FC<ResultItemProps> = ({
     // Default style
     return (
         <div className={cn("space-y-2", className)}>
-            <div 
+            <div
                 className={cn(
-                    "flex items-center justify-between p-4 rounded-lg transition-all duration-200",
+                    "flex items-center justify-between px-4 py-2 rounded-lg transition-all duration-200",
                     "bg-card border border-border",
                     isClickable && [
                         "cursor-pointer hover:bg-accent/50 hover:border-primary/50",
@@ -153,14 +154,14 @@ const ResultItem: React.FC<ResultItemProps> = ({
                             {title}
                         </h4>
                     </div>
-                    
+
                     {description && (
                         <p className="text-xs text-muted-foreground truncate">
                             {description}
                         </p>
                     )}
                 </div>
-                
+
                 <div className="flex items-center gap-3 ml-4">
                     <div className="flex items-center gap-2">
                         {renderStatusIcon()}
@@ -170,13 +171,13 @@ const ResultItem: React.FC<ResultItemProps> = ({
                     </div>
                 </div>
             </div>
-            
+
             {/* Error message */}
             {error && (
-                <Alert 
-                    message='Error' 
+                <Alert
+                    message='Error'
                     description={error}
-                    type="error" 
+                    type="error"
                     showIcon={true}
                 />
             )}

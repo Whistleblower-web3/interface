@@ -1,12 +1,9 @@
-"use client"
-
 import React from 'react';
 import { Typography, Card, Space } from 'antd';
-import { CheckOutlined, CopyOutlined } from '@ant-design/icons';
-import { message } from 'antd';
 import { ipfsCidToUrl } from '@/services/ipfsUrl/ipfsCidToUrl';
+import CopyText from './base/copyText';
 
-const { Text, Paragraph } = Typography;
+const { Text } = Typography;
 
 export interface ParagraphListProps {
     label: string;
@@ -17,12 +14,6 @@ export interface ParagraphListProps {
 
 /**
  * Simple text list display component
- * 
- * Function:
- * - Display text list, each line, no wrap (using ellipsis)
- * - Each line has a copy button
- * - If it is CID type, automatically convert to IPFS URL when copying
- * - If it is password type, default hide password
  */
 const ParagraphList: React.FC<ParagraphListProps> = ({
     label,
@@ -31,39 +22,22 @@ const ParagraphList: React.FC<ParagraphListProps> = ({
     className,
 }) => {
     /**
-     * Copy text to clipboard
-     * If it is CID type, convert to IPFS URL when copying; other types directly copy the original text
+     * Get the text that should be copied
      */
-    const handleCopy = async (text: string, index: number) => {
-        if (!text) {
-            message.warning(`${label} ${index + 1} is empty`);
-            return;
-        }
-
-        let copyText = text;
-
-        // If it is CID type, convert to IPFS URL when copying
+    const getCopyText = (text: string): string => {
+        if (!text) return '';
         if (type === 'cid') {
             try {
-                copyText = ipfsCidToUrl(text);
+                return ipfsCidToUrl(text);
             } catch (error) {
                 console.error('Failed to convert CID to URL:', error);
-                // If conversion fails, still copy the original CID
             }
         }
-
-        try {
-            await navigator.clipboard.writeText(copyText);
-            message.success(`${label} ${index + 1} copied!`);
-        } catch (error) {
-            console.error('Failed to copy:', error);
-            message.error('Failed to copy');
-        }
+        return text;
     };
 
     /**
      * Format display text
-     * If it is password type, default hide password
      */
     const formatDisplayText = (text: string): string => {
         if (type === 'password' && text) {
@@ -78,44 +52,30 @@ const ParagraphList: React.FC<ParagraphListProps> = ({
 
     return (
         <div className={className}>
-            <Card >
-            <Space direction="vertical" size="small" style={{ width: '100%' }}>
-                <Text strong style={{ fontFamily: 'monospace', fontSize: 13 }}>{label}:</Text>
-                {cidList.map((item, index) => (
-                    <div
-                        key={index}
-                        style={{
-                            display: 'flex',
-                            alignItems: 'center',
-                            gap: 8,
-                            width: '100%',
-                        }}
-                    >
-                        <Paragraph
-                            copyable={{
-                                text: item,
-                                icon: [<CopyOutlined key="copy" />, <CheckOutlined key="check" />],
-                                tooltips: ['Copy', 'Copied!'],
-                            }}
-                            ellipsis={{ tooltip: item }}
-                            style={{
-                                flex: 1,
-                                fontFamily: type === 'cid' || type === 'password' ? 'monospace' : undefined,
-                                fontSize: 13,
-                            }}
+            <Card className="shadow-sm">
+                <Space direction="vertical" size="small" style={{ width: '100%' }}>
+                    <Text strong className="text-[13px] font-mono opacity-80">{label}:</Text>
+                    {cidList.map((item, index) => (
+                        <div
+                            key={index}
+                            className="flex items-center gap-2 group p-1 hover:bg-white/5 rounded-md transition-colors"
                         >
-                            {formatDisplayText(item)}
-                        </Paragraph>
-                        {/* <Button
-                            type="text"
-                            size="small"
-                            icon={<CopyOutlined />}
-                            onClick={() => handleCopy(item, index)}
-                            disabled={!item}
-                        /> */}
-                    </div>
-                ))}
-            </Space>
+                            <div className="flex-1 min-w-0">
+                                <Text 
+                                    className="block truncate text-[13px] font-mono opacity-90"
+                                    title={item}
+                                >
+                                    {formatDisplayText(item)}
+                                </Text>
+                            </div>
+                            <CopyText 
+                                text={getCopyText(item)} 
+                                className="shrink-0"
+                                iconSize={14}
+                            />
+                        </div>
+                    ))}
+                </Space>
             </Card>
         </div>
     );

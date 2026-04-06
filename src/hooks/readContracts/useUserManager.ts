@@ -8,17 +8,17 @@ export function useUserManager() {
     const { readContract } = useReadContract();
 
     // function myUserId(bytes memory token_) external view returns (uint256);
-    const myUserId = async (siweToken: string): Promise<number> => {
+    const myUserId = async (siweToken: string): Promise<string> => {
         try {
             const tx = await readContract({
                 contractName: ContractName.USER_MANAGER,
                 functionName: 'myUserId',
                 args: [siweToken],
             });
-            return tx ? Number(tx) : 0;
+            return tx || '';
         } catch (error) {
             console.error('myUserId error:', error);
-            return 0;
+            return '';
         }
     };
 

@@ -5,6 +5,7 @@ import TextP from '@/components/base/text_p';
 import TextTitle from '@/components/base/text_title';
 import { Space, Button } from 'antd';
 import { useBoxDetailContext } from '../contexts/BoxDetailContext';
+import UserId from '@/components/base/uerId';
 
 interface Props {
     tokenId: number | string;
@@ -33,23 +34,16 @@ const ContentLeft: React.FC<Props> = ({ tokenId }) => {
         <div className="w-full space-y-6 md:space-y-8">
             <Space direction="vertical" size="middle">
 
-                <div className='flex justify-between w-full'>
-                    <Space direction="horizontal" size="middle" align='baseline'>
-                        <TextP>Box ID:</TextP>
-                        <TextP size='lg' className='text-white'>{tokenId}</TextP>
-                    </Space>
+                <Space direction="horizontal" size="middle" align='baseline'>
+                    <TextP>Box ID:</TextP>
+                    <TextP size='lg' className='text-white'>{tokenId}</TextP>
+                </Space>
 
-                    {/* Owner Information */}
-                    <Space direction="horizontal" size="middle">
-                        <TextP>Minter ID:</TextP>{' '}
-                        <TextP size='lg' className='text-primary'>{box.minter_id}</TextP>
-                    </Space>
-                </div>
-
-                {/* <Space direction="horizontal" size="middle">
-                    <TextP>NFT Owner:</TextP>{' '}
-                    <TextP>{box.owner_address}</TextP>
-                </Space> */}
+                {/* Minter Information */}
+                <Space direction="horizontal" size="middle">
+                    <TextP>Minter ID:</TextP>{' '}
+                    <UserId userId={box.minter_id} size='md' type="primary" copyAble={true} />
+                </Space>
                 <Space direction="horizontal" size="middle">
                     <TextP>Create date:</TextP>{' '}
                     <TextP>{metadataBox?.create_date ? new Date(metadataBox?.create_date).toLocaleString() : ''}</TextP>
@@ -60,7 +54,7 @@ const ContentLeft: React.FC<Props> = ({ tokenId }) => {
             <div className="w-full bg-black rounded-xl md:rounded-2xl overflow-hidden">
                 <div className="aspect-video md:aspect-[4/3] lg:aspect-video">
                     <ImageSwiper
-                        images={[metadataBox?.box_image || '', metadataBox?.nft_image || '']}
+                        images={[metadataBox?.box_image || '']}
                         className='w-full'
                     />
                 </div>

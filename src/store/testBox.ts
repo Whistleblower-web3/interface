@@ -19,7 +19,7 @@ export const testBox: TestBoxType = {
     token_id: '1',
     type_of_crime: 'Modular',
     title: "This is a test! Here is the title about TruthBox, which directly conveys the key information, allowing others to quickly understand this TruthBox.",
-    nft_image: "ipfs://bafkreianmtw7x22zb3iawia3rcmfm67iiupytrxj3ytljxojlichfaictm",
+    // nft_image: "ipfs://bafkreianmtw7x22zb3iawia3rcmfm67iiupytrxj3ytljxojlichfaictm",
     box_image: "bafkreiccjb4uhzhze2pyehnoo7qwkk73yhjl6k6scbzxss6idqkhghznom",
     country: 'United States',
     state: 'California',
@@ -67,7 +67,7 @@ export const baseBox: TestBoxType = {
     //-----------
     type_of_crime: 'Modular',
     title: "This is a test! Here is the title about TruthBox, which directly conveys the key information, allowing others to quickly understand this TruthBox.",
-    nft_image: image as string,
+    // nft_image: image as string,
     box_image: image2 as string,
     country: 'United States',
     state: 'California',

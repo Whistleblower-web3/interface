@@ -106,7 +106,7 @@ const ContentRight: React.FC<Props> = ({ tokenId }) => {
             <ShareSocial
                 title={metadataBox?.title ?? ''}
                 description={metadataBox?.description ?? ''}
-                image={metadataBox?.nft_image ?? ''}
+                image={metadataBox?.box_image ?? ''}
                 url={typeof window !== 'undefined' ? window.location.href : ''}
                 box={box}
                 metadataBox={metadataBox}

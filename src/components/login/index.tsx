@@ -9,6 +9,7 @@ import { twMerge } from 'tailwind-merge';
 import { ConnectButton } from '@dapp/contexts/web3Context/connectButton';
 import { useSiweAuth } from '@dapp/hooks/SiweAuth';
 import { useGetMyUserId } from '@dapp/hooks/readContracts2/useGetMyUserId';
+import UserId from '../base/uerId';
 
 const { Text } = Typography;
 
@@ -23,9 +24,9 @@ const LoginDropdown: React.FC<LoginDropdownProps> = ({
 }) => {
     const navigate = useNavigate();
     const dropdownRef = useRef<HTMLDivElement>(null);
-    
+
     // Wallet connection status
-    const {isConnected } = useAccount();
+    const { isConnected } = useAccount();
 
     // SIWE login related
     const { login, logout: siweLogout, isValidateSession, isLoading: isSiweLoading, error: siweError } = useSiweAuth();
@@ -79,7 +80,7 @@ const LoginDropdown: React.FC<LoginDropdownProps> = ({
                 ),
                 disabled: true,
             });
-            
+
             items.push({
                 key: 'siwe-login-button',
                 label: (
@@ -127,7 +128,7 @@ const LoginDropdown: React.FC<LoginDropdownProps> = ({
                     label: (
                         <Space>
                             <Text strong >
-                                User ID: <Text type="success" strong style={{ fontFamily: 'monospace', fontSize: 14 }}>{userId}</Text>
+                                User ID: <UserId userId={userId} size='md' type="primary" copyAble={true} />
                             </Text>
                         </Space>
                     ),
@@ -157,7 +158,7 @@ const LoginDropdown: React.FC<LoginDropdownProps> = ({
                 key: 'siwe-logout',
                 label: (
                     <Space>
-                        <LogoutOutlined style={{ color: 'var(--color-attention)' }}/>
+                        <LogoutOutlined style={{ color: 'var(--color-attention)' }} />
                         <p className="text-attention font-bold text-xs md:text-sm">Logout</p>
                     </Space>
                 ),
@@ -191,7 +192,7 @@ const LoginDropdown: React.FC<LoginDropdownProps> = ({
     // Dropdown menu provides SIWE and Profile related functionality
     return (
         <div ref={dropdownRef} className={twMerge("flex-shrink-0 whitespace-nowrap", className)} style={{ display: 'inline-flex', alignItems: 'center', gap: 8, position: 'relative' }}>
-            <ConnectButton showBalance={false} accountStatus="address"/>
+            <ConnectButton showBalance={false} accountStatus="address" />
             {needsSiweLogin ? (
                 <Button
                     className="cursor-pointer"
@@ -202,7 +203,7 @@ const LoginDropdown: React.FC<LoginDropdownProps> = ({
                     disabled={isSiweLoading}
                 >
                     {isSiweLoading ? "Signing..." : "Sign In"}
-                    
+
                 </Button>
             ) : (
                 <Dropdown
