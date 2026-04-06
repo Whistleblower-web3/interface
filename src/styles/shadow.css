@@ -1,0 +1,17 @@
+/* 
+ * shadow.css
+ * 
+ * 
+ */
+
+.shadow-primary {
+    box-shadow: 0 0 10px 0 rgba(102, 241, 9, 0.5);
+}
+
+.shadow-primary-light {
+    box-shadow: 0 0 10px 0 rgba(102, 241, 9, 0.8);
+}
+
+.shadow-primary:hover {
+    box-shadow: 0 0 10px 0 rgba(102, 241, 9, 0.8);
+}

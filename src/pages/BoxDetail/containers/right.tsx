@@ -11,10 +11,12 @@ import Published from '@BoxDetail/statusContainer/Published';
 import StatusStep from '@/components/statusStep';
 import RoleContainer from '../components/roleLabel';
 import { BoxStatus } from '@dapp/types/typesDapp/contracts/truthBox';
-import StatusLabel from '@/components/base/statusLabel';
+import StatusLabel from '@/components/base/statusTag';
 import ShareSocial from '@/components/shareSoical';
 import { useBoxDetailContext } from '../contexts/BoxDetailContext';
-import PriceTimer from '../components/priceTimer';
+import CountdownTimer from '@/components/countdownTimer';
+import PriceTag from '@/components/priceTag';
+
 
 interface Props {
     tokenId: number | string;
@@ -80,7 +82,13 @@ const ContentRight: React.FC<Props> = ({ tokenId }) => {
             />
 
             {status !== 'Published' && (
-                <PriceTimer status={status} price={price} token={token} deadline={deadline} />
+                <div className="flex flex-col space-y-2 md:space-y-4">
+                    {/* <PriceTimer status={status} price={price} token={token} deadline={deadline} /> */}
+                    <CountdownTimer targetTime={deadline} size='sm' />
+                    <PriceTag status={status} price={price} token={token} />
+
+                </div>
+
             )}
 
             {box?.status === 'Blacklisted' && (
@@ -94,13 +102,7 @@ const ContentRight: React.FC<Props> = ({ tokenId }) => {
 
             <hr className="border-border/50" />
 
-            {
-                import.meta.env.DEV && (
-                    <p className="text-xs text-muted-foreground md:text-md">
-                        {JSON.stringify(box, null, 2)}
-                    </p>
-                )
-            }
+
 
             {/* Social Share */}
             <ShareSocial

@@ -1,10 +1,9 @@
 "use client"
-import React, { useState, useEffect, useMemo } from 'react';
-// import { Typography } from 'antd';
+import React, { useMemo } from 'react';
 import TextP from '@/components/base/text_p';
 import { BoxStatus } from '@dapp/types/typesDapp/contracts/truthBox';
 import usePriceUSD from '@/hooks/usePriceUSD';
-import PriceLabel from '@/components/base/priceLabel';
+import PriceText from '@/components/base/priceText';
 import { formatPrice } from '@/utils/formatPrice';
 import { getTokenByAddress, getTokenBySymbol } from "@dapp/config/tokenConfig";
 
@@ -15,7 +14,7 @@ interface Props {
     status?: BoxStatus;
 }
 
-const PriceContainer: React.FC<Props> = ({ price, token, status, }) => {
+const PriceTag: React.FC<Props> = ({ price, token, status, }) => {
 
     const { getPriceUSD } = usePriceUSD();
 
@@ -23,7 +22,7 @@ const PriceContainer: React.FC<Props> = ({ price, token, status, }) => {
         if (status === 'Delaying') {
             return getTokenBySymbol('WTRC.Privacy');
         }
-        return token ? getTokenByAddress(token as `0x${string}`) : null;
+        return getTokenByAddress(token as `0x${string}`);
     }, [token, status]);
 
     const priceUSD = useMemo(() => {
@@ -36,20 +35,18 @@ const PriceContainer: React.FC<Props> = ({ price, token, status, }) => {
 
     return (
         < div className='
-        w-full
-        px-4 md:px-6 py-3 md:py-6
-        border border-border/50
-        bg-primary/5
-        rounded-xl
+        px-4 md:px-6 py-1.5 md:py-3
+        border-2 border-primary/50
+        bg-primary/10 shadow-primary
+        rounded-lg md:rounded-xl
         '>
-            <div className="w-full flex flex-col items-start ">
+            <div className="w-full flex flex-row items-baseline gap-2">
                 <h2 className='
-                    mb-3 md:mb-5
-                    text-lg md:text-xl lg:text-2xl font-bold
+                    text-sm md:text-base lg:text-lg
                     '>
                     {status === 'Delaying' ? 'Delay Fee:' : 'Price:'}
                 </h2>
-                <PriceLabel
+                <PriceText
                     size="xl"
                     data={formatPrice(price, tokenMetadata?.decimals, tokenMetadata?.precision)}
                     symbol={tokenMetadata?.symbol}
@@ -57,9 +54,9 @@ const PriceContainer: React.FC<Props> = ({ price, token, status, }) => {
                 {priceUSD > 0 && (
                     <span className="flex items-baseline flex-row gap-2">
                         <TextP> ≈ </TextP>
-                        <PriceLabel
+                        <PriceText
                             size="lg"
-                            className='text-white/60'
+                            className='text-white/80'
                             data={{
                                 formattedPrice: priceUSD.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 }),
                                 fullPrice: priceUSD.toString()
@@ -73,4 +70,4 @@ const PriceContainer: React.FC<Props> = ({ price, token, status, }) => {
     );
 }
 
-export default PriceContainer;
+export default PriceTag;

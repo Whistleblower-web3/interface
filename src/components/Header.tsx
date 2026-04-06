@@ -25,7 +25,7 @@ export default function Header() {
     return (
         <header className="w-full bg-black/70 backdrop-blur sticky top-0 z-50 border-b border-border/30">
             <Container className="py-3 flex items-center justify-between">
-                <Brand />
+                <Brand size="sm" />
                 <nav className="flex gap-2 md:gap-4 lg:gap-5 items-center">
                     <NavLinks
                         links={dappMenu}

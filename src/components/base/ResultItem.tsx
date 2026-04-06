@@ -135,7 +135,7 @@ const ResultItem: React.FC<ResultItemProps> = ({
         <div className={cn("space-y-2", className)}>
             <div
                 className={cn(
-                    "flex items-center justify-between px-4 py-2 rounded-lg transition-all duration-200",
+                    "flex items-center justify-between px-4 py-2 rounded-md md:rounded-lg transition-all duration-200",
                     "bg-card border border-border",
                     isClickable && [
                         "cursor-pointer hover:bg-accent/50 hover:border-primary/50",
@@ -143,7 +143,7 @@ const ResultItem: React.FC<ResultItemProps> = ({
                         "focus-within:ring-2 focus-within:ring-ring focus-within:ring-offset-2"
                     ],
                     !isClickable && error && "border-destructive/50 bg-destructive/5",
-                    !isClickable && isComplete && "border-green-500/50 bg-green-500/5",
+                    !isClickable && isComplete && "border-primary/50 bg-primary/5",
                     !isClickable && isSkipped && "border-muted/50 bg-muted/5"
                 )}
                 onClick={isClickable ? onClick : undefined}

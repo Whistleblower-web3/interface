@@ -64,19 +64,19 @@ export const ShareSocial: React.FC<ShareSocialProps> = ({
             if (type === 'download') {
                 const dataUrl = await toPng(element, {
                     backgroundColor: '#0a0a0a',
-                    pixelRatio: 2 // Get a higher quality image
+                    pixelRatio: 1 // Reduces size by 50% compared to ratio 2
                 });
                 const link = document.createElement('a');
-                link.download = `${PROJECT_NAME.short}-${box.id || 'NFT'}.png`;
+                link.download = `${PROJECT_NAME.short}-${metadataBox.title.slice(0, 30)}.jpg`;
                 link.href = dataUrl;
                 link.click();
             } else if (type === 'share' && navigator.share) {
                 const blob = await toBlob(element, {
                     backgroundColor: '#0a0a0a',
-                    pixelRatio: 2 // Get a higher quality image
+                    pixelRatio: 1 // Reduces size by 50% compared to ratio 2
                 });
                 if (blob) {
-                    const file = new File([blob], `Poster-${box.id || 'NFT'}.png`, { type: 'image/png' });
+                    const file = new File([blob], `Poster-${metadataBox.title.slice(0, 30)}.jpg`, { type: 'image/jpg' });
                     await navigator.share({
                         title: shareTitle,
                         text: shareTitle,

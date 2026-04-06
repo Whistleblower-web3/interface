@@ -16,7 +16,7 @@ import {
 } from '@xyflow/react';
 import '@xyflow/react/dist/style.css';
 import { cn } from '@/lib/utils';
-import StatusLabel from './statusLabel';
+import StatusLabel from './statusTag';
 import { BoxStatus } from '@dapp/types/typesDapp/contracts/truthBox';
 
 // Status step interface
@@ -37,9 +37,9 @@ export interface StatusStepFlowProps {
 const StatusNode = ({ data }: { data: any }) => {
     return (
         <div className="relative">
-            <Handle 
-                type="target" 
-                position={Position.Left} 
+            <Handle
+                type="target"
+                position={Position.Left}
                 style={{ background: '#555' }}
             />
             <StatusLabel
@@ -48,9 +48,9 @@ const StatusNode = ({ data }: { data: any }) => {
                 responsive={data.responsive}
                 disabled={!data.isActive}
             />
-            <Handle 
-                type="source" 
-                position={Position.Right} 
+            <Handle
+                type="source"
+                position={Position.Right}
                 style={{ background: '#555' }}
             />
         </div>
@@ -124,7 +124,7 @@ const StatusStepFlow: React.FC<StatusStepFlowProps> = ({
                 published: { x: 800, y: 80 }
             }
         };
-        
+
         return positionConfigs[size] || positionConfigs.md;
     }, [size]);
 
@@ -281,7 +281,7 @@ const StatusStepFlow: React.FC<StatusStepFlowProps> = ({
     const getContainerHeight = useCallback(() => {
         const heightConfigs = {
             sm: '80px',
-            md: '120px', 
+            md: '120px',
             lg: '160px'
         };
         return heightConfigs[size] || heightConfigs.md;
@@ -317,8 +317,8 @@ const StatusStepFlow: React.FC<StatusStepFlowProps> = ({
                 zoomOnPinch={false}
                 zoomOnDoubleClick={false}
                 preventScrolling={false}
-                proOptions={{ 
-                    hideAttribution: true 
+                proOptions={{
+                    hideAttribution: true
                 }}
             >
                 {showBackground && <Background />}

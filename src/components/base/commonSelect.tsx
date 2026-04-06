@@ -5,12 +5,12 @@ import { Select } from 'antd';
 import { cn } from '@/lib/utils';
 
 export interface CommonSelectOption {
-    icon?: string;      
-    index?: number;     
-    name: string;       
-    symbol?: string;    
-    value: string | number; 
-    [key: string]: any; 
+    icon?: string;
+    index?: number;
+    name: string;
+    symbol?: string;
+    value: string | number;
+    [key: string]: any;
 }
 
 export interface CommonSelectProps {
@@ -56,7 +56,7 @@ const CommonSelect: React.FC<CommonSelectProps> = ({
 
     // Check if it is a controlled component
     const isControlled = value !== undefined;
-    const currentValue = isControlled ? value : 
+    const currentValue = isControlled ? value :
         options.find(opt => String(opt.value) === internalValue) || null;
 
     // Initialize internal value
@@ -79,7 +79,7 @@ const CommonSelect: React.FC<CommonSelectProps> = ({
     const defaultFilterFunction = (option: CommonSelectOption, term: string): boolean => {
         const searchText = term.toLowerCase().trim();
         if (!searchText) return true;
-        
+
         return (
             option.name.toLowerCase().includes(searchText) ||
             (option.symbol && option.symbol.toLowerCase().includes(searchText)) ||
@@ -92,7 +92,7 @@ const CommonSelect: React.FC<CommonSelectProps> = ({
         if (!searchable || !searchTerm) {
             return options.slice(0, maxDisplayOptions);
         }
-        
+
         const filterFn = filterFunction || defaultFilterFunction;
         const filtered = options.filter(option => filterFn(option, searchTerm));
         return filtered.slice(0, maxDisplayOptions);
@@ -130,10 +130,10 @@ const CommonSelect: React.FC<CommonSelectProps> = ({
     const renderOptionContent = (option: CommonSelectOption) => (
         <div className="flex items-center gap-3 w-full">
             {option.icon && (
-                <img 
-                    src={option.icon} 
-                    alt="icon" 
-                    className="w-5 h-5 rounded-full flex-shrink-0 object-cover" 
+                <img
+                    src={option.icon}
+                    alt="icon"
+                    className="w-5 h-5 rounded-full flex-shrink-0 object-cover"
                 />
             )}
             <span className="truncate font-mono flex-1">{option.name}</span>

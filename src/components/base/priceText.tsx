@@ -20,7 +20,7 @@ export interface PriceLabelProps {
 }
 
 
-const PriceLabel: React.FC<PriceLabelProps> = ({
+const PriceText: React.FC<PriceLabelProps> = ({
     data,
     symbol = 'ETH',
     showSymbol = true,
@@ -51,7 +51,7 @@ const PriceLabel: React.FC<PriceLabelProps> = ({
 
     // Build price text
     const priceElement = (
-        <p className={cn("text-white", sizeConfig_price[size], className)}>
+        <p className={cn("text-primary font-bold font-number", sizeConfig_price[size], className)}>
             {data.formattedPrice}
         </p>
     );
@@ -99,4 +99,4 @@ const PriceLabel: React.FC<PriceLabelProps> = ({
     );
 };
 
-export default PriceLabel; 
+export default PriceText; 

@@ -1,12 +1,14 @@
 import React from "react";
-import StatusLabel from "@/components/base/statusLabel";
-import PriceTimer from "@/pages/BoxDetail/components/priceTimer";
+import StatusTag from "@/components/base/statusTag";
+import CountdownTimer from '@/components/countdownTimer';
+import PriceTag from '@/components/priceTag';
 import { BoxStatus } from "@dapp/types/typesDapp/contracts/truthBox";
 import { QRCodeSVG } from "qrcode.react";
 import { BoxUnifiedType } from "@/services/supabase/types/types";
 import { MetadataBoxType } from "@/types/typesDapp/metadata/metadataBox";
 import { useIpfsImage } from "@/hooks/useIpfsImage";
-import Logo from "@/components/brand";
+import Brand from "@/components/brand";
+import { HandcuffsSvg } from '@/components/svgs/HandcuffsSvg';
 
 interface SharePosterProps {
     box: BoxUnifiedType;
@@ -47,11 +49,12 @@ const SharePoster: React.FC<SharePosterProps> = ({
                         py-2
                     ">
                         <div className="flex flex-col gap-2">
-                            <Logo />
+                            <Brand />
                             <span className="text-sm text-muted-foreground">
                                 Decentralized Evidence & Asset Protocol
                             </span>
                         </div>
+
 
                         <div className="flex items-center gap-2">
                             {/* <div className="flex flex-col gap-2">
@@ -66,6 +69,25 @@ const SharePoster: React.FC<SharePosterProps> = ({
                                 />
                             </div>
                         </div>
+                    </div>
+
+                    <div className="text-center flex flex-col items-center justify-center">
+                        <HandcuffsSvg
+                            strokeWidth={5}
+                            color="primary"
+                            fillColor="black"
+                            isAnimated={true}
+                            width={160}
+                            height={80}
+                        />
+                        <p className="
+                    italic
+                    text-lg md:text-xl lg:text-2xl font-bold
+                    text-transparent bg-clip-text bg-gradient-to-r from-yellow-500 to-primary
+                
+                    ">
+                            "Truth will be revealed, criminals will be punished!"
+                        </p>
                     </div>
 
                     {/* Image */}
@@ -85,27 +107,20 @@ const SharePoster: React.FC<SharePosterProps> = ({
                         </h1>
 
                         <div className="flex gap-4 text-xl text-muted-foreground">
+
                             <div className="bg-muted/30 px-4 py-1 rounded-lg">
-                                <span className="font-semibold text-foreground">Box ID:</span>{" "}
+                                <span className="font-semibold text-muted-foreground">Box ID:</span>{" "}
                                 {box.id}
                             </div>
-                            <div className="bg-muted/30 px-4 py-1 rounded-lg">
-                                <span className="font-semibold text-foreground">Minter ID:</span>{" "}
-                                {box.minter_id}
-                            </div>
-                            <div className="h-4 w-px bg-border/40 mx-1"></div>
-                            <StatusLabel status={status} size="lg" />
+                            <StatusTag status={status} size="lg" />
+                        </div>
+                        <div className="bg-muted/30 px-4 py-1 rounded-lg">
+                            <span className="font-semibold text-muted-foreground">Minter ID:</span>{" "}
+                            {box.minter_id}
                         </div>
 
-                        {/* Price & Timer using existing component */}
-                        <div className="origin-top-left">
-                            <PriceTimer
-                                status={status}
-                                price={price}
-                                token={token}
-                                deadline={deadline}
-                            />
-                        </div>
+                        <PriceTag status={status} price={price} token={token} />
+                        <CountdownTimer targetTime={deadline} size='sm' />
                     </div>
 
                 </div>
@@ -123,10 +138,28 @@ const SharePoster: React.FC<SharePosterProps> = ({
             {/* Top: Logo & QR Code Section */}
             <div className="px-10 py-4 border-b border-border/50 flex justify-between items-center bg-background/80">
                 <div className="flex flex-col gap-2">
-                    <Logo />
+                    <Brand />
                     <span className="text-md text-muted-foreground opacity-80">
                         Decentralized Evidence & Asset Protocol
                     </span>
+                </div>
+                <div className="text-center flex flex-col items-center justify-center">
+                    <HandcuffsSvg
+                        strokeWidth={5}
+                        color="primary"
+                        fillColor="black"
+                        isAnimated={true}
+                        width={160}
+                        height={80}
+                    />
+                    <p className="
+                    italic
+                    text-lg md:text-xl lg:text-2xl font-bold
+                    text-transparent bg-clip-text bg-gradient-to-r from-yellow-500 to-primary
+                
+                    ">
+                        "Truth will be revealed, criminals will be punished!"
+                    </p>
                 </div>
                 {/* Moved QR Code to Top Right */}
                 <div className="flex flex-col items-center gap-2">
@@ -137,7 +170,7 @@ const SharePoster: React.FC<SharePosterProps> = ({
                     <div className="bg-white p-1 rounded-md shadow-lg">
                         <QRCodeSVG
                             value={url}
-                            size={64}
+                            size={72}
                             level="M"
                             includeMargin={false}
                         />
@@ -164,28 +197,20 @@ const SharePoster: React.FC<SharePosterProps> = ({
                             {metadataBox.title}
                         </h1>
 
-                        {/* StatusLabel moved here, same div with BoxID/MinterID */}
+                        {/* StatusTag moved here, same div with BoxID/MinterID */}
                         <div className="flex flex-wrap items-center gap-3">
                             <div className="bg-muted/30 px-3 py-1 rounded-lg border border-border/20 text-sm">
                                 <span className="font-semibold text-muted-foreground">Box ID:</span> {box.id}
                             </div>
-                            <div className="bg-muted/30 px-3 py-1 rounded-lg border border-border/20 text-sm">
-                                <span className="font-semibold text-muted-foreground">Minter ID:</span> {box.minter_id}
-                            </div>
-                            <div className="h-4 w-px bg-border/40 mx-1"></div>
-
-                            <StatusLabel status={status} size="sm" />
+                            <StatusTag status={status} size="sm" />
 
                         </div>
-
-                        <div className="scale-100 origin-top-left pt-4">
-                            <PriceTimer
-                                status={status}
-                                price={price}
-                                token={token}
-                                deadline={deadline}
-                            />
+                        <div className="bg-muted/30 px-3 py-1 rounded-lg border border-border/20 text-sm">
+                            <span className="font-semibold text-muted-foreground">Minter ID:</span> {box.minter_id}
                         </div>
+
+                        <PriceTag status={status} price={price} token={token} />
+                        <CountdownTimer targetTime={deadline} size='sm' />
                     </div>
 
                     <div className="mt-auto opacity-40 text-[12px]  tracking-widest uppercase">

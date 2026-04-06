@@ -8,11 +8,11 @@ export { default as InputArea } from './inputArea';
 export { default as SkeletonCard } from './skeletonCard';
 export { default as SkeletonProfile } from './skeletonProfile';
 // export { default as ResultItem } from './alertResult';
-export { default as PriceText } from './priceLabel';
+export { default as PriceText } from './priceText';
 // export { default as InfiniteScroll } from './infiniteScroll';
 // export { default as FileUploadButton } from '../fileUploadButton';
 
-export { default as CommonSelect } from './CommonSelect';
+export { default as CommonSelect } from './commonSelect';
 // export { default as AlertBox } from './alertBox';
 export { default as SearchBox } from './searchBox';
 
@@ -27,11 +27,11 @@ export type { SkeletonCardProps } from './skeletonCard';
 export type { SkeletonProfileProps } from './skeletonProfile';
 
 // export type { ResultItemProps } from './alertResult';
-export type { PriceTextProps} from './priceLabel';
+export type { PriceTextProps } from './priceText';
 // export type { InfiniteScrollProps } from './infiniteScroll';
 // export type { FileUploadButtonProps, UploadFile } from '../fileUploadButton';
 
 // Newly reconstructed component types
-export type { CommonSelectOption, CommonSelectProps } from './CommonSelect';
+export type { CommonSelectOption, CommonSelectProps } from './commonSelect';
 // export type { AlertBoxProps } from './alertBox';
 export type { SearchResult, SearchBoxProps } from './searchBox';

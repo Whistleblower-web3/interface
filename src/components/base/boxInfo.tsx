@@ -2,7 +2,7 @@ import React, { useMemo } from 'react';
 import { Space, Tag, Tooltip } from 'antd';
 import { EnvironmentOutlined, CalendarOutlined } from '@ant-design/icons';
 import { cn } from '@/lib/utils';
-import StatusLabel from '@/components/base/statusLabel';
+import StatusLabel from '@/components/base/statusTag';
 import TextP from '@/components/base/text_p';
 import TextTitle from '@/components/base/text_title';
 
@@ -80,12 +80,12 @@ const BoxInfo: React.FC<BoxInfoProps> = ({
         if (!text || typeof text !== 'string') {
             return '';
         }
-        
+
         if (typeof maxLength === 'number') {
             if (text.length <= maxLength) return text;
             return text.substring(0, maxLength) + '...';
         }
-        
+
         // In responsive mode, use medium length as default value
         const length = maxLength.md;
         if (text.length <= length) return text;
@@ -97,7 +97,7 @@ const BoxInfo: React.FC<BoxInfoProps> = ({
         if (!dateString || typeof dateString !== 'string') {
             return '';
         }
-        
+
         try {
             const date = new Date(dateString);
             // Check if the date is valid
@@ -138,12 +138,12 @@ const BoxInfo: React.FC<BoxInfoProps> = ({
     }, [description, config.descriptionMaxLength]);
 
     // Check if Tooltip needs to be displayed (when text is truncated)
-    const showTitleTooltip = title && title.length > (typeof config.titleMaxLength === 'number' 
-        ? config.titleMaxLength 
+    const showTitleTooltip = title && title.length > (typeof config.titleMaxLength === 'number'
+        ? config.titleMaxLength
         : config.titleMaxLength?.md || 70);
-    
-    const showDescriptionTooltip = description && description.length > (typeof config.descriptionMaxLength === 'number' 
-        ? config.descriptionMaxLength 
+
+    const showDescriptionTooltip = description && description.length > (typeof config.descriptionMaxLength === 'number'
+        ? config.descriptionMaxLength
         : config.descriptionMaxLength?.md || 180);
 
     return (
@@ -153,13 +153,13 @@ const BoxInfo: React.FC<BoxInfoProps> = ({
                 <Space direction="vertical" size={responsive ? 'small' : 'middle'} style={{ width: '100%' }}>
                     {showTitleTooltip ? (
                         <Tooltip title={title} placement="topLeft">
-                            <TextTitle 
+                            <TextTitle
                             >
                                 {displayTitle}
                             </TextTitle>
                         </Tooltip>
                     ) : (
-                        <TextTitle 
+                        <TextTitle
                         >
                             {displayTitle}
                         </TextTitle>
@@ -181,10 +181,10 @@ const BoxInfo: React.FC<BoxInfoProps> = ({
                 </Space>
 
                 {/* Metadata area */}
-                <Space 
-                    wrap 
+                <Space
+                    wrap
                     size={responsive ? ['small', 'middle'] : 'middle'}
-                    style={{ 
+                    style={{
                         width: '100%',
                     }}
                 >
@@ -220,7 +220,7 @@ const BoxInfo: React.FC<BoxInfoProps> = ({
                                     responsive && "text-xs sm:text-sm"
                                 )}
                             >
-                                <span 
+                                <span
                                     style={{
                                         maxWidth: responsive ? undefined : 140,
                                         overflow: 'hidden',

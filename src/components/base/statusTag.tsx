@@ -3,7 +3,7 @@
 import { cn } from "@/lib/utils";
 
 
-export interface StatusLabelProps {
+export interface StatusTagProps {
     status: string;
     className?: string;
     disabled?: boolean;
@@ -11,13 +11,13 @@ export interface StatusLabelProps {
     responsive?: boolean;
 }
 
-export default function StatusLabel({
+export default function StatusTag({
     status,
     className,
     disabled = false,
     size = 'md',
     responsive = true
-}: StatusLabelProps) {
+}: StatusTagProps) {
     const getStatusColorClass = () => {
         if (disabled) {
             return 'bg-gray-500/20 text-gray-400 border-gray-500/30';

@@ -2,7 +2,7 @@
 
 import React, { useMemo } from 'react';
 import { useBoxDetailContext } from '../contexts/BoxDetailContext';
-import PriceLabel from '@/components/base/priceLabel';
+import PriceLabel from '@/components/base/priceText';
 import { formatPrice } from '@/utils/formatPrice';
 import { getTokenByAddress } from "@dapp/config/tokenConfig";
 import type { BoxUserOrderAmountData } from '@/services/supabase/boxUserOrderAmounts';

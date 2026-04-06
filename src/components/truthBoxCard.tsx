@@ -2,9 +2,9 @@
 
 import React from 'react';
 import { cn } from '@/lib/utils';
-import PriceLabel from './base/priceLabel';
+import PriceText from './base/priceText';
 import ImageSwiperCache from './imageSwiperCache';
-import StatusLabel from './base/statusLabel';
+import StatusTag from './base/statusTag';
 import { getBoxCardData } from '@/utils/getBoxCardData';
 import { formatPrice } from '@/utils/formatPrice';
 
@@ -139,7 +139,7 @@ const TruthBoxCard: React.FC<TruthBoxCardProps> = ({
                     )}>
                         {/* Price component */}
                         {cardData.isDisplayPrice && cardData.price !== undefined && (
-                            <PriceLabel
+                            <PriceText
                                 data={formatPrice(cardData.price, cardData.tokenDecimals, cardData.precision)}
                                 symbol={cardData.tokenSymbol}
                                 className="shrink min-w-0"
@@ -147,7 +147,7 @@ const TruthBoxCard: React.FC<TruthBoxCardProps> = ({
                         )}
 
                         {/* Status label */}
-                        <StatusLabel
+                        <StatusTag
                             status={cardData.status}
                             size="sm"
                             responsive={true}

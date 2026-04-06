@@ -1,5 +1,5 @@
 "use client"
-import CommonSelect, { CommonSelectOption } from '@/components/base/CommonSelect';
+import CommonSelect, { CommonSelectOption } from '@/components/base/commonSelect';
 import { useSupportedTokens } from '@dapp/config/tokenConfig';
 import { useEffect, useState } from 'react';
 
