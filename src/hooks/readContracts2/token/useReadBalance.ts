@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { PermitType } from '@dapp/hooks/EIP712';
 import { useEIP712Permit } from '@dapp/hooks/EIP712/useEIP712Permit';
-import { useSupportedTokens, TokenMetadata } from '@dapp/config/tokenConfig';
+import { useAllTokens, TokenMetadata } from '@dapp/config/tokenConfig';
 import {
     useERC20,
     useERC20Privacy
@@ -21,7 +21,7 @@ export const useReadBalance = () => {
     const { balanceOfWithPermit } = useERC20Privacy();
 
     const { getValidPermit } = useEIP712Permit();
-    const supportedTokens = useSupportedTokens();
+    const allTokens = useAllTokens();
     /**
      * @example
      * // Check ERC20 token balance
@@ -40,7 +40,7 @@ export const useReadBalance = () => {
         setError(null);
         try {
             // 1. Get the token configuration
-            const tokenMetadata = supportedTokens.find(
+            const tokenMetadata = allTokens.find(
                 (token: TokenMetadata) => token.address.toLowerCase() === tokenAddress.toLowerCase()
             );
             if (!tokenMetadata) {

@@ -2,10 +2,10 @@
 import { useWriteCustormV3 } from "@/hooks/useWriteCustormV3";
 import { useAllContracts } from "@dapp/config/contractsConfig";
 import { useWithdrawStore } from "../store/withdrawStore";
-import { useSupportedTokens } from "@dapp/config/tokenConfig";
+import { useAllTokens } from "@dapp/config/tokenConfig";
 
 export const useWithdraw = () => {
-    const supportedTokens = useSupportedTokens();
+    const supportedTokens = useAllTokens();
     const allContracts = useAllContracts();
     const { writeCustormV3, error, isLoading, isSuccessed, reset } = useWriteCustormV3();
 

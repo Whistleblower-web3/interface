@@ -1,5 +1,5 @@
 import { useState, useEffect, useMemo } from 'react';
-import { useSupportedTokens, type TokenMetadata } from '@dapp/config/tokenConfig';
+import { useAllTokens, type TokenMetadata } from '@dapp/config/tokenConfig';
 import { TokenInfo, TokenPair } from '../types';
 
 /**
@@ -7,7 +7,7 @@ import { TokenInfo, TokenPair } from '../types';
  * 
  */
 export const useTokenPairs = (tokens: TokenInfo[]) => {
-    const supportedTokens = useSupportedTokens();
+    const supportedTokens = useAllTokens();
     const [selectedPairIndex, setSelectedPairIndex] = useState<number>(0);
 
     // Filter out ERC20 tokens and corresponding Secret token pairs

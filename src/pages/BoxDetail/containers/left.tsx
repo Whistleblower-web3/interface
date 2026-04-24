@@ -4,16 +4,17 @@ import ImageSwiper from '@/components/imageSwiperCache';
 import TextP from '@/components/base/text_p';
 import TextTitle from '@/components/base/text_title';
 import { Space, Button } from 'antd';
-import { useBoxDetailContext } from '../contexts/BoxDetailContext';
+// import { useBoxDetailContext } from '../contexts/BoxDetailContext';
 import UserId from '@/components/base/uerId';
+import { BoxUnifiedType } from '@/services/supabase/types/types';
+import { MetadataBoxType } from '@/types/typesDapp/metadata/metadataBox';
 
 interface Props {
-    tokenId: number | string;
+    box: BoxUnifiedType;
+    metadataBox: MetadataBoxType;
 }
 
-const ContentLeft: React.FC<Props> = ({ tokenId }) => {
-
-    const { box, metadataBox } = useBoxDetailContext()
+const ContentLeft: React.FC<Props> = ({ box, metadataBox }) => {
     const [isExpanded, setIsExpanded] = useState(false);
 
     // Simple check to determine if we should show the "Show More" button
@@ -36,7 +37,7 @@ const ContentLeft: React.FC<Props> = ({ tokenId }) => {
 
                 <Space direction="horizontal" size="middle" align='baseline'>
                     <TextP>Box ID:</TextP>
-                    <TextP size='lg' className='text-white'>{tokenId}</TextP>
+                    <TextP size='lg' className='text-white'>{box.id}</TextP>
                 </Space>
 
                 {/* Minter Information */}

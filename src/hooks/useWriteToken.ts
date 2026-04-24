@@ -4,7 +4,7 @@ import {
 } from 'wagmi';
 // import { ContractConfig, ContractName,} from '@dapp/contractsConfig/types';
 // import { Abi, parseUnits } from 'viem';
-import { useSupportedTokens, TokenMetadata } from '@dapp/config/tokenConfig';
+import { useAllTokens, TokenMetadata } from '@dapp/config/tokenConfig';
 import { useEffect } from 'react';
 
 interface WriteContractConfig {
@@ -39,7 +39,7 @@ export const useWriteToken = (): WriteContractResult => {
         reset             // Function to reset the status
     } = useWriteContract();
 
-    const supportedTokens = useSupportedTokens();
+    const supportedTokens = useAllTokens();
 
     const { isSuccess: isSuccessed } = useWaitForTransactionReceipt({
         hash,

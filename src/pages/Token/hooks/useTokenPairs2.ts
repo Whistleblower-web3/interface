@@ -1,9 +1,9 @@
 import { useMemo } from 'react';
-import { useSupportedTokens } from '@dapp/config/tokenConfig';
+import { useAllTokens } from '@dapp/config/tokenConfig';
 import { type TokenInfo, type TokenPair } from '../types';
 
 export const useTokenPairs2 = () => {
-    const supportedTokens = useSupportedTokens();
+    const supportedTokens = useAllTokens();
 
     // Filter out ERC20 and Secret type tokens
     const erc20Tokens = supportedTokens.filter(token => token.types === 'ERC20');

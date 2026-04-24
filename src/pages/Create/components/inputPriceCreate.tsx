@@ -1,6 +1,6 @@
 import React from 'react';
 import { useTanStackForm } from '../context/TanStackFormContext';
-import { useSupportedTokens } from '@dapp/config/tokenConfig';
+import { useAllTokens } from '@dapp/config/tokenConfig';
 import { cn } from '@/lib/utils';
 import { InputNumber } from 'antd';
 import TextP from '@/components/base/text_p';
@@ -13,14 +13,14 @@ interface InputPriceCreateProps {
 
 export const InputPriceCreate: React.FC<InputPriceCreateProps> = ({ className }) => {
     const form = useTanStackForm();
-    const supportedTokens = useSupportedTokens();
+    const supportedTokens = useAllTokens();
 
     const getErrorMessage = (errors: any[]) => {
         return errors.map(err => typeof err === 'string' ? err : (err?.message || String(err))).join(', ');
     };
 
     return (
-        <form.Field 
+        <form.Field
             name="price"
             validators={{
                 onChange: ({ value, fieldApi }) => {
@@ -43,7 +43,7 @@ export const InputPriceCreate: React.FC<InputPriceCreateProps> = ({ className })
                 const mintMethod = field.form.getFieldValue('mint_method');
                 const isRequired = mintMethod === 'create';
                 const hasError = field.state.meta.isTouched && field.state.meta.errors.length > 0;
-                
+
                 return (
                     <div className={cn("flex w-full lg:max-w-lg space-y-2", className)}>
                         <div className="flex flex-col w-full gap-2">

@@ -5,6 +5,7 @@ import ContentRight from './containers/right';
 import { Container } from '@/components/Container';
 import { BoxDetailProvider } from './contexts/BoxDetailContext';
 import { HandcuffsSvg } from '@/components/svgs/HandcuffsSvg';
+import Container_BoxDetail from "./containers";
 
 const BoxDetail: React.FC = () => {
     const { tokenId } = useParams<{ tokenId: string }>();
@@ -40,27 +41,11 @@ const BoxDetail: React.FC = () => {
                         "Truth will be revealed, criminals will be punished!"
                     </p>
                 </div>
+                <BoxDetailProvider boxId={tokenId || ''}>
 
-                {/* Main Content */}
-                <div className="bg-muted/30 backdrop-blur-sm rounded-2xl p-6 md:p-8 lg:p-12">
-
-                    <BoxDetailProvider boxId={tokenId || ''}>
-                        <div className="flex w-full flex-col lg:flex-row gap-8 lg:gap-12">
-                            {/* Left Content */}
-                            <div className="flex-1 lg:max-w-2xl">
-                                <ContentLeft tokenId={tokenId || ''} />
-                            </div>
-
-                            {/* Divider - Only visible on desktop */}
-                            <div className="hidden lg:block w-px bg-border/50 self-stretch"></div>
-
-                            {/* Right Content */}
-                            <div className="flex-1 lg:max-w-xl">
-                                <ContentRight tokenId={tokenId || ''} />
-                            </div>
-                        </div>
-                    </BoxDetailProvider>
-                </div>
+                    {/* Main Content */}
+                    <Container_BoxDetail />
+                </BoxDetailProvider>
             </Container>
 
         </>

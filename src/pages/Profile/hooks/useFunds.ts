@@ -2,7 +2,7 @@
 
 import { useMemo } from 'react';
 import { formatUnits } from 'viem';
-import { useSupportedTokens } from '@dapp/config/tokenConfig';
+import { useAllTokens } from '@dapp/config/tokenConfig';
 import { ClaimableFund, ClaimMethodType, FundType, TokenData } from '../types/cardProfile.types';
 import type { BoxData } from '../types/profile.types';
 import { useProfileStore } from '../store/profileStore';
@@ -53,7 +53,7 @@ const createTokenData = (params: {
 });
 
 export const useFunds = ({ box, userId, prefetchedOrderAmounts }: UseFundsParams): UseFundsReturn => {
-    const supportedTokens = useSupportedTokens();
+    const supportedTokens = useAllTokens();
     const selectedTab = useProfileStore((state) => state.filterState.selectedTab);
 
     const acceptedTokenMeta = useMemo(() => {

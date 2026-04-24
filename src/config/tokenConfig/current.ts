@@ -11,7 +11,7 @@ import {
 // Import ABIS_Token from the new tokenConfig location
 import { ABIS_Token } from "../tokenConfig/chain-23295/abis_token";
 
-export let SUPPORTED_TOKENS: TokenMetadata[] = [];
+export let ALL_TOKENS: TokenMetadata[] = [];
 export let ACCEPTED_TOKENS: TokenMetadata[] = [];
 export let OFFICIAL_TOKEN_CONFIG: TokenMetadata = {
     name: 'WikiTruth Coin',
@@ -35,7 +35,7 @@ export function useSetCurrentTokenConfig() {
     const chainId = useChainId();
     useEffect(() => {
         if (chainId) {
-            SUPPORTED_TOKENS = getAllTokensByChainId(chainId);
+            ALL_TOKENS = getAllTokensByChainId(chainId);
             OFFICIAL_TOKEN_CONFIG = getOfficialTokenByChainId(chainId);
             ACCEPTED_TOKENS = getAcceptedTokensByChainId(chainId);
         }

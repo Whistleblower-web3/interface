@@ -13,18 +13,20 @@ import RoleContainer from '../components/roleLabel';
 import { BoxStatus } from '@dapp/types/typesDapp/contracts/truthBox';
 import StatusLabel from '@/components/base/statusTag';
 import ShareSocial from '@/components/shareSoical';
-import { useBoxDetailContext } from '../contexts/BoxDetailContext';
+// import { useBoxDetailContext } from '../contexts/BoxDetailContext';
 import CountdownTimer from '@/components/countdownTimer';
 import PriceTag from '@/components/priceTag';
+import { BoxUnifiedType } from '@/services/supabase/types/types';
+import { MetadataBoxType } from '@/types/typesDapp/metadata/metadataBox';
 
 
 interface Props {
-    tokenId: number | string;
-    args?: boolean;
+    box: BoxUnifiedType;
+    metadataBox: MetadataBoxType
 }
 
-const ContentRight: React.FC<Props> = ({ tokenId }) => {
-    const { box, metadataBox, isLoading } = useBoxDetailContext();
+const ContentRight: React.FC<Props> = ({ box, metadataBox }) => {
+    // const { box, metadataBox} = useBoxDetailContext();
 
     const [price, setPrice] = useState('');
     const [status, setStatus] = useState<BoxStatus>('Storing');
@@ -62,14 +64,6 @@ const ContentRight: React.FC<Props> = ({ tokenId }) => {
                 return null;
         }
     };
-
-    if (isLoading) {
-        return (
-            <div className="w-full flex items-center justify-center py-12">
-                <div className="text-muted-foreground text-lg">Loading...</div>
-            </div>
-        );
-    }
 
     return (
         <div className="w-full space-y-4 md:space-y-6">

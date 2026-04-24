@@ -1,7 +1,7 @@
 // import { useQuery } from '@tanstack/react-query';
 import {
     // CHAIN_ID,
-    SUPPORTED_TOKENS,
+    ALL_TOKENS,
     TokenMetadata,
 } from '@/config/tokenConfig';
 import { parseAmountToBigInt } from '@/utils/parseAmountToBigInt';
@@ -25,7 +25,7 @@ const usePriceUSD = () => {
 
     const getPriceUSD = (tokenAddress: string, amount: string | number): number => {
         // Find token configuration
-        const tokenMetadata = SUPPORTED_TOKENS.find(
+        const tokenMetadata = ALL_TOKENS.find(
             (tokenMetadata: TokenMetadata) => tokenMetadata.address.toLowerCase() === tokenAddress.toLowerCase()
         );
         if (!tokenMetadata) {

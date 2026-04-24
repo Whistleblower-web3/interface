@@ -7,7 +7,7 @@ import {
 } from '@dapp/hooks/EIP712/types_ERC20secret';
 import { useSimpleSecretStore } from '@dapp/store/simpleSecretStore';
 import { useWalletContext } from '@dapp/contexts/web3Context/useAccount/WalletContext';
-import { TokenMetadata, useSupportedTokens } from '@dapp/config/tokenConfig';
+import { TokenMetadata, useAllTokens } from '@dapp/config/tokenConfig';
 
 /**
  * This is for the current frontend
@@ -39,7 +39,7 @@ export interface UseCheckEIP712PermitResult {
 export const useEIP712Permit = (): UseCheckEIP712PermitResult => {
     const { address, chainId } = useWalletContext();
     const { signPermit, isLoading: isSigningLoading, error: signError } = useEIP712_ERC20secret(chainId ?? 0, address ?? '');
-    const supportedTokens = useSupportedTokens();
+    const allTokens = useAllTokens();
 
     const getEip712Permit = useSimpleSecretStore((state) => state.getEip712Permit);
     const setEip712Permit = useSimpleSecretStore((state) => state.setEip712Permit);
@@ -100,7 +100,7 @@ export const useEIP712Permit = (): UseCheckEIP712PermitResult => {
         }
 
         // Get token metadata
-        const tokenMetadata = supportedTokens.find(
+        const tokenMetadata = allTokens.find(
             (token: TokenMetadata) => token.address.toLowerCase() === contractAddress.toLowerCase()
         );
         if (!tokenMetadata) {

@@ -37,7 +37,7 @@ export function useAcceptedTokens(): TokenMetadata[] {
   }, [CHAIN_ID]);
 }
 
-export function useSupportedTokens(): TokenMetadata[] {
+export function useAllTokens(): TokenMetadata[] {
   return useMemo(() => {
     return getAllTokensByChainId(CHAIN_ID);
   }, [CHAIN_ID]);

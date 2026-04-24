@@ -5,7 +5,7 @@ import {
     useERC20,
     useERC20Privacy,
 } from '../../readContracts/index';
-import { useSupportedTokens, TokenMetadata } from '@dapp/config/tokenConfig';
+import { useAllTokens, TokenMetadata } from '@dapp/config/tokenConfig';
 
 export interface ReadAllowanceResult {
     isEnough: boolean;
@@ -43,7 +43,7 @@ export const useReadAllowance = () => {
     const { allowanceWithPermit } = useERC20Privacy();
 
     const { getValidPermit } = useEIP712Permit();
-    const supportedTokens = useSupportedTokens();
+    const allTokens = useAllTokens();
 
     const readAllowance = async (
         tokenAddress: `0x${string}`,
@@ -55,7 +55,7 @@ export const useReadAllowance = () => {
         setIsLoading(true);
 
         try {
-            const tokenMetadata = supportedTokens.find(
+            const tokenMetadata = allTokens.find(
                 (token: TokenMetadata) => token.address.toLowerCase() === tokenAddress.toLowerCase()
             );
             if (!tokenMetadata) {

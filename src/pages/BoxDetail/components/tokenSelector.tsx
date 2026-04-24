@@ -1,6 +1,6 @@
 "use client"
 import CommonSelect, { CommonSelectOption } from '@/components/base/commonSelect';
-import { useSupportedTokens } from '@dapp/config/tokenConfig';
+import { useAllTokens } from '@dapp/config/tokenConfig';
 import { useEffect, useState } from 'react';
 
 interface TokenSelectorProps {
@@ -8,9 +8,9 @@ interface TokenSelectorProps {
 }
 
 const TokenSelector: React.FC<TokenSelectorProps> = ({ onChange }) => {
-    const supportedTokens = useSupportedTokens();
+    const allTokens = useAllTokens();
     const [value, setValue] = useState<CommonSelectOption | null>(null)
-    const options: CommonSelectOption[] = supportedTokens.filter(token => token.isAccepted).map(token => ({
+    const options: CommonSelectOption[] = allTokens.filter(token => token.isAccepted).map(token => ({
         // icon: '/token/usdt.png',
         name: token.name,
         symbol: token.symbol,

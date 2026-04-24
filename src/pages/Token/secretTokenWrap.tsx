@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useCallback, useMemo } from 'react';
 import { Card, Space, Typography, Select, Tabs, Row, Col, Alert } from 'antd';
-import { useToken, useSupportedTokens, TokenName } from '@/config/tokenConfig';
+import { useToken, useAllTokens, TokenName } from '@/config/tokenConfig';
 import { useTokenPageContext } from './context/TokenPageContext';
 import TokenWrapForm from './components/TokenWrapForm';
 import TokenDepositForm from './components/TokenDepositForm';
@@ -10,7 +10,7 @@ const { Text } = Typography;
 const { Option } = Select;
 
 const SecretTokenWrap: React.FC = () => {
-    const supportedTokens = useSupportedTokens();
+    const supportedTokens = useAllTokens();
     const [activeTab, setActiveTab] = useState<string>('wrap');
 
     const {

@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useCallback, useMemo } from 'react';
 import { Card, Space, Typography, Select, Tabs, Row, Col, Alert } from 'antd';
-import { useSupportedTokens, TokenName } from '@/config/tokenConfig';
+import { useAllTokens, TokenName } from '@/config/tokenConfig';
 import TokenUnwrapForm from './components/TokenUnwrapForm';
 import TokenWithdrawForm from './components/TokenWithdrawForm';
 import { useTokenOperations } from './hooks/useTokenOperations';
@@ -11,7 +11,7 @@ const { Text } = Typography;
 const { Option } = Select;
 
 const SecretTokenUnWrap: React.FC = () => {
-    const supportedTokens = useSupportedTokens();
+    const supportedTokens = useAllTokens();
     const [activeTab, setActiveTab] = useState<string>('unwrap');
     const [selectedPairIndex, setSelectedPairIndex] = useState<number>(0);
 

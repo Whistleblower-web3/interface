@@ -1,10 +1,10 @@
 {
 
-  "AddressManager": "0xA8f21b2C03E63CC4d55c22256d0d5940861A8866",
+  "AddressManager": "0x268863DAeaAdcB45aBb010402600Dea7C0a04744",
   "Forwarder":"0x6553408789c9ca50FDCa0E3120245674F4C529ad",
   "UserManager":"0xeeF1c5Fd9bf0dFc8fD47D57c56B2ec9f52811CB2",
   "TruthBox":"0x8Db771373077225aEb5Af7DFCa9ba33185ba0dB3",
-  "Exchange":"0x339F723EF786366B63fB6923fe56faBE19c58829",
+  "Exchange":"0x0499bd1974FF382A49D0008b413422518E71e06d",
   "FundManager":"0x154f826356776a75B748373aDD310a5BB449a268",
 
   "Contracts_2": "-------------------------------------------------",

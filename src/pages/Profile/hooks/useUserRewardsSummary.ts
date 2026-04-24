@@ -2,7 +2,7 @@ import { useMemo } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { formatUnits } from 'viem';
 import { CHAIN_CONFIG } from '@dapp/config/chainConfig';
-import { useSupportedTokens } from '@dapp/config/tokenConfig';
+import { useAllTokens } from '@dapp/config/tokenConfig';
 import type { TokenMetadata } from '@dapp/config/tokenConfig';
 import {
     query_UserRewardsData,
@@ -93,7 +93,7 @@ const fallbackSymbol = (address: string) => {
 };
 
 export const useUserRewardsSummary = (userId: string | null) => {
-    const supportedTokens = useSupportedTokens();
+    const supportedTokens = useAllTokens();
     const tokenMap = useMemo(() => buildTokenMap(supportedTokens), [supportedTokens]);
 
     const enabled = Boolean(userId);

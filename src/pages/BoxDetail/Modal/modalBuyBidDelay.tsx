@@ -35,6 +35,7 @@ const ModalBuyBidPay: React.FC<ModalBuyBidPayProps> = ({
 }) => {
     const tokenMetadata = useTokenByAddress(tokenAddress);
 
+
     const {
         steps,
         checkAllowance,
